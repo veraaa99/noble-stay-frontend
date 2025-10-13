@@ -38,20 +38,6 @@ const router = createBrowserRouter([
       },
 
       {
-        element: <BookingLayout />,
-        children: [
-          {
-            path: 'book',
-            element: <PlaceBooking />
-          },
-          {
-            path: 'confirmed',
-            element: <BookingConfirmed />
-          }
-        ]
-      },
-
-      {
         element: <UserLayout />,
         children: [
           {
@@ -61,6 +47,19 @@ const router = createBrowserRouter([
         ]
       }
 
+    ]
+  },
+  {
+    element: <BookingLayout />,
+    children: [
+      {
+        path: 'book',
+        element: <PlaceBooking />
+      },
+      {
+        path: 'confirmed',
+        element: <BookingConfirmed />
+      }
     ]
   }
 ])
