@@ -56,6 +56,8 @@ const Profile = () => {
               <p>dummyAvaliableDates</p>
               <p>dummyRoomsAvaliable</p>
               <p>dummyGuestsAvaliable</p>
+              <p>dummyRules</p>
+              <p>dummyAmenities</p>
             </div>  
           </div>
         </div>
@@ -98,8 +100,20 @@ const Profile = () => {
               <input type="text" name="" id="" />
             </div>
             <div>
+              <h3>What amneties do you offer?</h3>
+              <input type="text" name="" id="" />
+            </div>
+            <div>
+              <h3>Set house rules and cancellation policy</h3>
+              <input type="text" name="" id="" />
+            </div>
+            <div>
               <h3>Set contact email to castle owner</h3>
               <input type="text" name="" id="" placeholder="dummyEmail"/>
+            </div>
+            <div>
+              <h3>Upload images of your castle</h3>
+              <input type="file" name="" id="" />
             </div>
 
             <button type="submit">Submit listing</button>
