@@ -57,7 +57,9 @@ const SearchResults = () => {
                 </div>
               </div>
             </div>
+
             <hr />
+            
             <div>
               <p>DummyPrice</p>
               <button>Read more</button>
