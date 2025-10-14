@@ -37,6 +37,11 @@ const BookingConfirmed = () => {
         </div>
         <hr />
         <div>
+          <h3>Booking ID:</h3>
+          <p>dummyBookingID</p>
+        </div>
+        <hr />
+        <div>
           <h3>Total:</h3>
           <p>dummyNumber</p>
         </div>
