@@ -1,3 +1,5 @@
+import CastleCardSmall from "../components/CastleCardSmall"
+
 const Home = () => {
   // TODO: Add date picker for the select date field
   // TODO: Install tailwind and ShadCN
@@ -27,51 +29,17 @@ const Home = () => {
       {/* Scandinavia castles carousel */}
       <h2>Scandinavia</h2>
       <div>
-
-        <div>
-          <img src="" alt="" />
-          <h3>DummyTitle</h3>
-          <p>dummyDescription</p>
-          <p>dummyPrice</p>
-        </div>
-        <div>
-          <img src="" alt="" />
-          <h3>DummyTitle</h3>
-          <p>dummyDescription</p>
-          <p>dummyPrice</p>
-        </div>
-        <div>
-          <img src="" alt="" />
-          <h3>DummyTitle</h3>
-          <p>dummyDescription</p>
-          <p>dummyPrice</p>
-        </div>
-
+        <CastleCardSmall />
+        <CastleCardSmall />
+        <CastleCardSmall />
       </div>
 
       {/* Sweden castles carousel */}
       <h2>Sweden</h2>
       <div>
-
-        <div>
-          <img src="" alt="" />
-          <h3>DummyTitle</h3>
-          <p>dummyDescription</p>
-          <p>dummyPrice</p>
-        </div>
-        <div>
-          <img src="" alt="" />
-          <h3>DummyTitle</h3>
-          <p>dummyDescription</p>
-          <p>dummyPrice</p>
-        </div>
-        <div>
-          <img src="" alt="" />
-          <h3>DummyTitle</h3>
-          <p>dummyDescription</p>
-          <p>dummyPrice</p>
-        </div>
-
+        <CastleCardSmall />
+        <CastleCardSmall />
+        <CastleCardSmall />
       </div>
 
     </div>
