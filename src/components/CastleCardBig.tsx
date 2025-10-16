@@ -1,4 +1,8 @@
-const CastleCardBig = () => {
+type CastleProps = {
+    castle: CastleListing
+} 
+
+const CastleCardBig = ({ castle }: CastleProps) => {
   return (
     <div>
         <div>
@@ -7,18 +11,18 @@ const CastleCardBig = () => {
             </div>
             <div>
                 <div>
-                    <h2>DummyTitle</h2>
-                    <p>DummyLocation</p>
+                    <h2>{castle.title}</h2>
+                    <p>{castle.location}</p>
                 </div>
-                <p>DummyEventAvaliable</p>
+                <p>{castle.events}</p>
                 <div>
-                    <p>DummyDescription</p>
+                    <p>{castle.description}</p>
                 </div>
             </div>
         </div>
         <hr />
         <div>
-            <p>DummyPrice</p>
+            <p>{castle.rooms[0].price} kr / night</p>
             <button>Read more</button>
         </div>
     </div>

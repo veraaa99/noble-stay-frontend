@@ -1,12 +1,15 @@
-const CastleCardSmall = () => {
+type CastleProps = {
+    castle: CastleListing
+} 
+const CastleCardSmall = ({ castle }: CastleProps) => {
   return (
     <div>
         <div>
-            <img src="" alt="" />
+            <img src={castle.images[0]} alt="" />
         </div>
-        <h3>DummyTitle</h3>
-        <p>dummyDescription</p>
-        <p>dummyPrice</p>
+        <h3>{castle.title}</h3>
+        <p>{castle.description}</p>
+        <p>{castle.rooms[0].price}</p>
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import Booking from "../components/Booking"
+import { dummyBookings } from "../data/bookings"
 
 const BookingConfirmed = () => {
   return (
@@ -12,7 +13,7 @@ const BookingConfirmed = () => {
 
       <p>Summary:</p>
       {/* Booking summary */}
-      <Booking bookingConfirmed={true} />
+      <Booking booking={dummyBookings[0]} bookingConfirmed={true} />
 
       <div>
         <p>Download this booking</p>

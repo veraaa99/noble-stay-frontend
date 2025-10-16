@@ -1,4 +1,5 @@
 import CastleCardBig from "../components/CastleCardBig"
+import { dummyCastleListings } from "../data/castleListings"
 
 const AllCastles = () => {
   return (
@@ -8,7 +9,7 @@ const AllCastles = () => {
           <h1>All castles</h1>
         </div>
         <div>
-          <p>dummyNumber</p>
+          <p>3 found</p>
           <button>Filter</button>
         </div>
       </div>
@@ -16,12 +17,9 @@ const AllCastles = () => {
       {/* Search results */}
       <div>
         {/* Castle card/s */}
-        <CastleCardBig />
-        <CastleCardBig />
-        <CastleCardBig />
-        <CastleCardBig />
-        <CastleCardBig />
-        <CastleCardBig />
+        <CastleCardBig castle={dummyCastleListings[0]} />
+        <CastleCardBig castle={dummyCastleListings[0]} />
+        <CastleCardBig castle={dummyCastleListings[0]} />
       </div>
     </div>
   )

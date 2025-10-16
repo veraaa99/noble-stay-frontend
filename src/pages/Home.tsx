@@ -1,6 +1,7 @@
 import { useState } from "react"
 import CastleCardSmall from "../components/CastleCardSmall"
 import FilterDropdown from "../components/FilterDropdown"
+import { dummyCastleListings } from "../data/castleListings"
 
 const Home = () => {
   // TODO: Add date picker for the select date field
@@ -46,17 +47,17 @@ const Home = () => {
         {/* Scandinavia castles carousel */}
         <h2>Scandinavia</h2>
         <div>
-          <CastleCardSmall />
-          <CastleCardSmall />
-          <CastleCardSmall />
+          <CastleCardSmall castle={dummyCastleListings[0]}/>
+          <CastleCardSmall castle={dummyCastleListings[0]}/>
+          <CastleCardSmall castle={dummyCastleListings[0]}/>
         </div>
 
         {/* Sweden castles carousel */}
         <h2>Sweden</h2>
         <div>
-          <CastleCardSmall />
-          <CastleCardSmall />
-          <CastleCardSmall />
+          <CastleCardSmall castle={dummyCastleListings[0]}/>
+          <CastleCardSmall castle={dummyCastleListings[0]}/>
+          <CastleCardSmall castle={dummyCastleListings[0]}/>
         </div>
       </div>
 
