@@ -1,8 +1,9 @@
 type BookingProps = {
+  booking: Booking,
   bookingConfirmed: boolean
 }
 
-const Booking = ({ bookingConfirmed }: BookingProps) => {
+const Booking = ({ booking, bookingConfirmed }: BookingProps) => {
 
   return (
     <div>
@@ -13,17 +14,17 @@ const Booking = ({ bookingConfirmed }: BookingProps) => {
             <h1>Booking summary</h1>
             {/* Castle image */}
             <div>
-              <img src="" alt="" />
+              <img src={booking.castle.images[0]} alt="" />
             </div>
           </div>
         }
 
         {/* Castle information */}
         <div>
-          <h2>DummyTitle</h2>
-          <p>DummyLocation</p>
+          <h2>{booking.castle.title}</h2>
+          <p>{booking.castle.location}</p>
           { !bookingConfirmed &&
-            <p>DummyRules</p>
+            <p>{booking.castle.rules}</p>
           }
         </div>
       </div>
@@ -34,34 +35,34 @@ const Booking = ({ bookingConfirmed }: BookingProps) => {
         <div>
           <h3>Date:</h3>
           <div>
-            <p>dummyDate</p>
+            <p>{booking.bookedDates[0]}</p>
             <p>→</p>
-            <p>dummyDate</p>
+            <p>{booking.bookedDates[2]}</p>
           </div>
         </div>
         <hr />
         <div>
           <h3>Room:</h3>
-          <p>dummyRoom</p>
+          <p>{booking.bookedRooms[0].title}</p>
         </div>
         <hr />
         <div>
           <h3>Guests:</h3>
-          <p>dummyGuests</p>
+          <p>{booking.bookedGuests[0].number} {booking.bookedGuests[0].category}</p>
         </div>
         { bookingConfirmed && 
           <>
             <hr />
             <div>
               <h3>Booking ID:</h3>
-              <p>dummyBookingID</p>
+              <p>{booking.bookingId}</p>
             </div>
           </>
         }
         <hr />
         <div>
           <h3>Total:</h3>
-          <p>dummyNumber</p>
+          <p>{booking.totalPrice}</p>
         </div>
       </div>
     </div>

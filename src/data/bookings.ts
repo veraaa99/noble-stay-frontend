@@ -1,7 +1,7 @@
-import { dummyCastleListings } from "./castleListings";
-import { dummyGuests } from "./guests";
-import { dummyRooms } from "./rooms";
-import { dummyUsers } from "./users";
+import { dummyCastleListings } from "./castleListings.ts";
+import { dummyGuests } from "./guests.ts";
+import { dummyRooms } from "./rooms.ts";
+import { dummyUsers } from "./users.ts";
 
 export const dummyBookings: Booking[] = [
     // {

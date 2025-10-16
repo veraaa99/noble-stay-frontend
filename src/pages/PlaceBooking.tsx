@@ -1,17 +1,19 @@
 import Booking from "../components/Booking"
 import PaymentOptions from "../components/PaymentOptions"
 import RegisterForm from "../components/RegisterForm"
+import { dummyBookings } from "../data/bookings"
 
 const PlaceBooking = () => {
   return (
     <div>
       <button>Go back without booking</button>
-      <Booking bookingConfirmed={false} />
+      <Booking booking={dummyBookings[0]} bookingConfirmed={false} />
 
       {/* IF NOT LOGGED IN: Sign up form */}
       <div>
         <h1>Sign up to Noble Stay to continue to payment</h1>
         <RegisterForm />
+        <p>Already have an account?</p> <p>LOG IN</p>
       </div>
 
       {/* IF LOGGED IN: Select payment method */}
