@@ -1,11 +1,11 @@
 const Footer = () => {
   return (
     <div>
-        {/* Logo and full name */}
+      {/* Logo and full name */}
       <div>
         <h2>NOBLE STAY</h2>
       </div>
-        {/* Contact */}
+      {/* Contact */}
       <div>
         <h3>Contact us</h3>
         <div>

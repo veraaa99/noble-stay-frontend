@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         element: <SearchResults />
       },
       {
-        path: 'castles',
+        path: 'all',
         element: <AllCastles />
       },
       {

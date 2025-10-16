@@ -1,3 +1,5 @@
+import Booking from "../components/Booking"
+
 const BookingConfirmed = () => {
   return (
     <div>
@@ -10,43 +12,7 @@ const BookingConfirmed = () => {
 
       <p>Summary:</p>
       {/* Booking summary */}
-      <div>
-
-        <div>
-          <h2>dummyTitle</h2>
-          <p>dummyLocation</p>
-        </div>
-        <hr />
-        <div>
-          <h3>Date:</h3>
-          <div>
-            <p>dummyDate</p>
-            <p>→</p>
-            <p>dummyDate</p>
-          </div>
-        </div>
-        <hr />
-        <div>
-          <h3>Room:</h3>
-          <p>dummyRoom</p>
-        </div>
-        <hr />
-        <div>
-          <h3>Guests:</h3>
-          <p>dummyGuests</p>
-        </div>
-        <hr />
-        <div>
-          <h3>Booking ID:</h3>
-          <p>dummyBookingID</p>
-        </div>
-        <hr />
-        <div>
-          <h3>Total:</h3>
-          <p>dummyNumber</p>
-        </div>
-
-      </div>
+      <Booking bookingConfirmed={true} />
 
       <div>
         <p>Download this booking</p>

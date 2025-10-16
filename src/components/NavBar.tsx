@@ -1,11 +1,27 @@
 import { useState } from "react"
+import LoginForm from "./LoginForm"
+import RegisterForm from "./RegisterForm"
 
 const NavBar = () => {
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isMenuModalOpen, setIsMenuModalOpen] = useState(false)
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
 
   const menuModalHandler = () => {
-    setIsModalOpen(isModalOpen => !isModalOpen)
+    setIsMenuModalOpen(isMenuModalOpen => !isMenuModalOpen)
+  }
+
+  const loginModalHandler = () => {
+    setIsLoginModalOpen(isLoginModalOpen => !isLoginModalOpen)
+    setIsRegisterModalOpen(false)
+    // setIsMenuModalOpen(false)
+  }
+
+  const registerModalHandler = () => {
+    setIsRegisterModalOpen(isRegisterModalOpen => !isRegisterModalOpen)
+    setIsLoginModalOpen(false)
+    // setIsMenuModalOpen(false)
   }
 
   return (
@@ -24,8 +40,7 @@ const NavBar = () => {
         {/* All castles, My Bookings, Login/Sign up */}
       </div>
 
-      {
-        isModalOpen && 
+      { isMenuModalOpen && 
         <div>
           <div>
             <h1>Menu</h1>
@@ -42,9 +57,25 @@ const NavBar = () => {
               <p>My bookings</p>
             </div>
             <div>
-              <p>Login /Sign up</p>
+              <p onClick={loginModalHandler}>Login /Sign up</p>
             </div>
           </div>
+        </div>
+      }
+      {
+        isLoginModalOpen && 
+        <div>
+          <p>X</p>
+          <LoginForm />
+          <p>Don't have an account?</p> <p onClick={registerModalHandler}>SIGN UP</p>
+        </div>
+      }
+      {
+        isRegisterModalOpen && 
+        <div>
+          <p>X</p>
+          <RegisterForm />
+          <p>Already have an account?</p> <p onClick={loginModalHandler}>LOG IN</p>
         </div>
       }
       

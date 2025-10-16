@@ -1,4 +1,3 @@
-import { DayPicker } from "react-day-picker"
 import Calendar from "../components/Calendar"
 import AddGuestsCounter from "../components/AddGuestsCounter"
 import RoomCard from "../components/RoomCard"
@@ -7,15 +6,12 @@ const CastleDetails = () => {
   return (
     <div>
       <button>Go back to listings</button>
-      
       {/* Full castle details */}
       <div>
-
         {/* Castle image */}
         <div>
           <img src="" alt="" />
         </div>
-
         {/* Castle information */}
         <div>
           <div>

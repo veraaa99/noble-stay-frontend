@@ -3,22 +3,20 @@ const CastleCardBig = () => {
     <div>
         <div>
             <div>
-            <img src="" alt="" />
+                <img src="" alt="" />
             </div>
             <div>
-            <div>
-                <h2>DummyTitle</h2>
-                <p>DummyLocation</p>
-            </div>
-            <p>DummyEventAvaliable</p>
-            <div>
-                <p>DummyDescription</p>
-            </div>
+                <div>
+                    <h2>DummyTitle</h2>
+                    <p>DummyLocation</p>
+                </div>
+                <p>DummyEventAvaliable</p>
+                <div>
+                    <p>DummyDescription</p>
+                </div>
             </div>
         </div>
-
         <hr />
-        
         <div>
             <p>DummyPrice</p>
             <button>Read more</button>
