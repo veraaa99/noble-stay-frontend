@@ -1,6 +1,7 @@
 import Calendar from "../components/Calendar"
 import AddGuestsCounter from "../components/AddGuestsCounter"
 import RoomCard from "../components/RoomCard"
+import { dummyRooms } from "../data/rooms"
 
 const CastleDetails = () => {
   return (
@@ -89,9 +90,9 @@ const CastleDetails = () => {
         {/* Select Room */}
         <div>
           <h2>Select a room</h2>
-          <RoomCard />
-          <RoomCard />
-          <RoomCard />
+          <RoomCard room={dummyRooms[0]}/>
+          <RoomCard room={dummyRooms[1]}/>
+          <RoomCard room={dummyRooms[2]}/>
         </div>
 
         {/* Total price and reserve */}

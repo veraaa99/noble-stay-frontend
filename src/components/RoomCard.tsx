@@ -1,21 +1,25 @@
-const RoomCard = () => {
+type RoomCardProps = {
+  room: Room
+}
+
+const RoomCard = ({ room }: RoomCardProps ) => {
   return (
     <div>
         <div>
-            <h3>DummyRoom</h3>
-            <p>DummyRoomCaption</p>
+            <h3>{room.title}</h3>
+            <p>{room.caption}</p>
             <ul>
-            <li>DummyDescription</li>
-            <li>DummyDescription</li>
-            <li>DummyDescription</li>
+              {room.description.map(d => 
+                <li>{d}</li>
+              )}
             </ul>
         </div>
         <hr />
         <div>
-            <p>DummyPrice</p>
+            <p>{room.price}</p>
             <div>
-            <p>Select this room</p>
-            <input type="radio" name="" id="" />
+              <p>Select this room</p>
+              <input type="radio" name="" id="" />
             </div>
         </div>
     </div>

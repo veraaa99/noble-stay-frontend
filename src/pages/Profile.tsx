@@ -1,6 +1,8 @@
 import Booking from "../components/Booking"
-import CastleListing from "../components/CastleListing"
-import CastleListingForm from "../components/CastleListingForm"
+import CreatedListing from "../components/CreatedListing"
+import ListingForm from "../components/ListingForm"
+import { dummyBookings } from "../data/bookings"
+import { dummyCastleListings } from "../data/castleListings"
 
 const Profile = () => {
   return (
@@ -24,21 +26,21 @@ const Profile = () => {
         {/* My bookings */}
         <div>
           <h2>My bookings</h2>
-          <Booking bookingConfirmed={true} />
-          <Booking bookingConfirmed={true} />
-          <Booking bookingConfirmed={true} />
+          <Booking booking={dummyBookings[0]}bookingConfirmed={true} />
+          <Booking booking={dummyBookings[0]}bookingConfirmed={true} />
+          <Booking booking={dummyBookings[0]}bookingConfirmed={true} />
         </div>
 
         {/* My listings */}
         <div>
           <h2>My listings</h2>
-          <CastleListing />
+          <CreatedListing castle={dummyCastleListings[0]} />
         </div>
 
         {/* Create new castle listing */}
         <div>
           <h2>Create new castle listing</h2>
-          <CastleListingForm />
+          <ListingForm />
         </div>
       </div>
       

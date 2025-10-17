@@ -1,4 +1,5 @@
 import CastleCardBig from "../components/CastleCardBig"
+import { dummyCastleListings } from "../data/castleListings"
 
 const SearchResults = () => {
   // Använd usesearchparams?
@@ -21,9 +22,7 @@ const SearchResults = () => {
       {/* Search results */}
       <div>
         {/* Castle card/s */}
-        <CastleCardBig />
-        <CastleCardBig />
-        <CastleCardBig />
+        <CastleCardBig castle={dummyCastleListings[0]}/>
       </div>
 
     </div>

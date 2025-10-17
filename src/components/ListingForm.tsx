@@ -1,6 +1,6 @@
 import Calendar from "./Calendar"
 
-const CastleListingForm = () => {
+const ListingForm = () => {
   return (
     <div>
         <form action="">
@@ -58,4 +58,4 @@ const CastleListingForm = () => {
     </div>
   )
 }
-export default CastleListingForm
+export default ListingForm
