@@ -1,4 +1,4 @@
-import Calendar from "./Calendar"
+import DateCalendar from "./DateCalendar"
 
 const ListingForm = () => {
   return (
@@ -18,7 +18,7 @@ const ListingForm = () => {
             </div>
             <div>
                 <h3>Set avaliable dates</h3>
-                <Calendar />
+                <DateCalendar />
             </div>
             <div>
                 <h3>Set maximum of guests per booking</h3>

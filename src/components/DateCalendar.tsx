@@ -1,6 +1,6 @@
 import { DayPicker } from "react-day-picker"
 
-const Calendar = () => {
+const DateCalendar = () => {
   // TODO: Ersätta med kalender från shadcn?
   return (
     <div>
@@ -8,4 +8,4 @@ const Calendar = () => {
     </div>
   )
 }
-export default Calendar
+export default DateCalendar

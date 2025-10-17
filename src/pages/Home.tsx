@@ -3,6 +3,7 @@ import CastleCardSmall from "../components/CastleCardSmall"
 import FilterDropdown from "../components/FilterDropdown"
 import { dummyCastleListings } from "../data/castleListings"
 import { useNavigate } from "react-router"
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 
 const Home = () => {
   // TODO: Add date picker for the select date field
@@ -52,21 +53,33 @@ const Home = () => {
         {/* Scandinavia castles carousel */}
         <h2>Scandinavia</h2>
         <div>
-          {
-            dummyCastleListings.map(c => (
-              <CastleCardSmall castle={c}/>
-            ))
-          }
+          <Carousel>
+            <CarouselContent>
+              {
+                dummyCastleListings.map(c => (
+                  <CarouselItem>
+                    <CastleCardSmall castle={c}/>
+                  </CarouselItem>
+                ))
+              }
+            </CarouselContent>
+          </Carousel>
         </div>
 
         {/* Sweden castles carousel */}
         <h2>Sweden</h2>
         <div>
-          {
-            dummyCastleListings.map(c => (
-              <CastleCardSmall castle={c}/>
-            ))
-          }
+          <Carousel>
+            <CarouselContent>
+              {
+                dummyCastleListings.map(c => (
+                  <CarouselItem>
+                    <CastleCardSmall castle={c}/>
+                  </CarouselItem>
+                ))
+              }
+            </CarouselContent>
+          </Carousel>
         </div>
       </div>
 
