@@ -2,8 +2,12 @@ import Calendar from "../components/Calendar"
 import AddGuestsCounter from "../components/AddGuestsCounter"
 import RoomCard from "../components/RoomCard"
 import { dummyRooms } from "../data/rooms"
+import { useParams } from "react-router"
 
 const CastleDetails = () => {
+
+  const { castleId } = useParams()
+
   return (
     <div>
       <button>Go back to listings</button>

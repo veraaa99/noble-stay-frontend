@@ -1,9 +1,13 @@
+import { useNavigate } from "react-router"
 import Booking from "../components/Booking"
 import PaymentOptions from "../components/PaymentOptions"
 import RegisterForm from "../components/RegisterForm"
 import { dummyBookings } from "../data/bookings"
 
 const PlaceBooking = () => {
+
+  const navigate = useNavigate()
+
   return (
     <div>
       <button>Go back without booking</button>
@@ -21,7 +25,7 @@ const PlaceBooking = () => {
         <h2>Select payment method</h2>
         {/* <p>Disclaimer: you will not be charged</p>  */}
         <PaymentOptions />
-        <button>Book</button>
+        <button onClick={() => navigate('/confirmed')}>Book</button>
       </div>
 
     </div>

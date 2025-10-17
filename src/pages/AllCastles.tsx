@@ -1,7 +1,16 @@
+import { useState } from "react"
 import CastleCardBig from "../components/CastleCardBig"
 import { dummyCastleListings } from "../data/castleListings"
+import FilterDropdown from "../components/FilterDropdown"
 
 const AllCastles = () => {
+
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+  
+  const filterModalHandler = () => {
+    setIsFilterModalOpen(isFilterModalOpen => !isFilterModalOpen)
+  }
+
   return (
     <div>
       <div>
@@ -10,16 +19,28 @@ const AllCastles = () => {
         </div>
         <div>
           <p>3 found</p>
-          <button>Filter</button>
+          <button onClick={filterModalHandler}>Filter</button>
         </div>
       </div>
+
+      {
+        isFilterModalOpen &&
+        <div>
+          <p onClick={filterModalHandler}>X</p>
+          <FilterDropdown />
+          <FilterDropdown />
+          <FilterDropdown />
+          <button onClick={filterModalHandler}>Apply</button>
+        </div>
+      }
 
       {/* Search results */}
       <div>
         {/* Castle card/s */}
-        <CastleCardBig castle={dummyCastleListings[0]} />
-        <CastleCardBig castle={dummyCastleListings[0]} />
-        <CastleCardBig castle={dummyCastleListings[0]} />
+        { dummyCastleListings.map (c => (
+          <CastleCardBig castle={c} />
+          ))
+        }
       </div>
     </div>
   )

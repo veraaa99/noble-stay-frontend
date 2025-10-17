@@ -2,16 +2,16 @@ const PaymentOptions = () => {
   return (
     <div>
         <div>
-            <p>Credit card</p>
-            <input type="radio" name="" id="" />
+            <label htmlFor="creditCard">Credit card</label>
+            <input type="radio" name="paymentMethod" id="creditCard" />
         </div>
         <div>
-            <p>PayPal</p>
-            <input type="radio" name="" id="" />
+            <label htmlFor="payPal">PayPal</label>
+            <input type="radio" name="paymentMethod" id="payPal" />
         </div>
         <div>
-            <p>Swish</p>
-            <input type="radio" name="" id="" />
+            <label htmlFor="swish">Swish</label>
+            <input type="radio" name="paymentMethod" id="swish" />
         </div>
     </div>
   )

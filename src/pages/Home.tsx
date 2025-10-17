@@ -2,6 +2,7 @@ import { useState } from "react"
 import CastleCardSmall from "../components/CastleCardSmall"
 import FilterDropdown from "../components/FilterDropdown"
 import { dummyCastleListings } from "../data/castleListings"
+import { useNavigate } from "react-router"
 
 const Home = () => {
   // TODO: Add date picker for the select date field
@@ -14,6 +15,9 @@ const Home = () => {
     setIsFilterModalOpen(isFilterModalOpen => !isFilterModalOpen)
   }
 
+  // Make into a hook?
+  const navigate = useNavigate()
+
   return (
     <div>
       <div>
@@ -23,14 +27,14 @@ const Home = () => {
           <input type="text" placeholder="Select date"/>
           <input type="text" placeholder="Select guests" />
           <input type="text" placeholder="Filter" onClick={filterModalHandler}/>
-          <button>Search</button>
+          <button onClick={() => navigate('/search/1')}>Search</button>
         </div>
       </div>
 
       {
         isFilterModalOpen &&
         <div>
-          <p>X</p>
+          <p onClick={filterModalHandler}>X</p>
           <FilterDropdown />
           <FilterDropdown />
           <FilterDropdown />
@@ -47,17 +51,21 @@ const Home = () => {
         {/* Scandinavia castles carousel */}
         <h2>Scandinavia</h2>
         <div>
-          <CastleCardSmall castle={dummyCastleListings[0]}/>
-          <CastleCardSmall castle={dummyCastleListings[0]}/>
-          <CastleCardSmall castle={dummyCastleListings[0]}/>
+          {
+            dummyCastleListings.map(c => (
+              <CastleCardSmall castle={c}/>
+            ))
+          }
         </div>
 
         {/* Sweden castles carousel */}
         <h2>Sweden</h2>
         <div>
-          <CastleCardSmall castle={dummyCastleListings[0]}/>
-          <CastleCardSmall castle={dummyCastleListings[0]}/>
-          <CastleCardSmall castle={dummyCastleListings[0]}/>
+          {
+            dummyCastleListings.map(c => (
+              <CastleCardSmall castle={c}/>
+            ))
+          }
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import LoginForm from "./LoginForm"
 import RegisterForm from "./RegisterForm"
+import { Link } from "react-router"
 
 const NavBar = () => {
 
@@ -28,8 +29,10 @@ const NavBar = () => {
     <div>
       <div>
         {/* Logotype */}
-        <img src="" alt="" />
-        {/* IF DESKTOP: Show logo + full name */}
+        <Link to={'/'}>
+          <img src="" alt="" />
+          {/* IF DESKTOP: Show logo + full name */}
+        </Link>
         {/* NOBLE STAY */}
       </div>
       <div>
@@ -47,15 +50,21 @@ const NavBar = () => {
             <p onClick={menuModalHandler}>X</p>
           </div>
           <div>
-            <div>
-              <p>Home</p>
-            </div>
-            <div>
-              <p>All castles</p>
-            </div>
-            <div>
-              <p>My bookings</p>
-            </div>
+            <Link to={'/'} onClick={menuModalHandler}>
+              <div>
+                <p>Home</p>
+              </div>
+            </Link>
+            <Link to={'/all' } onClick={menuModalHandler}>
+              <div>
+                <p>All castles</p>
+              </div>
+            </Link>
+            <Link to={'/profile'}>
+              <div>
+                <p>My bookings</p>
+              </div>
+            </Link>
             <div>
               <p onClick={loginModalHandler}>Login /Sign up</p>
             </div>

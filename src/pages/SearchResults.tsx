@@ -1,8 +1,18 @@
+import { useParams } from "react-router"
 import CastleCardBig from "../components/CastleCardBig"
 import { dummyCastleListings } from "../data/castleListings"
+import { useState } from "react"
+import FilterDropdown from "../components/FilterDropdown"
 
 const SearchResults = () => {
   // Använd usesearchparams?
+  const { filter } = useParams()
+
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+
+  const filterModalHandler = () => {
+    setIsFilterModalOpen(isFilterModalOpen => !isFilterModalOpen)
+  }
 
   return (
     <div>
@@ -15,9 +25,20 @@ const SearchResults = () => {
         </div>
         <div>
           <p>dummyNumber</p>
-          <button>Filter</button>
+          <button onClick={filterModalHandler}>Filter</button>
         </div>
       </div>
+
+      {
+        isFilterModalOpen &&
+        <div>
+          <p onClick={filterModalHandler}>X</p>
+          <FilterDropdown />
+          <FilterDropdown />
+          <FilterDropdown />
+          <button onClick={filterModalHandler}>Apply</button>
+        </div>
+      }
 
       {/* Search results */}
       <div>

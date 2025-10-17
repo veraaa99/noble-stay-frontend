@@ -1,3 +1,5 @@
+import { Link } from "react-router"
+
 type CreatedListingProps = {
   castle: CastleListing
 }
@@ -5,6 +7,7 @@ type CreatedListingProps = {
 const CreatedListing = ({ castle }: CreatedListingProps ) => {
   return (
     <div>
+      <Link to={`/castles/${castle.id}`}>
         <div>
             <div>
                 <img src={castle.images[0]} alt="" />
@@ -17,6 +20,7 @@ const CreatedListing = ({ castle }: CreatedListingProps ) => {
             <p>{castle.rules}</p>
             <p>{castle.amneties?.join(' ')}</p>
         </div>  
+      </Link>
     </div>
   )
 }

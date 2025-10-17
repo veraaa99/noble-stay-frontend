@@ -5,6 +5,8 @@ import { dummyBookings } from "../data/bookings"
 import { dummyCastleListings } from "../data/castleListings"
 
 const Profile = () => {
+  // TODO: Use localstorage to save user who's currently logged in
+  // TODO: Make a mybookings page? ask if it's ok
   return (
     <div>
       {/* Full account information */}

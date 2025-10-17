@@ -1,7 +1,11 @@
+import { useNavigate } from "react-router"
 import Booking from "../components/Booking"
 import { dummyBookings } from "../data/bookings"
 
 const BookingConfirmed = () => {
+
+  const navigate = useNavigate()
+
   return (
     <div>
       {/* Booking confirmed title */}
@@ -19,7 +23,7 @@ const BookingConfirmed = () => {
         <p>Download this booking</p>
       </div>
 
-      <button>Back to start</button>
+      <button onClick={() => navigate('/')}>Back to start</button>
     </div>
   )
 }
