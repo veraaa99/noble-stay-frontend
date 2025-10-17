@@ -1,4 +1,11 @@
+import { useNavigate } from "react-router"
+import Booking from "../components/Booking"
+import { dummyBookings } from "../data/bookings"
+
 const BookingConfirmed = () => {
+
+  const navigate = useNavigate()
+
   return (
     <div>
       {/* Booking confirmed title */}
@@ -10,49 +17,13 @@ const BookingConfirmed = () => {
 
       <p>Summary:</p>
       {/* Booking summary */}
-      <div>
-
-        <div>
-          <h2>dummyTitle</h2>
-          <p>dummyLocation</p>
-        </div>
-        <hr />
-        <div>
-          <h3>Date:</h3>
-          <div>
-            <p>dummyDate</p>
-            <p>→</p>
-            <p>dummyDate</p>
-          </div>
-        </div>
-        <hr />
-        <div>
-          <h3>Room:</h3>
-          <p>dummyRoom</p>
-        </div>
-        <hr />
-        <div>
-          <h3>Guests:</h3>
-          <p>dummyGuests</p>
-        </div>
-        <hr />
-        <div>
-          <h3>Booking ID:</h3>
-          <p>dummyBookingID</p>
-        </div>
-        <hr />
-        <div>
-          <h3>Total:</h3>
-          <p>dummyNumber</p>
-        </div>
-
-      </div>
+      <Booking booking={dummyBookings[0]} bookingConfirmed={true} />
 
       <div>
         <p>Download this booking</p>
       </div>
 
-      <button>Back to start</button>
+      <button onClick={() => navigate('/')}>Back to start</button>
     </div>
   )
 }

@@ -46,8 +46,6 @@ type User = {
     email: string,
     phone: string,
     password: string,
-    bookings?: Booking[],
-    listings?: CastleListing[]
 }
 
 type Guest = {

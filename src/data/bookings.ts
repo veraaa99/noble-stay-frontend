@@ -1,19 +1,9 @@
-import { dummyCastleListings } from "./castleListings";
-import { dummyGuests } from "./guests";
-import { dummyRooms } from "./rooms";
-import { dummyUsers } from "./users";
+import { dummyCastleListings } from "./castleListings.ts";
+import { dummyGuests } from "./guests.ts";
+import { dummyRooms } from "./rooms.ts";
+import { dummyUsers } from "./users.ts";
 
 export const dummyBookings: Booking[] = [
-    // {
-    //     bookingId: 1,
-    //     castle: dummyCastleListings[0],
-    //     bookedUser: dummyUsers[1],
-    //     bookedDates: dummyCastleListings[0].dates,
-    //     bookedRooms: [dummyCastleListings[0].rooms[0]],
-    //     bookedGuests: [dummyCastleListings[0].guests[0]],
-    //     bookedEvents: dummyCastleListings[0].events,
-    //     totalPrice: dummyCastleListings[0].rooms[0].price * dummyCastleListings[0].guests[0].number
-    // },
     {
         bookingId: 1,
         castle: dummyCastleListings[0],
