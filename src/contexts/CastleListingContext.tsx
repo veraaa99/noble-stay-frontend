@@ -1,12 +1,12 @@
 import { dummyCastleListings } from "@/data/castleListings";
-import { createContext, useContext, useState, type PropsWithChildren } from "react"
+import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
 
 type CastleListingState = {
     listings: CastleListing[],
     actions: {
         createListing: (listing: CastleListing) => void;
-        getListings: (filter: string[]) => CastleListing[] | null;
-        getListingByID: (listingId: CastleListing['id']) => CastleListing | null
+        getListingsByFilter: (filter: string[]) => CastleListing[] | undefined;
+        getListingByID: (listingId: CastleListing['id']) => CastleListing | undefined
     }
 }
 
@@ -14,8 +14,8 @@ const defaultState: CastleListingState = {
     listings: [],
     actions: {
         createListing: () => {},
-        getListings: () => null,
-        getListingByID: () => null
+        getListingsByFilter: () => undefined,
+        getListingByID: () => undefined
     }
 }
 
@@ -23,23 +23,46 @@ const CastleListingContext = createContext<CastleListingState>(defaultState)
 
 function CastleListingProvider ({ children }: PropsWithChildren){
 
-    const [listings, setListings] = useState(dummyCastleListings) 
+    const [listings, setListings] = useState<CastleListing[]>(dummyCastleListings)
 
-    const createListing: typeof defaultState.actions.createListing = (listing: CastleListing) => {
-        return
+    useEffect(() => {
+        _getListings()
+    }, [])
+    
+    // Private functions 
+    const _getListings = () => { 
+        setListings(dummyCastleListings)
     }
 
-    const getListings: typeof defaultState.actions.getListings = (filter: string[]) => { 
+    const _setListings = (_listings: CastleListing[]) => {
+        setListings(dummyCastleListings)
+    }
+
+    // Public functions
+    const createListing: typeof defaultState.actions.createListing = (listing: CastleListing) => {
+        const updatedListings = [...listings, listing]
+        _setListings(updatedListings)
+    }
+
+    const getListingsByFilter: typeof defaultState.actions.getListingsByFilter = (filter: string[])  => { 
+        //TODO: If no filters, return all castles. Else, only return castles with matching filters
+        
         return dummyCastleListings
     }
 
     const getListingByID: typeof defaultState.actions.getListingByID = (listingId: number) => {
-        return dummyCastleListings[0]
+        const castleListing = dummyCastleListings.find(listing => listing.id == listingId)
+        if(castleListing == undefined) {
+            console.log('Error: Listing could not be found')
+            return castleListing
+        }
+        
+        return castleListing
     }
 
     const actions = {
         createListing,
-        getListings,
+        getListingsByFilter,
         getListingByID
     }
   

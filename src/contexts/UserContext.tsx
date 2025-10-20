@@ -1,5 +1,5 @@
 import { dummyUsers } from "@/data/users"
-import { createContext, useContext, useState, type PropsWithChildren } from "react"
+import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
 
 type UserState = {
     users: User[],
@@ -23,25 +23,35 @@ const UserContext = createContext<UserState>(defaultState)
 
 function UserProvider ({ children }: PropsWithChildren){
 
-    const [users, setUsers] = useState<User[]>(dummyUsers)
+    const [users, setUsers] = useState<User[]>([])
     const [currentUser, setCurrentUser] = useState<User | null>(defaultState.currentUser)
+
+    useEffect(() => {
+      _getUsers()
+      _getCurrentUser()
+    }, [])
     
+    // Private functions
     const _getUsers = () => {
-        // const _users: User[] = LocalStorageService.getItem('@forum/users', dummyUsers)
-        // setUsers(_users)
+        setUsers(dummyUsers)
+    }
+
+     const _getCurrentUser = () => {
+        setCurrentUser(dummyUsers[0])
     }
 
     const _setUsers = (_users: User[]) => {
-        // LocalStorageService.setItem('@forum/users', _users)
         setUsers(_users)
     }
 
+    // Public functions
     const createUser: typeof defaultState.actions.createUser = (user: User) => {
-
+        const updatedUsers = [...users, user]
+        _setUsers(updatedUsers)
     }
 
     const setUser: typeof defaultState.actions.setUser = (user: User | null) => {
-
+        setCurrentUser(user)
     }
 
     const actions = {
