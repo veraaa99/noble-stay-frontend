@@ -1,4 +1,5 @@
-import { createContext, useContext, type PropsWithChildren } from "react"
+import { dummyCastleListings } from "@/data/castleListings";
+import { createContext, useContext, useState, type PropsWithChildren } from "react"
 
 type CastleListingState = {
     listings: CastleListing[],
@@ -21,8 +22,34 @@ const defaultState: CastleListingState = {
 const CastleListingContext = createContext<CastleListingState>(defaultState) 
 
 function CastleListingProvider ({ children }: PropsWithChildren){
-  return (
-    <div>CastleListingContext</div>
+
+    const [listings, setListings] = useState(dummyCastleListings) 
+
+    const createListing: typeof defaultState.actions.createListing = (listing: CastleListing) => {
+        return
+    }
+
+    const getListings: typeof defaultState.actions.getListings = (filter: string[]) => { 
+        return dummyCastleListings
+    }
+
+    const getListingByID: typeof defaultState.actions.getListingByID = (listingId: number) => {
+        return dummyCastleListings[0]
+    }
+
+    const actions = {
+        createListing,
+        getListings,
+        getListingByID
+    }
+  
+    return (
+    <CastleListingContext.Provider value={{
+        listings,
+        actions
+    }}>
+        { children }
+    </CastleListingContext.Provider>
   )
 }
 

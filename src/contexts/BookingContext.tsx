@@ -1,4 +1,5 @@
-import { createContext, useContext, type PropsWithChildren } from "react"
+import { dummyBookings } from "@/data/bookings";
+import { createContext, useContext, useState, type PropsWithChildren } from "react"
 
 type BookingState = {
     bookings: Booking[],
@@ -19,8 +20,29 @@ const defaultState: BookingState = {
 const BookingContext = createContext<BookingState>(defaultState) 
 
 function BookingProvider ({ children }: PropsWithChildren){
+
+    const [bookings, setBookings] = useState(dummyBookings)
+
+    const createBooking: typeof defaultState.actions.createBooking = (booking: Booking) => {
+
+    }
+
+    const getBookingsByUser: typeof defaultState.actions.getBookingsByUser = (user: User) => {
+        return [dummyBookings[0]]
+    }
+
+    const actions = {
+        createBooking,
+        getBookingsByUser
+    }
+
   return (
-    <div>CastleListingContext</div>
+    <BookingContext.Provider value={{
+        bookings,
+        actions
+    }}>
+        { children }
+    </BookingContext.Provider>
   )
 }
 
