@@ -1,9 +1,11 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import CastleCardSmall from "../components/CastleCardSmall"
 import FilterDropdown from "../components/FilterDropdown"
 import { dummyCastleListings } from "../data/castleListings"
 import { useNavigate } from "react-router"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import AddGuestsCounter from "@/components/AddGuestsCounter"
+import { dummyGuests } from "@/data/guests"
 
 const Home = () => {
   // TODO: Add date picker for the select date field
@@ -11,9 +13,14 @@ const Home = () => {
   // https://daypicker.dev/docs/selection-modes
 
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+  const [isGuestsModalOpen, setIsGuestsModalOpen] = useState(false)
 
   const filterModalHandler = () => {
     setIsFilterModalOpen(isFilterModalOpen => !isFilterModalOpen)
+  }
+
+  const guestsModalHandler = () => {
+    setIsGuestsModalOpen(isGuestsModalOpen => !isGuestsModalOpen)
   }
 
   // Make into a hook?
@@ -26,7 +33,7 @@ const Home = () => {
         <div>
           <input type="text" placeholder="Search location" />
           <input type="text" placeholder="Select date"/>
-          <input type="text" placeholder="Select guests" />
+          <input type="text" placeholder="Select guests" onClick={guestsModalHandler}/>
           <input type="text" placeholder="Filter" onClick={filterModalHandler}/>
           <button onClick={() => navigate('/search/1')}>Search</button>
         </div>
@@ -41,6 +48,14 @@ const Home = () => {
           <FilterDropdown name={'Events'} options={['Ghost hunting', 'Dance party', 'Photoshoot', 'Guided tour']}/>
           <FilterDropdown name={'Amneties'} options={['Pets allowed', 'Breakfast included', 'Lunch included', 'Gym nearby']}/>
           <button onClick={filterModalHandler}>Apply</button>
+        </div>
+      }
+
+      {
+        isGuestsModalOpen &&
+        <div>
+          <p onClick={guestsModalHandler}>X</p>
+          <AddGuestsCounter />
         </div>
       }
 

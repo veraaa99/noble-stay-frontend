@@ -3,19 +3,39 @@ import { createContext, useContext, useEffect, useState, type PropsWithChildren 
 
 type CastleListingState = {
     listings: CastleListing[],
+    selectedGuests: Guest[],
     actions: {
         createListing: (listing: CastleListing) => void;
         getListingsByFilter: (filter: string[]) => CastleListing[] | undefined;
         getListingByID: (listingId: CastleListing['id']) => CastleListing | undefined
+        updateSelectedGuests: (guests: Guest[]) => void
     }
 }
 
 const defaultState: CastleListingState = {
     listings: [],
+    selectedGuests: [
+    {
+        id: 1,
+        category: 'adult',
+        number: 0,
+    },
+    {
+        id: 2,
+        category: 'child',
+        number: 0
+    },
+    {
+        id: 3,
+        category: 'pet',
+        number: 0
+    }
+    ],
     actions: {
         createListing: () => {},
         getListingsByFilter: () => undefined,
-        getListingByID: () => undefined
+        getListingByID: () => undefined,
+        updateSelectedGuests: () => {}
     }
 }
 
@@ -24,6 +44,7 @@ const CastleListingContext = createContext<CastleListingState>(defaultState)
 function CastleListingProvider ({ children }: PropsWithChildren){
 
     const [listings, setListings] = useState<CastleListing[]>(dummyCastleListings)
+    const [selectedGuests, setSelectedGuests] = useState<Guest[]>(defaultState.selectedGuests)
 
     useEffect(() => {
         _getListings()
@@ -36,6 +57,10 @@ function CastleListingProvider ({ children }: PropsWithChildren){
 
     const _setListings = (_listings: CastleListing[]) => {
         setListings(dummyCastleListings)
+    }
+
+    const _setSelectedGuests = (_guests: Guest[]) => {
+        setSelectedGuests(_guests)
     }
 
     // Public functions
@@ -60,15 +85,21 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         return castleListing
     }
 
+    const updateSelectedGuests = (guests: Guest[]) => {
+        setSelectedGuests(guests)
+    }
+
     const actions = {
         createListing,
         getListingsByFilter,
-        getListingByID
+        getListingByID,
+        updateSelectedGuests
     }
   
     return (
     <CastleListingContext.Provider value={{
         listings,
+        selectedGuests,
         actions
     }}>
         { children }

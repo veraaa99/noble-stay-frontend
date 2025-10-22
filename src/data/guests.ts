@@ -7,7 +7,7 @@ export const dummyGuests: Guest[] = [
     {
         id: 2,
         category: 'child',
-        number: 1
+        number: 2
     },
     {
         id: 3,
