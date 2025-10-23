@@ -3,15 +3,11 @@ import AddGuestsCounter from "../components/AddGuestsCounter"
 import RoomCard from "../components/RoomCard"
 import { useParams } from "react-router"
 import { useCastleListing } from "@/contexts/CastleListingContext"
-import { useState } from "react"
 
 const CastleDetails = () => {
 
-  // ISTÄLLET: Lägga guests i en context???
-
   let params = useParams()
   const { actions } = useCastleListing()
-  const [castleGuests, setCastleGuests] = useState<Guest[]>([])
 
   if(!params.castleId) {
     console.log('404: Not found')

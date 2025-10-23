@@ -4,15 +4,18 @@ import { Button } from './ui/button'
 
 type DropdownProps = {
   name: string,
-  options: string[]
+  options: string[],
+  onHandleSelectOptions: (name: string, option: string) => void
 }
 
-const FilterDropdown = ({ name, options }: DropdownProps ) => {
+const FilterDropdown = ({ name, options, onHandleSelectOptions }: DropdownProps ) => {
 
   const [checked, setChecked] = useState<string[]>([]);
+  //TODO: If size or rooms, only one checkbox/radio button?
 
   // https://stackoverflow.com/questions/60408612/how-to-select-one-checkbox-from-a-mapped-multiple-checkboxes-react-js
   const handleChange = (option: string) => () => {
+    onHandleSelectOptions(name, option)
     setChecked(prev => {
       if (prev.includes(option)) {
         return prev.filter(x => x !== option);

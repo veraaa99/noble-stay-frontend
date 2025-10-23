@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 
 type GuestsCounterProps = {
@@ -6,7 +6,6 @@ type GuestsCounterProps = {
 }
 
 const AddGuestsCounter = ({ castleListing }: GuestsCounterProps) => {
-
     const { selectedGuests, actions } = useCastleListing()
     const newAllGuests = [...selectedGuests]
 

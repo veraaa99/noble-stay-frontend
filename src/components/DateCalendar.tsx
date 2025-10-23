@@ -1,5 +1,7 @@
 import { DayPicker } from "react-day-picker"
 
+//TODO: Add optional dates from listing
+
 const DateCalendar = () => {
   return (
     <div>

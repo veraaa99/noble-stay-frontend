@@ -4,6 +4,7 @@ type CreatedListingProps = {
   castle: CastleListing
 }
 
+
 const CreatedListing = ({ castle }: CreatedListingProps ) => {
   return (
     <div>

@@ -86,7 +86,7 @@ function CastleListingProvider ({ children }: PropsWithChildren){
     }
 
     const updateSelectedGuests = (guests: Guest[]) => {
-        setSelectedGuests(guests)
+        _setSelectedGuests(guests)
     }
 
     const actions = {

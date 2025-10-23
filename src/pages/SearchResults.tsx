@@ -1,14 +1,50 @@
-import { useParams } from "react-router"
+import { useParams, useSearchParams } from "react-router"
 import CastleCardBig from "../components/CastleCardBig"
 import { dummyCastleListings } from "../data/castleListings"
 import { useState } from "react"
 import FilterDropdown from "../components/FilterDropdown"
+import { dummyFilters } from "@/data/filters"
 
 const SearchResults = () => {
   // Använd usesearchparams?
-  const { filter } = useParams()
+  const [ searchParams ] = useSearchParams()
 
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+
+  const [selectedFilters, setSelectedFilters] = useState(dummyFilters)
+
+  const handleSelectOptions = (filterName: string, filterOption: string) => {
+    const newSelectedFilters = [...selectedFilters]
+    const filterToUpdate = newSelectedFilters.find(f => f.name == filterName)
+    const filterToUpdateIndex = newSelectedFilters.findIndex(f => f.name == filterName)
+
+    if (filterToUpdate) {
+      const optionAlreadySelected = filterToUpdate.selectedOptions.find(o => o == filterOption)
+      
+      if(optionAlreadySelected) {
+        const updatedSelectedOptions = filterToUpdate.selectedOptions.filter(o => o !== filterOption)
+
+        const updatedFilter: Filter = {
+          ...filterToUpdate,
+          selectedOptions: updatedSelectedOptions
+        }
+
+        newSelectedFilters[filterToUpdateIndex] = updatedFilter
+      } else {
+        filterToUpdate.selectedOptions.push(filterOption)
+
+        const updatedFilter: Filter = {
+          ...filterToUpdate,
+          selectedOptions: filterToUpdate.selectedOptions
+        }
+        
+        newSelectedFilters[filterToUpdateIndex] = updatedFilter
+      }
+
+      setSelectedFilters(newSelectedFilters)
+    }
+
+  }
 
   const filterModalHandler = () => {
     setIsFilterModalOpen(isFilterModalOpen => !isFilterModalOpen)
@@ -33,10 +69,10 @@ const SearchResults = () => {
         isFilterModalOpen &&
         <div>
           <p onClick={filterModalHandler}>X</p>
-          <FilterDropdown name={'Size'} options={['50m²', '20m²', '100m²']}/>
-          <FilterDropdown name={'Number of rooms'} options={['1', '2', '3', '4', '5']}/>
-          <FilterDropdown name={'Events'} options={['Ghost hunting', 'Dance party', 'Photoshoot', 'Guided tour']}/>
-          <FilterDropdown name={'Amneties'} options={['Pets allowed', 'Breakfast included', 'Lunch included', 'Gym nearby']}/>
+          <FilterDropdown name={dummyFilters[0].name} options={dummyFilters[0].options} onHandleSelectOptions={handleSelectOptions}/>
+          <FilterDropdown name={dummyFilters[1].name} options={dummyFilters[1].options} onHandleSelectOptions={handleSelectOptions}/>
+          <FilterDropdown name={dummyFilters[2].name} options={dummyFilters[2].options} onHandleSelectOptions={handleSelectOptions}/>
+          <FilterDropdown name={dummyFilters[3].name} options={dummyFilters[3].options} onHandleSelectOptions={handleSelectOptions}/>
           <button onClick={filterModalHandler}>Apply</button>
         </div>
       }
