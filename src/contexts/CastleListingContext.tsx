@@ -65,7 +65,7 @@ function CastleListingProvider ({ children }: PropsWithChildren){
 
     // Public functions
     const createListing: typeof defaultState.actions.createListing = (listing: CastleListing) => {
-        const updatedListings = [...listings, listing]
+        const updatedListings: CastleListing[] = [...listings, listing]
         _setListings(updatedListings)
     }
 
@@ -76,7 +76,7 @@ function CastleListingProvider ({ children }: PropsWithChildren){
     }
 
     const getListingByID: typeof defaultState.actions.getListingByID = (listingId: number) => {
-        const castleListing = dummyCastleListings.find(listing => listing.id == listingId)
+        const castleListing: CastleListing | undefined = dummyCastleListings.find(listing => listing.id == listingId)
         if(castleListing == undefined) {
             console.log('Error: Listing could not be found')
             return castleListing
@@ -85,7 +85,7 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         return castleListing
     }
 
-    const updateSelectedGuests = (guests: Guest[]) => {
+    const updateSelectedGuests: typeof defaultState.actions.updateSelectedGuests = (guests: Guest[]) => {
         _setSelectedGuests(guests)
     }
 

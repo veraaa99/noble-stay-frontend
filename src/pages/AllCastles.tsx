@@ -7,19 +7,18 @@ import { dummyFilters } from "@/data/filters"
 const AllCastles = () => {
 
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
-
   const [selectedFilters, setSelectedFilters] = useState(dummyFilters)
 
   const handleSelectOptions = (filterName: string, filterOption: string) => {
-    const newSelectedFilters = [...selectedFilters]
-    const filterToUpdate = newSelectedFilters.find(f => f.name == filterName)
-    const filterToUpdateIndex = newSelectedFilters.findIndex(f => f.name == filterName)
+    const newSelectedFilters: Filter[] = [...selectedFilters]
+    const filterToUpdate: Filter | undefined = newSelectedFilters.find(f => f.name == filterName)
+    const filterToUpdateIndex: number | undefined = newSelectedFilters.findIndex(f => f.name == filterName)
 
     if (filterToUpdate) {
-      const optionAlreadySelected = filterToUpdate.selectedOptions.find(o => o == filterOption)
+      const optionAlreadySelected: string | undefined = filterToUpdate.selectedOptions.find(o => o == filterOption)
       
       if(optionAlreadySelected) {
-        const updatedSelectedOptions = filterToUpdate.selectedOptions.filter(o => o !== filterOption)
+        const updatedSelectedOptions: string[] | undefined = filterToUpdate.selectedOptions.filter(o => o !== filterOption)
 
         const updatedFilter: Filter = {
           ...filterToUpdate,

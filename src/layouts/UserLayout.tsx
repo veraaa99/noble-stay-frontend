@@ -1,6 +1,7 @@
 import { Outlet } from "react-router"
 
 const UserLayout = () => {
+
   return (
       <div>
         <Outlet />

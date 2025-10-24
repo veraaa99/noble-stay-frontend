@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import CastleCardSmall from "../components/CastleCardSmall"
 import FilterDropdown from "../components/FilterDropdown"
 import { dummyCastleListings } from "../data/castleListings"
@@ -15,15 +15,15 @@ const Home = () => {
   const [selectedFilters, setSelectedFilters] = useState(dummyFilters)
 
   const handleSelectOptions = (filterName: string, filterOption: string) => {
-    const newSelectedFilters = [...selectedFilters]
-    const filterToUpdate = newSelectedFilters.find(f => f.name == filterName)
-    const filterToUpdateIndex = newSelectedFilters.findIndex(f => f.name == filterName)
+    const newSelectedFilters: Filter[] = [...selectedFilters]
+    const filterToUpdate: Filter | undefined = newSelectedFilters.find(f => f.name == filterName)
+    const filterToUpdateIndex: number | undefined = newSelectedFilters.findIndex(f => f.name == filterName)
 
     if (filterToUpdate) {
-      const optionAlreadySelected = filterToUpdate.selectedOptions.find(o => o == filterOption)
+      const optionAlreadySelected: string | undefined = filterToUpdate.selectedOptions.find(o => o == filterOption)
       
       if(optionAlreadySelected) {
-        const updatedSelectedOptions = filterToUpdate.selectedOptions.filter(o => o !== filterOption)
+        const updatedSelectedOptions: string[] | undefined = filterToUpdate.selectedOptions.filter(o => o !== filterOption)
 
         const updatedFilter: Filter = {
           ...filterToUpdate,
@@ -67,7 +67,7 @@ const Home = () => {
           <input type="text" placeholder="Select date"/>
           <input type="text" placeholder="Select guests" onClick={guestsModalHandler}/>
           <input type="text" placeholder="Filter" onClick={filterModalHandler}/>
-          <button onClick={() => navigate('/search/1')}>Search</button>
+          <button onClick={() => navigate('/search/?guests=3')}>Search</button>
         </div>
       </div>
 

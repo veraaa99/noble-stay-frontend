@@ -1,4 +1,5 @@
 export const dummyFilters: Filter[] = [
+    // TODO: Lägg till key-value par i options-arrayen (ex. 50m²: 50)
     {
         name: 'Size',
         options: ['50m²', '20m²', '100m²'],
