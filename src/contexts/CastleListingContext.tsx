@@ -7,8 +7,8 @@ type CastleListingState = {
     actions: {
         createListing: (listing: CastleListing) => void;
         getListingsByFilter: (filter: string[]) => CastleListing[] | undefined;
-        getListingByID: (listingId: CastleListing['id']) => CastleListing | undefined
-        updateSelectedGuests: (guests: Guest[]) => void
+        getListingsByID: (listingId: CastleListing['id']) => CastleListing[] | undefined;
+        updateSelectedGuests: (guests: Guest[]) => void;
     }
 }
 
@@ -34,7 +34,7 @@ const defaultState: CastleListingState = {
     actions: {
         createListing: () => {},
         getListingsByFilter: () => undefined,
-        getListingByID: () => undefined,
+        getListingsByID: () => undefined,
         updateSelectedGuests: () => {}
     }
 }
@@ -75,14 +75,15 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         return dummyCastleListings
     }
 
-    const getListingByID: typeof defaultState.actions.getListingByID = (listingId: number) => {
-        const castleListing: CastleListing | undefined = dummyCastleListings.find(listing => listing.id == listingId)
-        if(castleListing == undefined) {
+    const getListingsByID: typeof defaultState.actions.getListingsByID = (listingId: number) => {
+        const newListings = [...listings]
+        const userListings: CastleListing[] | undefined = newListings.filter(listing => listing.castleOwner.id == listingId)
+        if(userListings == undefined || userListings.length == 0) {
             console.log('Error: Listing could not be found')
-            return castleListing
+            return undefined
         }
         
-        return castleListing
+        return userListings
     }
 
     const updateSelectedGuests: typeof defaultState.actions.updateSelectedGuests = (guests: Guest[]) => {
@@ -92,7 +93,7 @@ function CastleListingProvider ({ children }: PropsWithChildren){
     const actions = {
         createListing,
         getListingsByFilter,
-        getListingByID,
+        getListingsByID,
         updateSelectedGuests
     }
   

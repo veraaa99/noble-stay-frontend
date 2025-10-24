@@ -1,5 +1,5 @@
 import { dummyBookings } from "@/data/bookings";
-import { createContext, useContext, useState, type PropsWithChildren } from "react"
+import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
 
 type BookingState = {
     bookings: Booking[],
@@ -23,9 +23,17 @@ function BookingProvider ({ children }: PropsWithChildren){
 
     const [bookings, setBookings] = useState<Booking[]>(dummyBookings)
 
+    useEffect(() => {
+        _getBookings()
+    }, [])
+
     // Private functions
     const _setBookings = (_bookings: Booking[]) => {
         setBookings(_bookings)
+    }
+
+    const _getBookings = () => {
+        return bookings
     }
 
     // Public functions
@@ -35,10 +43,11 @@ function BookingProvider ({ children }: PropsWithChildren){
     }
 
     const getBookingsByUser: typeof defaultState.actions.getBookingsByUser = (user: User) => {
-        const bookingsByUser: Booking[] | undefined = bookings.filter(booking => booking.bookedUser == user)
-        if(bookingsByUser == undefined) {
+        const newBookings = [...bookings]
+        const bookingsByUser: Booking[] | undefined = newBookings.filter(booking => booking.bookedUser.id == user.id)
+        if(bookingsByUser == undefined || bookingsByUser.length == 0) {
             console.log('Error: Booking/s could not be found')
-            return bookingsByUser
+            return undefined
         }
         return bookingsByUser
     }
