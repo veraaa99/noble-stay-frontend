@@ -2,12 +2,15 @@ import { useState } from "react"
 import LoginForm from "./LoginForm"
 import RegisterForm from "./RegisterForm"
 import { Link } from "react-router"
+import { useUser } from "@/contexts/UserContext"
 
 const NavBar = () => {
 
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false)
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
+
+  const { currentUser } = useUser()
 
   const menuModalHandler = () => {
     setIsMenuModalOpen(isMenuModalOpen => !isMenuModalOpen)
@@ -16,14 +19,16 @@ const NavBar = () => {
   const loginModalHandler = () => {
     setIsLoginModalOpen(isLoginModalOpen => !isLoginModalOpen)
     setIsRegisterModalOpen(false)
-    // setIsMenuModalOpen(false)
+    setIsMenuModalOpen(false)
   }
 
   const registerModalHandler = () => {
     setIsRegisterModalOpen(isRegisterModalOpen => !isRegisterModalOpen)
     setIsLoginModalOpen(false)
-    // setIsMenuModalOpen(false)
+    setIsMenuModalOpen(false)
   }
+
+  // TODO: Handle my bookings onclick if user isn't logged in
 
   return (
     <div>
@@ -66,7 +71,9 @@ const NavBar = () => {
               </div>
             </Link>
             <div>
-              <p onClick={loginModalHandler}>Login /Sign up</p>
+              { currentUser == null &&
+                <p onClick={loginModalHandler}>Login / Sign up</p>
+              }
             </div>
           </div>
         </div>
@@ -74,7 +81,7 @@ const NavBar = () => {
       {
         isLoginModalOpen && 
         <div>
-          <p>X</p>
+          <p onClick={loginModalHandler}>X</p>
           <LoginForm />
           <p>Don't have an account?</p> <p onClick={registerModalHandler}>SIGN UP</p>
         </div>
@@ -82,7 +89,7 @@ const NavBar = () => {
       {
         isRegisterModalOpen && 
         <div>
-          <p>X</p>
+          <p onClick={registerModalHandler}>X</p>
           <RegisterForm />
           <p>Already have an account?</p> <p onClick={loginModalHandler}>LOG IN</p>
         </div>

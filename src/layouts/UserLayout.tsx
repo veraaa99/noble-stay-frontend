@@ -1,11 +1,14 @@
-import { Outlet } from "react-router"
+import { useUser } from "@/contexts/UserContext"
+import { Navigate, Outlet } from "react-router"
 
 const UserLayout = () => {
 
+  const { currentUser } = useUser()
+
   return (
-      <div>
-        <Outlet />
-      </div>
+    currentUser
+    ? <Outlet />
+    : <Navigate to="/" replace />
   )
 }
 export default UserLayout

@@ -37,7 +37,7 @@ function UserProvider ({ children }: PropsWithChildren){
     }
 
      const _getCurrentUser = () => {
-        setCurrentUser(dummyUsers[0])
+        setCurrentUser(null)
     }
 
     const _setUsers = (_users: User[]) => {
