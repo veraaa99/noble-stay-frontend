@@ -4,16 +4,20 @@ import { createContext, useContext, useEffect, useState, type PropsWithChildren 
 type CastleListingState = {
     listings: CastleListing[],
     selectedGuests: Guest[],
+    filters: Filter[],
+    filterCheckboxes: string[],
     actions: {
         createListing: (listing: CastleListing) => void;
         getListingsByFilter: (filter: string[]) => CastleListing[] | undefined;
-        getListingsByID: (listingId: CastleListing['id']) => CastleListing[] | undefined;
+        getListingByID: (listingId: CastleListing['id']) => CastleListing | undefined;
+        getListingsByUser: (user: User) => CastleListing[] | undefined;
         updateSelectedGuests: (guests: Guest[]) => void;
+        updateFilterboxes: (option: string) => void
     }
 }
 
 const defaultState: CastleListingState = {
-    listings: [],
+    listings: dummyCastleListings,
     selectedGuests: [
     {
         id: 1,
@@ -31,11 +35,36 @@ const defaultState: CastleListingState = {
         number: 0
     }
     ],
+    filters: [
+    {
+        name: 'Size',
+        options: ['50m²', '20m²', '100m²'],
+        selectedOptions: []
+    },
+    {
+        name: 'Number of rooms',
+        options: ['1', '2', '3', '4', '5'],
+        selectedOptions: []
+    },
+    {
+        name: 'Events',
+        options: ['Ghost hunting', 'Dance party', 'Photoshoot', 'Guided tour'],
+        selectedOptions: []
+    },
+    {
+        name: 'Amneties',
+        options: ['Pets allowed', 'Breakfast included', 'Lunch included', 'Gym nearby'],
+        selectedOptions: []
+    }
+    ],
+    filterCheckboxes: [],
     actions: {
         createListing: () => {},
         getListingsByFilter: () => undefined,
-        getListingsByID: () => undefined,
-        updateSelectedGuests: () => {}
+        getListingByID: () => undefined,
+        getListingsByUser: () => undefined,
+        updateSelectedGuests: () => {},
+        updateFilterboxes: () => {}
     }
 }
 
@@ -43,8 +72,10 @@ const CastleListingContext = createContext<CastleListingState>(defaultState)
 
 function CastleListingProvider ({ children }: PropsWithChildren){
 
-    const [listings, setListings] = useState<CastleListing[]>(dummyCastleListings)
+    const [listings, setListings] = useState<CastleListing[]>(defaultState.listings)
     const [selectedGuests, setSelectedGuests] = useState<Guest[]>(defaultState.selectedGuests)
+    const [filters, setFilters] = useState<Filter[]>(defaultState.filters)
+    const [filterCheckboxes, setFilterCheckboxes] = useState<string[]>(defaultState.filterCheckboxes)
 
     useEffect(() => {
         _getListings()
@@ -75,11 +106,21 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         return dummyCastleListings
     }
 
-    const getListingsByID: typeof defaultState.actions.getListingsByID = (listingId: number) => {
-        const newListings = [...listings]
-        const userListings: CastleListing[] | undefined = newListings.filter(listing => listing.castleOwner.id == listingId)
-        if(userListings == undefined || userListings.length == 0) {
+    const getListingByID: typeof defaultState.actions.getListingByID = (listingId: number) => {
+        const listingByID: CastleListing | undefined = listings.find(listing => listing.id == listingId)
+        if(listingByID == undefined) {
             console.log('Error: Listing could not be found')
+            return undefined
+        }
+        
+        return listingByID
+    }
+
+    const getListingsByUser: typeof defaultState.actions.getListingsByUser = (user: User) => {
+        const newListings = [...listings]
+        const userListings: CastleListing[] | undefined = newListings.filter(listing => listing.castleOwner.id == user.id)
+        if(userListings == undefined || userListings.length == 0) {
+            console.log('No listings made by this user')
             return undefined
         }
         
@@ -90,17 +131,34 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         _setSelectedGuests(guests)
     }
 
+    const updateFilterboxes: typeof defaultState.actions.updateFilterboxes = (option: string) => {
+        setFilterCheckboxes(prev => {
+        if (prev.includes(option)) {
+            // set in localstorage?
+            return prev.filter(x => x !== option);
+        } else {
+            return [...prev, option];
+        }
+        });
+    }
+
+    // updatefilter?
+
     const actions = {
         createListing,
         getListingsByFilter,
-        getListingsByID,
-        updateSelectedGuests
+        getListingByID,
+        getListingsByUser,
+        updateSelectedGuests,
+        updateFilterboxes
     }
   
     return (
     <CastleListingContext.Provider value={{
         listings,
         selectedGuests,
+        filters,
+        filterCheckboxes,
         actions
     }}>
         { children }

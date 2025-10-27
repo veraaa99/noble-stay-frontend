@@ -1,12 +1,12 @@
 import Calendar from "../components/DateCalendar"
 import AddGuestsCounter from "../components/AddGuestsCounter"
 import RoomCard from "../components/RoomCard"
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 
 const CastleDetails = () => {
 
-  let params = useParams()
+  const params = useParams()
   const { actions } = useCastleListing()
 
   if(!params.castleId) {
@@ -14,10 +14,9 @@ const CastleDetails = () => {
     return
   }
 
+  const navigate = useNavigate()
+
   const castle: CastleListing | undefined  = actions.getListingByID(parseInt(params.castleId))
-  // if(castle) {
-  //   setCastleGuests(castle.guests)
-  // }
 
   return (
     <div>
@@ -123,7 +122,7 @@ const CastleDetails = () => {
             </div>
             <div>
               <p>You will not be charged yet</p>
-              <button>Reserve</button>
+              <button onClick={() => navigate(`/book/?castleId=${castle.id}`)}>Reserve</button>
             </div>
           </div>
 

@@ -19,7 +19,7 @@ const Profile = () => {
   useEffect(() => {
     if(currentUser) {
       const currentUserBookings: Booking[] | undefined = bookingActions.getBookingsByUser(currentUser)
-      const currentUserListings: CastleListing[] | undefined = castleListingActions.getListingsByID(currentUser.id)
+      const currentUserListings: CastleListing[] | undefined = castleListingActions.getListingsByUser(currentUser)
 
       if(currentUserBookings) {
         setUserBookings(currentUserBookings)
@@ -53,7 +53,7 @@ const Profile = () => {
           <h2>My bookings</h2>
           {
             userBookings.map(b => (
-              <Booking booking={b} bookingConfirmed={true} />
+              <Booking booking={b} />
             ))
           }
         </div>

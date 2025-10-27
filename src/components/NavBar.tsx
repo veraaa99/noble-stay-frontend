@@ -60,7 +60,7 @@ const NavBar = () => {
                 <p>Home</p>
               </div>
             </Link>
-            <Link to={'/all' } onClick={menuModalHandler}>
+            <Link to={'/castles' } onClick={menuModalHandler}>
               <div>
                 <p>All castles</p>
               </div>

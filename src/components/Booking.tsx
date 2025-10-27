@@ -1,15 +1,14 @@
 type BookingProps = {
-  booking: Booking,
-  bookingConfirmed: boolean
+  booking: Booking
 }
 
-const Booking = ({ booking, bookingConfirmed }: BookingProps) => {
+const Booking = ({ booking }: BookingProps) => {
 
   return (
     <div>
       {/* Castle information summary */}
       <div>
-        { !bookingConfirmed && 
+        {/* { !bookingConfirmed &&  */}
           <div>
             <h1>Booking summary</h1>
             {/* Castle image */}
@@ -17,15 +16,15 @@ const Booking = ({ booking, bookingConfirmed }: BookingProps) => {
               <img src={booking.castle.images[0]} alt="" />
             </div>
           </div>
-        }
+        {/* } */}
 
         {/* Castle information */}
         <div>
           <h2>{booking.castle.title}</h2>
           <p>{booking.castle.location}</p>
-          { !bookingConfirmed &&
+          {/* { !bookingConfirmed && */}
             <p>{booking.castle.rules}</p>
-          }
+          {/* } */}
         </div>
       </div>
 
@@ -50,15 +49,15 @@ const Booking = ({ booking, bookingConfirmed }: BookingProps) => {
           <h3>Guests:</h3>
           <p>{booking.bookedGuests[0].number} {booking.bookedGuests[0].category}</p>
         </div>
-        { bookingConfirmed && 
-          <>
+        {/* { bookingConfirmed &&  */}
+          {/* <> */}
             <hr />
             <div>
               <h3>Booking ID:</h3>
               <p>{booking.bookingId}</p>
             </div>
-          </>
-        }
+          {/* </> */}
+        {/* } */}
         <hr />
         <div>
           <h3>Total:</h3>

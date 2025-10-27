@@ -5,6 +5,7 @@ type BookingState = {
     bookings: Booking[],
     actions: {
         createBooking: (booking: Booking) => void;
+        getBookingByID: (id: number) => Booking | undefined
         getBookingsByUser: (user: User) => Booking[] | undefined;
     }
 }
@@ -13,6 +14,7 @@ const defaultState: BookingState = {
     bookings: [],
     actions: {
         createBooking: () => {},
+        getBookingByID: () => undefined,
         getBookingsByUser: () => undefined
     }
 }
@@ -40,6 +42,17 @@ function BookingProvider ({ children }: PropsWithChildren){
     const createBooking: typeof defaultState.actions.createBooking = (booking: Booking) => {
         const updatedBookings = [...bookings, booking]
         _setBookings(updatedBookings)
+        // TODO: Setbooking i localstorage
+    }
+
+    const getBookingByID: typeof defaultState.actions.getBookingByID = (id: number) => {
+        const bookingByID: Booking | undefined = bookings.find(booking => booking.bookingId == id)
+        if(bookingByID == undefined) {
+            console.log('Error: Booking could not be found')
+            return undefined
+        }
+        
+        return bookingByID 
     }
 
     const getBookingsByUser: typeof defaultState.actions.getBookingsByUser = (user: User) => {
@@ -54,6 +67,7 @@ function BookingProvider ({ children }: PropsWithChildren){
 
     const actions = {
         createBooking,
+        getBookingByID,
         getBookingsByUser
     }
 
