@@ -1,4 +1,4 @@
-import { dummyBookings } from "@/data/bookings";
+import LocalStorageService from "@/utils/LocalStorageService";
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
 
 type BookingState = {
@@ -23,26 +23,23 @@ const BookingContext = createContext<BookingState>(defaultState)
 
 function BookingProvider ({ children }: PropsWithChildren){
 
-    const [bookings, setBookings] = useState<Booking[]>(dummyBookings)
+    const [bookings, setBookings] = useState<Booking[]>(defaultState.bookings)
 
     useEffect(() => {
         _getBookings()
     }, [])
 
     // Private functions
-    const _setBookings = (_bookings: Booking[]) => {
-        setBookings(_bookings)
-    }
-
     const _getBookings = () => {
-        return bookings
+        const _bookings: Booking[] = LocalStorageService.getItem('@booking/bookings', defaultState.bookings)
+        setBookings(_bookings)
     }
 
     // Public functions
     const createBooking: typeof defaultState.actions.createBooking = (booking: Booking) => {
         const updatedBookings = [...bookings, booking]
-        _setBookings(updatedBookings)
-        // TODO: Setbooking i localstorage
+        setBookings(updatedBookings)
+        LocalStorageService.setItem<Booking[]>('@booking/bookings', updatedBookings)
     }
 
     const getBookingByID: typeof defaultState.actions.getBookingByID = (id: number) => {
@@ -62,6 +59,7 @@ function BookingProvider ({ children }: PropsWithChildren){
             console.log('Error: Booking/s could not be found')
             return undefined
         }
+
         return bookingsByUser
     }
 
