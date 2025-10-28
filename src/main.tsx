@@ -14,6 +14,9 @@ import UserLayout from './layouts/UserLayout.tsx'
 import Profile from './pages/Profile.tsx'
 import CastleDetails from './pages/CastleDetails.tsx'
 import AllCastles from './pages/AllCastles.tsx'
+import { CastleListingProvider } from './contexts/CastleListingContext.tsx'
+import { UserProvider } from './contexts/UserContext.tsx'
+import { BookingProvider } from './contexts/BookingContext.tsx'
 
 const router = createBrowserRouter([
   // TODO: Ändra så att search/:filter visar resultat baserat på filter, och ha en separat path för att visa slottdetaljer (ex. castles/:castleId)
@@ -27,11 +30,11 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: 'search/:filter',
+        path: 'search',
         element: <SearchResults />
       },
       {
-        path: 'all',
+        path: 'castles',
         element: <AllCastles />
       },
       {
@@ -71,6 +74,12 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <CastleListingProvider>
+      <UserProvider>
+        <BookingProvider>
+          <RouterProvider router={router}/>
+        </BookingProvider>
+      </UserProvider>
+    </CastleListingProvider>
   </StrictMode>,
 )

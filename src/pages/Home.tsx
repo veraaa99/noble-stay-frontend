@@ -1,23 +1,32 @@
 import { useState } from "react"
 import CastleCardSmall from "../components/CastleCardSmall"
 import FilterDropdown from "../components/FilterDropdown"
-import { dummyCastleListings } from "../data/castleListings"
 import { useNavigate } from "react-router"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import AddGuestsCounter from "@/components/AddGuestsCounter"
+import { useCastleListing } from "@/contexts/CastleListingContext"
+import useSelectOptions from "@/hooks/useFilter"
 
 const Home = () => {
-  // TODO: Add date picker for the select date field
-  // TODO: Install tailwind and ShadCN
-  // https://daypicker.dev/docs/selection-modes
+  const { listings, filters } = useCastleListing()
+  const navigate = useNavigate()
 
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+  const [isGuestsModalOpen, setIsGuestsModalOpen] = useState(false)
+  const [selectedFilters, setSelectedFilters] = useState(filters)
+
+  const handleSelectOptions = (filterName: string, filterOption: string) => {
+    const updateSelectedFilters = useSelectOptions(filterName, filterOption, filters)
+    setSelectedFilters(updateSelectedFilters)
+  }
 
   const filterModalHandler = () => {
     setIsFilterModalOpen(isFilterModalOpen => !isFilterModalOpen)
   }
 
-  // Make into a hook?
-  const navigate = useNavigate()
+  const guestsModalHandler = () => {
+    setIsGuestsModalOpen(isGuestsModalOpen => !isGuestsModalOpen)
+  }
 
   return (
     <div>
@@ -26,9 +35,9 @@ const Home = () => {
         <div>
           <input type="text" placeholder="Search location" />
           <input type="text" placeholder="Select date"/>
-          <input type="text" placeholder="Select guests" />
+          <input type="text" placeholder="Select guests" onClick={guestsModalHandler}/>
           <input type="text" placeholder="Filter" onClick={filterModalHandler}/>
-          <button onClick={() => navigate('/search/1')}>Search</button>
+          <button onClick={() => navigate('/search/?guests=3')}>Search</button>
         </div>
       </div>
 
@@ -36,11 +45,19 @@ const Home = () => {
         isFilterModalOpen &&
         <div>
           <p onClick={filterModalHandler}>X</p>
-          <FilterDropdown name={'Size'} options={['50m²', '20m²', '100m²']}/>
-          <FilterDropdown name={'Number of rooms'} options={['1', '2', '3', '4', '5']}/>
-          <FilterDropdown name={'Events'} options={['Ghost hunting', 'Dance party', 'Photoshoot', 'Guided tour']}/>
-          <FilterDropdown name={'Amneties'} options={['Pets allowed', 'Breakfast included', 'Lunch included', 'Gym nearby']}/>
+          <FilterDropdown name={selectedFilters[0].name} options={selectedFilters[0].options} onHandleSelectOptions={handleSelectOptions}/>
+          <FilterDropdown name={selectedFilters[1].name} options={selectedFilters[1].options} onHandleSelectOptions={handleSelectOptions}/>
+          <FilterDropdown name={selectedFilters[2].name} options={selectedFilters[2].options} onHandleSelectOptions={handleSelectOptions}/>
+          <FilterDropdown name={selectedFilters[3].name} options={selectedFilters[3].options} onHandleSelectOptions={handleSelectOptions}/>
           <button onClick={filterModalHandler}>Apply</button>
+        </div>
+      }
+
+      {
+        isGuestsModalOpen &&
+        <div>
+          <p onClick={guestsModalHandler}>X</p>
+          <AddGuestsCounter />
         </div>
       }
 
@@ -56,7 +73,7 @@ const Home = () => {
           <Carousel>
             <CarouselContent>
               {
-                dummyCastleListings.map(c => (
+                listings.map(c => (
                   <CarouselItem>
                     <CastleCardSmall castle={c}/>
                   </CarouselItem>
@@ -72,7 +89,7 @@ const Home = () => {
           <Carousel>
             <CarouselContent>
               {
-                dummyCastleListings.map(c => (
+                listings.map(c => (
                   <CarouselItem>
                     <CastleCardSmall castle={c}/>
                   </CarouselItem>

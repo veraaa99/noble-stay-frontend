@@ -1,12 +1,35 @@
+import { useUser } from "@/contexts/UserContext"
 import Booking from "../components/Booking"
 import CreatedListing from "../components/CreatedListing"
 import ListingForm from "../components/ListingForm"
-import { dummyBookings } from "../data/bookings"
-import { dummyCastleListings } from "../data/castleListings"
+import { useEffect, useState } from "react"
+import { useBooking } from "@/contexts/BookingContext"
+import { useCastleListing } from "@/contexts/CastleListingContext"
 
 const Profile = () => {
   // TODO: Use localstorage to save user who's currently logged in
   // TODO: Make a mybookings page? ask if it's ok
+
+  const { currentUser } = useUser()
+  const { actions: bookingActions } = useBooking()
+  const { actions: castleListingActions } = useCastleListing()
+  const [userBookings, setUserBookings] = useState<Booking[]>([])
+  const [userListings, setUserListings] = useState<CastleListing[]>([])
+
+  useEffect(() => {
+    if(currentUser) {
+      const currentUserBookings: Booking[] | undefined = bookingActions.getBookingsByUser(currentUser)
+      const currentUserListings: CastleListing[] | undefined = castleListingActions.getListingsByUser(currentUser)
+
+      if(currentUserBookings) {
+        setUserBookings(currentUserBookings)
+      }
+      if (currentUserListings) {
+        setUserListings(currentUserListings)
+      }
+    }
+  }, [])
+  
   return (
     <div>
       {/* Full account information */}
@@ -18,25 +41,29 @@ const Profile = () => {
           <h2>Account details</h2>
           <div>
             <h3>Email</h3>
-            <p>dummyEmail</p>
+            <p>{currentUser?.email}</p>
             <hr />
             <h3>Mobile</h3>
-            <p>dummyMobile</p>
+            <p>{currentUser?.phone}</p>
           </div>
         </div>
 
         {/* My bookings */}
         <div>
           <h2>My bookings</h2>
-          <Booking booking={dummyBookings[0]}bookingConfirmed={true} />
-          <Booking booking={dummyBookings[0]}bookingConfirmed={true} />
-          <Booking booking={dummyBookings[0]}bookingConfirmed={true} />
+          {
+            userBookings.map(b => (
+              <Booking booking={b} />
+            ))
+          }
         </div>
 
         {/* My listings */}
         <div>
           <h2>My listings</h2>
-          <CreatedListing castle={dummyCastleListings[0]} />
+          { userListings.map(c => (
+            <CreatedListing castle={c} />
+          )) }
         </div>
 
         {/* Create new castle listing */}

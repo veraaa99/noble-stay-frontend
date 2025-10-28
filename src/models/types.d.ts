@@ -53,3 +53,9 @@ type Guest = {
     category: guestCategory,
     number: number,
 }
+
+type Filter = {
+    name: string,
+    options: string[],
+    selectedOptions: string[]
+}
