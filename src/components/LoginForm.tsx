@@ -1,4 +1,5 @@
 import { useUser } from "@/contexts/UserContext"
+import type { Dispatch, SetStateAction } from "react"
 import { useForm, type SubmitHandler } from "react-hook-form"
 
 type LoginInputs = {
@@ -6,7 +7,11 @@ type LoginInputs = {
   password: string
 }
 
-const LoginForm = () => {
+type LoginFormProps = {
+  setIsLoginModalOpen: Dispatch<SetStateAction<boolean>>
+}
+
+const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
 
    const {
     register,
@@ -33,6 +38,7 @@ const LoginForm = () => {
 
       if (existingUser.password == _user.password) {
         actions.setUser(_user)
+        setIsLoginModalOpen(false)
         // setIsSubmitted(true)
         // onSuccess()
       } else {

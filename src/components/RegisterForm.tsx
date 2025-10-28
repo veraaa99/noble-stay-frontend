@@ -1,5 +1,6 @@
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { useUser } from "@/contexts/UserContext"
+import type { Dispatch, SetStateAction } from 'react'
 
 type RegisterInputs = {
   email: string, 
@@ -8,7 +9,11 @@ type RegisterInputs = {
   confirmPassword: string
 }
 
-const RegisterForm = () => {
+type RegisterFormProps = {
+  setIsRegisterModalOpen?: Dispatch<SetStateAction<boolean>>
+}
+
+const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps ) => {
    const {
     register,
     handleSubmit,
@@ -37,6 +42,10 @@ const RegisterForm = () => {
     if (!existingUser) {
       actions.createUser(_user)
       actions.setUser(_user)
+      
+      if(setIsRegisterModalOpen) {
+        setIsRegisterModalOpen(false)
+      }
       // setIsSubmitted(true)
     } else {
       console.log("Email is already in use")

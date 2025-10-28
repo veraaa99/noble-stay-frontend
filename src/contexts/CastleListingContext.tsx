@@ -1,4 +1,5 @@
 import { dummyCastleListings } from "@/data/castleListings";
+import LocalStorageService from "@/utils/LocalStorageService";
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
 
 type CastleListingState = {
@@ -8,7 +9,6 @@ type CastleListingState = {
     filterCheckboxes: string[],
     actions: {
         createListing: (listing: CastleListing) => void;
-        getListingsByFilter: (filter: string[]) => CastleListing[] | undefined;
         getListingByID: (listingId: CastleListing['id']) => CastleListing | undefined;
         getListingsByUser: (user: User) => CastleListing[] | undefined;
         updateSelectedGuests: (guests: Guest[]) => void;
@@ -60,7 +60,6 @@ const defaultState: CastleListingState = {
     filterCheckboxes: [],
     actions: {
         createListing: () => {},
-        getListingsByFilter: () => undefined,
         getListingByID: () => undefined,
         getListingsByUser: () => undefined,
         updateSelectedGuests: () => {},
@@ -79,31 +78,32 @@ function CastleListingProvider ({ children }: PropsWithChildren){
 
     useEffect(() => {
         _getListings()
+        _getSelectedGuests()
     }, [])
     
     // Private functions 
     const _getListings = () => { 
-        setListings(dummyCastleListings)
-    }
-
-    const _setListings = (_listings: CastleListing[]) => {
-        setListings(dummyCastleListings)
+        const _listings: CastleListing[] = LocalStorageService.getItem('@booking/listings', defaultState.listings)
+        setListings(_listings)
     }
 
     const _setSelectedGuests = (_guests: Guest[]) => {
         setSelectedGuests(_guests)
+        LocalStorageService.setItem('@booking/guests', _guests)
     }
+
+    const _getSelectedGuests = () => {
+        const _selectedGuests: Guest[] = LocalStorageService.getItem('@booking/guests', defaultState.selectedGuests)
+        setSelectedGuests(_selectedGuests)
+    }
+
+    // set and get filters?
 
     // Public functions
     const createListing: typeof defaultState.actions.createListing = (listing: CastleListing) => {
         const updatedListings: CastleListing[] = [...listings, listing]
-        _setListings(updatedListings)
-    }
-
-    const getListingsByFilter: typeof defaultState.actions.getListingsByFilter = (filter: string[])  => { 
-        //TODO: If no filters, return all castles. Else, only return castles with matching filters
-        
-        return dummyCastleListings
+        setListings(updatedListings)
+        LocalStorageService.setItem<CastleListing[]>('@booking/listings', updatedListings)
     }
 
     const getListingByID: typeof defaultState.actions.getListingByID = (listingId: number) => {
@@ -129,12 +129,12 @@ function CastleListingProvider ({ children }: PropsWithChildren){
 
     const updateSelectedGuests: typeof defaultState.actions.updateSelectedGuests = (guests: Guest[]) => {
         _setSelectedGuests(guests)
+        LocalStorageService.setItem<Guest[]>('@booking/guests', guests)
     }
-
+    
     const updateFilterboxes: typeof defaultState.actions.updateFilterboxes = (option: string) => {
         setFilterCheckboxes(prev => {
         if (prev.includes(option)) {
-            // set in localstorage?
             return prev.filter(x => x !== option);
         } else {
             return [...prev, option];
@@ -142,11 +142,8 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         });
     }
 
-    // updatefilter?
-
     const actions = {
         createListing,
-        getListingsByFilter,
         getListingByID,
         getListingsByUser,
         updateSelectedGuests,

@@ -10,7 +10,6 @@ type DropdownProps = {
 
 const FilterDropdown = ({ name, options, onHandleSelectOptions }: DropdownProps ) => {
 
-  // const [checked, setChecked] = useState<string[]>([]);
   //TODO: If size or rooms, only one checkbox/radio button?
   const { filterCheckboxes, actions } = useCastleListing()
   

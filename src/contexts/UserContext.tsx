@@ -1,4 +1,4 @@
-import { dummyUsers } from "@/data/users"
+import LocalStorageService from "@/utils/LocalStorageService"
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
 
 type UserState = {
@@ -7,6 +7,7 @@ type UserState = {
     actions: {
         createUser: (user: User) => void
         setUser: (user: User | null) => void
+        logoutUser: () => void
     }
 }
 
@@ -15,7 +16,8 @@ const defaultState: UserState = {
     currentUser: null,
     actions: {
         createUser: () => {},
-        setUser: () => {}
+        setUser: () => {},
+        logoutUser: () => {}
     }
 }
 
@@ -23,7 +25,7 @@ const UserContext = createContext<UserState>(defaultState)
 
 function UserProvider ({ children }: PropsWithChildren){
 
-    const [users, setUsers] = useState<User[]>([])
+    const [users, setUsers] = useState<User[]>(defaultState.users)
     const [currentUser, setCurrentUser] = useState<User | null>(defaultState.currentUser)
 
     useEffect(() => {
@@ -33,31 +35,40 @@ function UserProvider ({ children }: PropsWithChildren){
     
     // Private functions
     const _getUsers = () => {
-        setUsers(dummyUsers)
+        const _users = LocalStorageService.getItem('@booking/users', defaultState.users)
+        setUsers(_users)
     }
 
      const _getCurrentUser = () => {
-        setCurrentUser(null)
-    }
-
-    const _setUsers = (_users: User[]) => {
-        setUsers(_users)
+        const _currentUser = LocalStorageService.getItem('@booking/currentUser', defaultState.currentUser)
+        setCurrentUser(_currentUser)
     }
 
     // Public functions
     const createUser: typeof defaultState.actions.createUser = (user: User) => {
         const updatedUsers: User[] = [...users, user]
-        _setUsers(updatedUsers)
+        LocalStorageService.setItem('@booking/users', updatedUsers)
+        setUsers(updatedUsers)
+        setUser(user)
     }
 
     const setUser: typeof defaultState.actions.setUser = (user: User | null) => {
+        LocalStorageService.setItem('@booking/currentUser', user)
         setCurrentUser(user)
+    }
+
+    const logoutUser: typeof defaultState.actions.logoutUser = () => {
+        LocalStorageService.setItem('@booking/currentUser', null)
+        setUser(null)
     }
 
     const actions = {
         createUser,
-        setUser
+        setUser,
+        logoutUser
     }
+
+    // TODO: Add sessionstorage when registered/logged in?
 
   return (
     <UserContext.Provider value={{
