@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router"
+import { useNavigate, useSearchParams } from "react-router"
 import CastleCardBig from "../components/CastleCardBig"
 import { useState } from "react"
 import FilterDropdown from "../components/FilterDropdown"
@@ -23,19 +23,18 @@ const SearchResults = () => {
   const { listings, filters, filterCheckboxes } = useCastleListing()
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState(filters)
+  const navigate = useNavigate()
   
   const handleSelectOptions = (filterName: string, filterOption: string) => {
     const updateSelectedFilters = useSelectOptions(filterName, filterOption, filters)
     setSelectedFilters(updateSelectedFilters)
-    console.log(selectedFilters)
   }
   
   const filterModalHandler = () => {
     setIsFilterModalOpen(isFilterModalOpen => !isFilterModalOpen)
+    navigate('/search/?guests=3&rooms=1&amneties=pets')
   }
-  
-  console.log(filterCheckboxes)
-    
+      
   return (
     <div>
       {/* Search filters */}
@@ -55,10 +54,9 @@ const SearchResults = () => {
         isFilterModalOpen &&
         <div>
           <p onClick={filterModalHandler}>X</p>
-          <FilterDropdown name={selectedFilters[0].name} options={selectedFilters[0].options} onHandleSelectOptions={handleSelectOptions}/>
-          <FilterDropdown name={selectedFilters[1].name} options={selectedFilters[1].options} onHandleSelectOptions={handleSelectOptions}/>
-          <FilterDropdown name={selectedFilters[2].name} options={selectedFilters[2].options} onHandleSelectOptions={handleSelectOptions}/>
-          <FilterDropdown name={selectedFilters[3].name} options={selectedFilters[3].options} onHandleSelectOptions={handleSelectOptions}/>
+          {selectedFilters.map(filter=> 
+            <FilterDropdown name={filter.name} options={filter.options} onHandleSelectOptions={handleSelectOptions}/>
+          )}
           <button onClick={filterModalHandler}>Apply</button>
         </div>
       }

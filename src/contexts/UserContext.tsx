@@ -7,6 +7,7 @@ type UserState = {
     actions: {
         createUser: (user: User) => void
         setUser: (user: User | null) => void
+        logoutUser: () => void
     }
 }
 
@@ -15,7 +16,8 @@ const defaultState: UserState = {
     currentUser: null,
     actions: {
         createUser: () => {},
-        setUser: () => {}
+        setUser: () => {},
+        logoutUser: () => {}
     }
 }
 
@@ -55,9 +57,15 @@ function UserProvider ({ children }: PropsWithChildren){
         setCurrentUser(user)
     }
 
+    const logoutUser: typeof defaultState.actions.logoutUser = () => {
+        LocalStorageService.setItem('@booking/currentUser', null)
+        setUser(null)
+    }
+
     const actions = {
         createUser,
-        setUser
+        setUser,
+        logoutUser
     }
 
     // TODO: Add sessionstorage when registered/logged in?

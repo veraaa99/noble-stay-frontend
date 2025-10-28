@@ -26,6 +26,7 @@ const Home = () => {
 
   const guestsModalHandler = () => {
     setIsGuestsModalOpen(isGuestsModalOpen => !isGuestsModalOpen)
+    navigate('/search/?guests=3&rooms=1&amneties=pets')
   }
 
   return (
@@ -45,10 +46,9 @@ const Home = () => {
         isFilterModalOpen &&
         <div>
           <p onClick={filterModalHandler}>X</p>
-          <FilterDropdown name={selectedFilters[0].name} options={selectedFilters[0].options} onHandleSelectOptions={handleSelectOptions}/>
-          <FilterDropdown name={selectedFilters[1].name} options={selectedFilters[1].options} onHandleSelectOptions={handleSelectOptions}/>
-          <FilterDropdown name={selectedFilters[2].name} options={selectedFilters[2].options} onHandleSelectOptions={handleSelectOptions}/>
-          <FilterDropdown name={selectedFilters[3].name} options={selectedFilters[3].options} onHandleSelectOptions={handleSelectOptions}/>
+          {selectedFilters.map(filter=> 
+            <FilterDropdown name={filter.name} options={filter.options} onHandleSelectOptions={handleSelectOptions}/>
+          )}
           <button onClick={filterModalHandler}>Apply</button>
         </div>
       }

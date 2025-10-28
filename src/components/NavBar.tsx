@@ -1,16 +1,16 @@
 import { useState } from "react"
 import LoginForm from "./LoginForm"
 import RegisterForm from "./RegisterForm"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { useUser } from "@/contexts/UserContext"
 
 const NavBar = () => {
-
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false)
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
 
-  const { currentUser } = useUser()
+  const { currentUser, actions } = useUser()
+  const navigate = useNavigate()
 
   const menuModalHandler = () => {
     setIsMenuModalOpen(isMenuModalOpen => !isMenuModalOpen)
@@ -26,6 +26,12 @@ const NavBar = () => {
     setIsRegisterModalOpen(isRegisterModalOpen => !isRegisterModalOpen)
     setIsLoginModalOpen(false)
     setIsMenuModalOpen(false)
+  }
+
+  const logoutHandler = () => {
+    actions.logoutUser()
+    setIsMenuModalOpen(false)
+    navigate('/')
   }
 
   // TODO: Handle my bookings onclick if user isn't logged in
@@ -71,8 +77,11 @@ const NavBar = () => {
               </div>
             </Link>
             <div>
-              { currentUser == null &&
+              { currentUser == null 
+              ?
                 <p onClick={loginModalHandler}>Login / Sign up</p>
+              :
+                <p onClick={logoutHandler}>Logout</p>
               }
             </div>
           </div>
@@ -82,7 +91,7 @@ const NavBar = () => {
         isLoginModalOpen && 
         <div>
           <p onClick={loginModalHandler}>X</p>
-          <LoginForm />
+          <LoginForm setIsLoginModalOpen={setIsLoginModalOpen}/>
           <p>Don't have an account?</p> <p onClick={registerModalHandler}>SIGN UP</p>
         </div>
       }
@@ -90,7 +99,7 @@ const NavBar = () => {
         isRegisterModalOpen && 
         <div>
           <p onClick={registerModalHandler}>X</p>
-          <RegisterForm />
+          <RegisterForm setIsRegisterModalOpen={setIsRegisterModalOpen}/>
           <p>Already have an account?</p> <p onClick={loginModalHandler}>LOG IN</p>
         </div>
       }

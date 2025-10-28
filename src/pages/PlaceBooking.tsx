@@ -4,6 +4,8 @@ import RegisterForm from "../components/RegisterForm"
 import { useBooking } from "@/contexts/BookingContext"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 import { useUser } from "@/contexts/UserContext"
+import { useState } from "react"
+import LoginForm from "@/components/LoginForm"
 
 const PlaceBooking = () => {
 
@@ -11,7 +13,9 @@ const PlaceBooking = () => {
   const { bookings, actions: bookingActions } = useBooking()
   const { selectedGuests, actions: castleListingActions } = useCastleListing()
   const { currentUser } = useUser()  
+
   const navigate = useNavigate()
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   
   const castleId = searchParams.get('castleId')
 
@@ -61,11 +65,15 @@ const PlaceBooking = () => {
     navigate(`/confirmed?bookingId=${newBookingId}`)
   }
 
+   const loginModalHandler = () => {
+    setIsLoginModalOpen(isLoginModalOpen => !isLoginModalOpen)
+  }
+
   return (
     <div>
       { castle && 
         <div>
-          <button>Go back without booking</button>
+          <button onClick={() => navigate('/')}>Go back without booking</button>
 
           <div>
             {/* Castle information summary */}
@@ -93,7 +101,6 @@ const PlaceBooking = () => {
                 <h3>Date:</h3>
                 <div>
                   {/* TODO: Add selected dates */}
-                  {/* Save in localstorage? */}
                   <p>{castle.dates[0]}</p>
                   <p>→</p>
                   <p>{castle.dates[2]}</p>
@@ -102,13 +109,11 @@ const PlaceBooking = () => {
               <hr />
               <div>
                 <h3>Room/s:</h3>
-                {/* Save in localstorage? */}
                 <p>{castle.rooms[0].title}</p>
               </div>
               <hr />
               <div>
                 <h3>Guests:</h3>
-                {/* Save in localstorage? */}
                 {selectedGuests.map(g => 
                   <>
                     <p>{g.number}</p>
@@ -138,7 +143,14 @@ const PlaceBooking = () => {
             <div>
               <h1>Sign up to Noble Stay to continue to payment</h1>
               <RegisterForm />
-              <p>Already have an account?</p> <p>LOG IN</p>
+              <p>Already have an account?</p> <p onClick={loginModalHandler}>LOG IN</p>
+            </div>
+          }
+          {
+            isLoginModalOpen && 
+            <div>
+              <p onClick={loginModalHandler}>X</p>
+              <LoginForm setIsLoginModalOpen={setIsLoginModalOpen}/>
             </div>
           }
         </div>
