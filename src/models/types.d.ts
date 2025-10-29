@@ -25,7 +25,7 @@ type Booking = {
     castle: CastleListing,
 
     bookedUser: User,
-    bookedDates: string[],
+    bookedDates: Date[],
     bookedRooms: Room[],
     bookedGuests: Guest[],
     bookedEvents?: eventCategory[],

@@ -1,4 +1,3 @@
-import { useCastleListing } from "@/contexts/CastleListingContext"
 
 const useSelectOptions = (filterName: string, filterOption: string, selectedFilters: Filter[]): Filter[] => {
 

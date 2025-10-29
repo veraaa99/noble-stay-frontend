@@ -1,16 +1,19 @@
 import { dummyCastleListings } from "@/data/castleListings";
 import LocalStorageService from "@/utils/LocalStorageService";
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
+import type { DateRange } from "react-day-picker";
 
 type CastleListingState = {
     listings: CastleListing[],
     selectedGuests: Guest[],
+    selectedDates: DateRange | undefined,
     filters: Filter[],
     filterCheckboxes: string[],
     actions: {
         createListing: (listing: CastleListing) => void;
         getListingByID: (listingId: CastleListing['id']) => CastleListing | undefined;
         getListingsByUser: (user: User) => CastleListing[] | undefined;
+        updateSelectedDates: (dates: DateRange | undefined) => void;
         updateSelectedGuests: (guests: Guest[]) => void;
         updateFilterboxes: (option: string) => void
     }
@@ -35,6 +38,10 @@ const defaultState: CastleListingState = {
         number: 0
     }
     ],
+    selectedDates: {
+        from: new Date(),
+        to: new Date(new Date().getDate() + 2),
+    },
     filters: [
     {
         name: 'Size',
@@ -62,6 +69,7 @@ const defaultState: CastleListingState = {
         createListing: () => {},
         getListingByID: () => undefined,
         getListingsByUser: () => undefined,
+        updateSelectedDates: () => {},
         updateSelectedGuests: () => {},
         updateFilterboxes: () => {}
     }
@@ -73,6 +81,7 @@ function CastleListingProvider ({ children }: PropsWithChildren){
 
     const [listings, setListings] = useState<CastleListing[]>(defaultState.listings)
     const [selectedGuests, setSelectedGuests] = useState<Guest[]>(defaultState.selectedGuests)
+    const [selectedDates, setSelectedDates] = useState<DateRange | undefined>(undefined)
     const [filters, setFilters] = useState<Filter[]>(defaultState.filters)
     const [filterCheckboxes, setFilterCheckboxes] = useState<string[]>(defaultState.filterCheckboxes)
 
@@ -127,6 +136,11 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         return userListings
     }
 
+    const updateSelectedDates: typeof defaultState.actions.updateSelectedDates = (dates: DateRange | undefined) => {
+        setSelectedDates(dates)
+        LocalStorageService.setItem<DateRange |undefined>('@booking/dates', dates)
+    }
+
     const updateSelectedGuests: typeof defaultState.actions.updateSelectedGuests = (guests: Guest[]) => {
         _setSelectedGuests(guests)
         LocalStorageService.setItem<Guest[]>('@booking/guests', guests)
@@ -140,12 +154,14 @@ function CastleListingProvider ({ children }: PropsWithChildren){
             return [...prev, option];
         }
         });
+        // Ändra den här funktionen så att filtercheckboxes bara sparas i localstorage?
     }
 
     const actions = {
         createListing,
         getListingByID,
         getListingsByUser,
+        updateSelectedDates,
         updateSelectedGuests,
         updateFilterboxes
     }
@@ -155,6 +171,7 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         listings,
         selectedGuests,
         filters,
+        selectedDates,
         filterCheckboxes,
         actions
     }}>

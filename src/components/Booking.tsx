@@ -30,9 +30,9 @@ const Booking = ({ booking }: BookingProps) => {
         <div>
           <h3>Date:</h3>
           <div>
-            <p>{booking.bookedDates[0]}</p>
+            <p>{booking.bookedDates[0].toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}</p>
             <p>→</p>
-            <p>{booking.bookedDates[booking.bookedDates.length-1]}</p>
+            <p>{booking.bookedDates[booking.bookedDates.length-1].toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}</p>
           </div>
         </div>
         <hr />

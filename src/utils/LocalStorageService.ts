@@ -1,4 +1,4 @@
-type LSKey = "@booking/listings" | "@booking/users" | "@booking/currentUser" | "@booking/filters" | "@booking/guests" | "@booking/rooms" | "@booking/bookings"
+type LSKey = "@booking/listings" | "@booking/users" | "@booking/currentUser" | "@booking/dates" | "@booking/filters" | "@booking/guests" | "@booking/rooms" | "@booking/bookings"
 
 class LocalStorageService {
   static setItem<T>(key: LSKey, value: T): void {
