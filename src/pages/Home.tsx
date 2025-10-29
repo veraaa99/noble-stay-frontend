@@ -6,11 +6,13 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import AddGuestsCounter from "@/components/AddGuestsCounter"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 import useSelectOptions from "@/hooks/useFilter"
+import DateCalendar from "@/components/DateCalendar"
 
 const Home = () => {
-  const { listings, filters } = useCastleListing()
+  const { listings, selectedDates, filters } = useCastleListing()
   const navigate = useNavigate()
 
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [isGuestsModalOpen, setIsGuestsModalOpen] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState(filters)
@@ -20,13 +22,25 @@ const Home = () => {
     setSelectedFilters(updateSelectedFilters)
   }
 
-  const filterModalHandler = () => {
-    setIsFilterModalOpen(isFilterModalOpen => !isFilterModalOpen)
+  const dateModalHandler = () => {
+    setIsDateModalOpen(isDateModalOpen => !isDateModalOpen)
+
+    setIsGuestsModalOpen(false)
+    setIsFilterModalOpen(false)
   }
 
   const guestsModalHandler = () => {
     setIsGuestsModalOpen(isGuestsModalOpen => !isGuestsModalOpen)
-    navigate('/search/?guests=3&rooms=1&amneties=pets')
+
+    setIsDateModalOpen(false)
+    setIsFilterModalOpen(false)
+  }
+
+  const filterModalHandler = () => {
+    setIsFilterModalOpen(isFilterModalOpen => !isFilterModalOpen)
+
+    setIsDateModalOpen(false)
+    setIsGuestsModalOpen(false)
   }
 
   return (
@@ -35,12 +49,20 @@ const Home = () => {
         {/* Search castles */}
         <div>
           <input type="text" placeholder="Search location" />
-          <input type="text" placeholder="Select date"/>
+          <input type="text" placeholder={selectedDates == undefined ? "Select date" : `${selectedDates.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}  onClick={dateModalHandler}/>
           <input type="text" placeholder="Select guests" onClick={guestsModalHandler}/>
           <input type="text" placeholder="Filter" onClick={filterModalHandler}/>
-          <button onClick={() => navigate('/search/?guests=3')}>Search</button>
+          <button onClick={() => navigate('/search/?guests=3&rooms=1&amneties=pets')}>Search</button>
         </div>
       </div>
+
+      {
+        isDateModalOpen &&
+        <div>
+          <p onClick={dateModalHandler}>X</p>
+          <DateCalendar />
+        </div>
+      }
 
       {
         isFilterModalOpen &&

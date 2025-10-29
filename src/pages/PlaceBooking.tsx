@@ -6,12 +6,13 @@ import { useCastleListing } from "@/contexts/CastleListingContext"
 import { useUser } from "@/contexts/UserContext"
 import { useState } from "react"
 import LoginForm from "@/components/LoginForm"
+import { eachDayOfInterval } from "date-fns"
 
 const PlaceBooking = () => {
 
   const [searchParams] = useSearchParams()
   const { bookings, actions: bookingActions } = useBooking()
-  const { selectedGuests, actions: castleListingActions } = useCastleListing()
+  const { selectedDates, selectedGuests, actions: castleListingActions } = useCastleListing()
   const { currentUser } = useUser()  
 
   const navigate = useNavigate()
@@ -45,14 +46,21 @@ const PlaceBooking = () => {
     } else if (currentUser == null) {
       console.log('Error: You must be logged in to place a booking')
       return
+    } else if (selectedDates == undefined || selectedDates?.from == undefined || selectedDates?.to == undefined) {
+      console.log('Error: No selected dates could be found')
+      return
     }
+
+    const allBookedDates = eachDayOfInterval({ start: selectedDates.from, end: selectedDates.to })
+    // const stringArray = allBookedDates.map(date => { return date.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})})
+    // console.log(stringArray)
 
     const newBooking: Booking = {
       bookingId: newBookingId,
       castle: castle,
 
       bookedUser: currentUser,
-      bookedDates: castle.dates,
+      bookedDates: allBookedDates,
       bookedRooms: castle.rooms,
       bookedGuests: selectedGuests,
       bookedEvents: castle.events,
@@ -101,9 +109,7 @@ const PlaceBooking = () => {
                 <h3>Date:</h3>
                 <div>
                   {/* TODO: Add selected dates */}
-                  <p>{castle.dates[0]}</p>
-                  <p>→</p>
-                  <p>{castle.dates[2]}</p>
+                  <p>{`${selectedDates?.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates?.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}</p>
                 </div>
               </div>
               <hr />

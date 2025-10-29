@@ -4,6 +4,7 @@ import { useState } from "react"
 import FilterDropdown from "../components/FilterDropdown"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 import useSelectOptions from "@/hooks/useFilter"
+import DateCalendar from "@/components/DateCalendar"
 
 const SearchResults = () => {
   // Använd usesearchparams?
@@ -20,7 +21,8 @@ const SearchResults = () => {
 
   console.log(params)
   
-  const { listings, filters, filterCheckboxes } = useCastleListing()
+  const { listings, selectedDates, filters } = useCastleListing()
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState(filters)
   const navigate = useNavigate()
@@ -28,6 +30,11 @@ const SearchResults = () => {
   const handleSelectOptions = (filterName: string, filterOption: string) => {
     const updateSelectedFilters = useSelectOptions(filterName, filterOption, filters)
     setSelectedFilters(updateSelectedFilters)
+  }
+
+  const dateModalHandler = () => {
+    setIsDateModalOpen(isDateModalOpen => !isDateModalOpen)
+    setIsFilterModalOpen(false)
   }
   
   const filterModalHandler = () => {
@@ -41,14 +48,22 @@ const SearchResults = () => {
       <div>
         <div>
           <h1>Showing results for:</h1>
-          <p>DummyLocation</p>
-          <p>DummyDate</p>
+          <input type="text" placeholder="Search location" />
+          <input type="text" placeholder={selectedDates == undefined ? "Select date" : `${selectedDates.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}  onClick={dateModalHandler}/>
         </div>
         <div>
           <p>dummyNumber</p>
           <button onClick={filterModalHandler}>Filter</button>
         </div>
       </div>
+
+      {
+        isDateModalOpen &&
+        <div>
+          <p onClick={dateModalHandler}>X</p>
+          <DateCalendar />
+        </div>
+      }
 
       {
         isFilterModalOpen &&
