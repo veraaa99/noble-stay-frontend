@@ -10,9 +10,8 @@ const SearchResults = () => {
   // Använd usesearchparams?
   //  createSearchParams?
   // querystring.stringify?
-
   const [ searchParams ] = useSearchParams()
-
+  const urlParams = new URLSearchParams(searchParams)
   const params = [];
 
   for(let entry of searchParams.entries()) {
@@ -20,6 +19,7 @@ const SearchResults = () => {
   }
 
   console.log(params)
+  console.log(urlParams.get('location'))
   
   const { listings, selectedDates, filters } = useCastleListing()
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
@@ -39,6 +39,7 @@ const SearchResults = () => {
   
   const filterModalHandler = () => {
     setIsFilterModalOpen(isFilterModalOpen => !isFilterModalOpen)
+    // TODO: Replace filter url
     navigate('/search/?guests=3&rooms=1&amneties=pets')
   }
       

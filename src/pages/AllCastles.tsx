@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import CastleCardBig from "../components/CastleCardBig"
 import FilterDropdown from "../components/FilterDropdown"
 import useSelectOptions from "@/hooks/useFilter"
-import { useNavigate } from "react-router"
+import { useLocation, useNavigate } from "react-router"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 import DateCalendar from "@/components/DateCalendar"
 
