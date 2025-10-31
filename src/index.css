@@ -44,19 +44,20 @@
 
   --font-playfair: var(--font-playfair);
   --default-font-family: var(--font-poppins);
+  
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: oklch(0.9975 0.0017 67.8);
+  --foreground: oklch(0.2735 0.0121 17.91);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.6129 0.0729 350.2);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(0.9975 0.0017 67.8);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -138,6 +139,30 @@
     font-family: var(--font-playfair);
     font-size: 20px;
     font-weight: bold;
+  }
+
+  .btn-primary {
+    /* @apply (styling) */
+  }
+
+   .btn-primary:hover {
+    /* @apply (styling) */
+  }
+
+  .btn-secondary {
+    /* @apply (styling) */
+  }
+
+  .btn-secondar:hover {
+    /* @apply (styling) */
+  }
+
+  .btn-action {
+    /* @apply (styling) */
+  }
+
+  .btn-action:hover {
+    /* @apply (styling) */
   }
 }
 

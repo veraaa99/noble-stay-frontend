@@ -9,22 +9,6 @@ import useSelectOptions from "@/hooks/useFilter"
 import DateCalendar from "@/components/DateCalendar"
 import { format } from "date-fns"
 
-// import { Playfair_Display } from "next/font/google"
-// import { Poppins } from "next/font/google"
-// import { Poppins } from 'next/font/google'
-
-import { cn } from "@/lib/utils"
-
-// const playFairDisplay = Playfair_Display({
-//     subsets:["latin"],
-//     weight: ["700"]
-// })
-
-// const poppins = Poppins({
-//   subsets: ["latin"],
-//   weight: ["700"]
-// })
-
 const Home = () => {
   const { listings, selectedGuests, selectedDates, filters } = useCastleListing()
   const navigate = useNavigate()
@@ -103,13 +87,14 @@ const Home = () => {
 
   return (
     <div>
-      <div>
+      {/* Photo by Rasmus Andersen: https://www.pexels.com/photo/red-brick-castle-in-landskrona-sweden-31599512/ */}
+      <div className="flex p-50 align-middle bg-[url(https://images.pexels.com/photos/31599512/pexels-photo-31599512.jpeg)] bg-cover bg-center">
         {/* Search castles */}
-        <div>
-          <input type="text" placeholder="Search location" onChange={handleChange} value={locationInput}/>
-          <input type="text" placeholder={selectedDates == undefined ? "Select date" : `${selectedDates.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}  onClick={dateModalHandler}/>
-          <input type="text" placeholder="Select guests" onClick={guestsModalHandler}/>
-          <input type="text" placeholder="Filter" onClick={filterModalHandler}/>
+        <div className="flex flex-col p-20 bg-white/70">
+          <input type="text" className="" placeholder="Search location" onChange={handleChange} value={locationInput}/>
+          <input type="text" className=""  placeholder={selectedDates == undefined ? "Select date" : `${selectedDates.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}  onClick={dateModalHandler}/>
+          <input type="text" className="" placeholder="Select guests" onClick={guestsModalHandler}/>
+          <input type="text" className="" placeholder="Filter" onClick={filterModalHandler}/>
           <button onClick={handleSearch}>Search</button>
         </div>
       </div>

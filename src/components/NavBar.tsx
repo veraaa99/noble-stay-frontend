@@ -3,6 +3,8 @@ import LoginForm from "./LoginForm"
 import RegisterForm from "./RegisterForm"
 import { Link, useNavigate } from "react-router"
 import { useUser } from "@/contexts/UserContext"
+import nobleStayLogo from '../assets/A.png'
+import { RxHamburgerMenu } from "react-icons/rx";
 
 const NavBar = () => {
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false)
@@ -34,22 +36,19 @@ const NavBar = () => {
     navigate('/')
   }
 
-  // TODO: Handle my bookings onclick if user isn't logged in
-
   return (
-    <div>
-      <div>
+    <nav className="flex align-middle justify-between px-5 py-3 drop-shadow-md-gray-400">
+      <div className="flex align-middle justify-center items-center">
         {/* Logotype */}
         <Link to={'/'}>
-          <img src="" alt="" />
+          <img src={nobleStayLogo} alt="" />
           {/* IF DESKTOP: Show logo + full name */}
         </Link>
         {/* NOBLE STAY */}
       </div>
-      <div>
+      <div className="flex align-middle justify-center items-center">
         {/* Hamburger menu */}
-        <p onClick={menuModalHandler}>Hamburger menu</p>
-        <img src="" alt="" onClick={menuModalHandler}/>
+        <RxHamburgerMenu className='cursor-pointer' size={30} onClick={menuModalHandler}/>
         {/* IF DESKTOP:  Show all options*/}
         {/* All castles, My Bookings, Login/Sign up */}
       </div>
@@ -104,7 +103,7 @@ const NavBar = () => {
         </div>
       }
       
-    </div>
+    </nav>
   )
 }
 export default NavBar
