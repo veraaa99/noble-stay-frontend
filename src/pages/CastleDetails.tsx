@@ -1,16 +1,13 @@
-import { Calendar } from "@/components/ui/calendar"
 import AddGuestsCounter from "../components/AddGuestsCounter"
 import RoomCard from "../components/RoomCard"
 import { useNavigate, useParams } from "react-router"
 import { useCastleListing } from "@/contexts/CastleListingContext"
-import { useState } from "react"
-import type { DateRange } from "react-day-picker"
 import DateCalendar from "@/components/DateCalendar"
 
 const CastleDetails = () => {
 
   const params = useParams()
-  const { selectedDates, actions } = useCastleListing()
+  const { actions } = useCastleListing()
 
   if(!params.castleId) {
     console.log('404: Not found')

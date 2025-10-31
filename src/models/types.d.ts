@@ -58,4 +58,5 @@ type Filter = {
     name: string,
     options: string[],
     selectedOptions: string[]
+    // ändra selectedoptions så den har key-value par
 }

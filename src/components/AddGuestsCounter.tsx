@@ -8,9 +8,7 @@ type GuestsCounterProps = {
 const AddGuestsCounter = ({ castleListing }: GuestsCounterProps) => {
     const { selectedGuests, actions } = useCastleListing()
     const newAllGuests: Guest[] = [...selectedGuests]
-
-    console.log(selectedGuests)
-
+    
     const checkMaxAmountOfGuests = () => {
         if(castleListing) {
             for (let i = 0; i < selectedGuests.length; i++) {

@@ -106,8 +106,6 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         setSelectedGuests(_selectedGuests)
     }
 
-    // set and get filters?
-
     // Public functions
     const createListing: typeof defaultState.actions.createListing = (listing: CastleListing) => {
         const updatedListings: CastleListing[] = [...listings, listing]
@@ -154,7 +152,6 @@ function CastleListingProvider ({ children }: PropsWithChildren){
             return [...prev, option];
         }
         });
-        // Ändra den här funktionen så att filtercheckboxes bara sparas i localstorage?
     }
 
     const actions = {

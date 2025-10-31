@@ -7,9 +7,6 @@ import { useBooking } from "@/contexts/BookingContext"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 
 const Profile = () => {
-  // TODO: Use localstorage to save user who's currently logged in
-  // TODO: Make a mybookings page? ask if it's ok
-
   const { currentUser } = useUser()
   const { actions: bookingActions } = useBooking()
   const { actions: castleListingActions } = useCastleListing()
