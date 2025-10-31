@@ -9,6 +9,22 @@ import useSelectOptions from "@/hooks/useFilter"
 import DateCalendar from "@/components/DateCalendar"
 import { format } from "date-fns"
 
+// import { Playfair_Display } from "next/font/google"
+// import { Poppins } from "next/font/google"
+// import { Poppins } from 'next/font/google'
+
+import { cn } from "@/lib/utils"
+
+// const playFairDisplay = Playfair_Display({
+//     subsets:["latin"],
+//     weight: ["700"]
+// })
+
+// const poppins = Poppins({
+//   subsets: ["latin"],
+//   weight: ["700"]
+// })
+
 const Home = () => {
   const { listings, selectedGuests, selectedDates, filters } = useCastleListing()
   const navigate = useNavigate()
