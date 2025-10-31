@@ -3,7 +3,7 @@ import LoginForm from "./LoginForm"
 import RegisterForm from "./RegisterForm"
 import { Link, useNavigate } from "react-router"
 import { useUser } from "@/contexts/UserContext"
-import nobleStayLogo from '../assets/A.png'
+import nobleStaySmallLogo from '../assets/A.svg'
 import { RxHamburgerMenu } from "react-icons/rx";
 
 const NavBar = () => {
@@ -41,7 +41,7 @@ const NavBar = () => {
       <div className="flex align-middle justify-center items-center">
         {/* Logotype */}
         <Link to={'/'}>
-          <img src={nobleStayLogo} alt="" />
+          <img src={nobleStaySmallLogo} alt="" />
           {/* IF DESKTOP: Show logo + full name */}
         </Link>
         {/* NOBLE STAY */}

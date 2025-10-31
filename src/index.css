@@ -78,7 +78,7 @@
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-border: oklch(0.738 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
   --font-playfair: 'Playfair Display', 'serif';
@@ -101,7 +101,7 @@
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(0.738 0 0);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
@@ -141,6 +141,24 @@
     font-weight: bold;
   }
 
+  h3 {
+    @apply text-(--primary);
+    font-family: var(--font-playfair);
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  h4 {
+    @apply text-(--primary);
+    font-family: var(--font-playfair);
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .caption {
+    font-size: 12px;
+  }
+
   .btn-primary {
     /* @apply (styling) */
   }
@@ -177,4 +195,10 @@
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
+}
+
+@media (min-width: 1024px) {
+    h1 {
+      font-size: 61px;
+    }
 }
