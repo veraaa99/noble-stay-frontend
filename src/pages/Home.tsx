@@ -1,12 +1,13 @@
 import { useState } from "react"
 import CastleCardSmall from "../components/CastleCardSmall"
 import FilterDropdown from "../components/FilterDropdown"
-import { useLocation, useNavigate, useSearchParams } from "react-router"
+import { useNavigate, useSearchParams } from "react-router"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
 import AddGuestsCounter from "@/components/AddGuestsCounter"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 import useSelectOptions from "@/hooks/useFilter"
 import DateCalendar from "@/components/DateCalendar"
+import { format } from "date-fns"
 
 const Home = () => {
   const { listings, selectedGuests, selectedDates, filters } = useCastleListing()
@@ -48,37 +49,34 @@ const Home = () => {
 
   const handleSearch = () => {
 
-    console.log(selectedFilters)
-    console.log(locationInput)
-    console.log(selectedDates)
-    console.log(selectedGuests)
-
-    const filterParams = selectedFilters.map(filter => ({ name: filter.name, selectedOptions: filter.selectedOptions}))
-    console.log(filterParams)
-
-    // const guestsParams = selectedGuests.map(guest => { return { guest.category: guest.number }} )
-
-    let params = {
-      location: locationInput,
-      dates: selectedDates,
-      guests: selectedGuests,
-      filter: filterParams
-    }
-
-    console.log(params)
-    // Check if value is empty, if empty, do not add to url
-
+    // Location params
     if(locationInput.trim() !== ''){
       searchParams.append('location', locationInput )
     }
+
+    // Dates params
+    if(selectedDates && selectedDates.from && selectedDates.to) {
+      searchParams.append('from', format(selectedDates.from, 'yyyy-MM-dd'))
+      searchParams.append('to', format(selectedDates.to, 'yyyy-MM-dd'))
+    }
+
+    // Guests params
     selectedGuests.map(guest => {
       guest.number > 0 &&
         searchParams.append(guest.category, guest.number.toString())
     })
+
+    // Filter params
+     selectedFilters.map(filter => {
+      filter.selectedOptions.length > 0 &&
+      filter.selectedOptions.forEach(option =>  
+        searchParams.append(filter.name, option)
+      )
+    })
     
+    // Insert searchparams and navigate to /search/ 
     navigate(`/search/?${searchParams}`)
     console.log(searchParams)
-    // navigate(`/search/${locationInput}`, { state: { location: locationInput }})
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,7 +89,6 @@ const Home = () => {
     <div>
       <div>
         {/* Search castles */}
-        {/* ANvänd searchparams och .append funktion */}
         <div>
           <input type="text" placeholder="Search location" onChange={handleChange} value={locationInput}/>
           <input type="text" placeholder={selectedDates == undefined ? "Select date" : `${selectedDates.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}  onClick={dateModalHandler}/>

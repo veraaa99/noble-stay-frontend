@@ -11,15 +11,7 @@ const SearchResults = () => {
   //  createSearchParams?
   // querystring.stringify?
   const [ searchParams ] = useSearchParams()
-  const urlParams = new URLSearchParams(searchParams)
-  const params = [];
-
-  for(let entry of searchParams.entries()) {
-    params.push(entry);
-  }
-
-  console.log(params)
-  console.log(urlParams.get('location'))
+  const urlParams = new URLSearchParams(searchParams)  
   
   const { listings, selectedDates, filters } = useCastleListing()
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
@@ -27,6 +19,11 @@ const SearchResults = () => {
   const [selectedFilters, setSelectedFilters] = useState(filters)
   const navigate = useNavigate()
   
+  // const size = urlParams.getAll('Size')
+  // const roomsNumber = urlParams.getAll('Number of rooms')
+  // const events = urlParams.getAll('Events')
+  // const amneties = urlParams.getAll('Amneties')
+
   const handleSelectOptions = (filterName: string, filterOption: string) => {
     const updateSelectedFilters = useSelectOptions(filterName, filterOption, filters)
     setSelectedFilters(updateSelectedFilters)
@@ -49,7 +46,7 @@ const SearchResults = () => {
       <div>
         <div>
           <h1>Showing results for:</h1>
-          <input type="text" placeholder="Search location" />
+          <input type="text" placeholder={urlParams.get('location') == null ? "Select location" : urlParams.get('location')?.toString()} />
           <input type="text" placeholder={selectedDates == undefined ? "Select date" : `${selectedDates.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}  onClick={dateModalHandler}/>
         </div>
         <div>

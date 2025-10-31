@@ -2,29 +2,23 @@ import { useEffect, useState } from "react"
 import CastleCardBig from "../components/CastleCardBig"
 import FilterDropdown from "../components/FilterDropdown"
 import useSelectOptions from "@/hooks/useFilter"
-import { useLocation, useNavigate } from "react-router"
+import { useNavigate } from "react-router"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 import DateCalendar from "@/components/DateCalendar"
 
 const AllCastles = () => {
 
-  const { listings, selectedGuests, selectedDates, filters, actions } = useCastleListing()
+  const { listings, filters } = useCastleListing()
   const navigate = useNavigate()
   const [isDateModalOpen, setIsDateModalOpen] = useState(false)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState<Filter[]>(filters)
 
   useEffect(() => {
-    // const resetNumberOfGuests = selectedGuests.map(guest => { 
-    //       return {...guest, number: 0}
-    // });
-
     const resetSelectedfilters = selectedFilters.map(filter => { 
       return {...filter, selectedOptions: []}
     });
     
-    // actions.updateSelectedGuests(resetNumberOfGuests)
-    // actions.updateSelectedDates(undefined)
     setSelectedFilters(resetSelectedfilters)
   }, [])
 
