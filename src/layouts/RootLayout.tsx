@@ -4,7 +4,7 @@ import Footer from "../components/Footer"
 
 const RootLayout = () => {
   return (
-    <div>
+    <div className="h-full">
       <NavBar />
       <div>
         <Outlet />

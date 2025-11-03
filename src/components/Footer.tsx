@@ -6,7 +6,7 @@ import { MdOutlineLocationOn } from "react-icons/md";
 
 const Footer = () => {
   return (
-    <footer className='flex flex-row justify-between items-center px-5 py-2 border-2'>
+    <footer className='flex flex-row justify-between items-center px-5 py-2 border-2 mt-5'>
       {/* Logo and full name */}
       <div>
         <img src={nobleStayLogo} alt="" />

@@ -12,6 +12,7 @@ const DateCalendar = () => {
       onSelect={(selectedDates) => {actions.updateSelectedDates(selectedDates)}}
       numberOfMonths={1}
       timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+      className="w-85 self-center"
     />
   )
 }

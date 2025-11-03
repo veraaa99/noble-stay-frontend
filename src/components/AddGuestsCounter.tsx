@@ -68,39 +68,39 @@ const AddGuestsCounter = ({ castleListing }: GuestsCounterProps) => {
     
 
   return (
-    <div>
-        <div>
-            <div>
+    <div className="flex flex-col gap-2.5">
+        <div className="border-2 rounded-lg grid grid-cols-3 px-3 py-1 items-center">
+            <div className="col-span-2">
                 <p>Adults</p>
-                <p>Ages 13 or above</p>
+                <p className="caption">Ages 13 or above</p>
             </div>
-            <div>
-                <button onClick={() => handleAmountOfGuests('adult', 'subtract')}>-</button>
-                <p>{newAllGuests[0].number}</p>
-                <button onClick={() => handleAmountOfGuests('adult', 'add')}>+</button>
+            <div className="grid grid-cols-3 items-center">
+                <button className="col-span-1 border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light text-center" onClick={() => handleAmountOfGuests('adult', 'subtract')}>-</button>
+                <p className="col-span-1 text-center">{newAllGuests[0].number}</p>
+                <button className="col-span-1 border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light" onClick={() => handleAmountOfGuests('adult', 'add')}>+</button>
             </div>
         </div>
 
-        <div>
-            <div>
+        <div className="border-2 rounded-lg grid grid-cols-3 px-3 py-1 items-center">
+            <div className="col-span-2">
                 <p>Children</p>
-                <p>Under 13</p>
+                <p className="caption">Under 13</p>
             </div>
-            <div>
-                <button onClick={() => handleAmountOfGuests('child', 'subtract')}>-</button>
-                <p>{newAllGuests[1].number}</p>
-                <button onClick={() => handleAmountOfGuests('child', 'add')}>+</button>
+            <div className="grid grid-cols-3 items-center">
+                <button className="col-span-1 border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light text-center" onClick={() => handleAmountOfGuests('child', 'subtract')}>-</button>
+                <p className="col-span-1 text-center">{newAllGuests[1].number}</p>
+                <button className="col-span-1 border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light" onClick={() => handleAmountOfGuests('child', 'add')}>+</button>
             </div>
         </div>
         
-        <div>
-            <div>
+        <div className="border-2 rounded-lg grid grid-cols-3 px-3 py-1 items-center">
+            <div className="col-span-2">
                 <p>Pets</p>
             </div>
-            <div>
-                <button onClick={() => handleAmountOfGuests('pet', 'subtract')}>-</button>
-                <p>{newAllGuests[2].number}</p>
-                <button onClick={() => handleAmountOfGuests('pet', 'add')}>+</button>
+            <div className="grid grid-cols-3 items-center">
+                <button className="border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light text-center" onClick={() => handleAmountOfGuests('pet', 'subtract')}>-</button>
+                <p className="col-span-1 text-center">{newAllGuests[2].number}</p>
+                <button className="border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light" onClick={() => handleAmountOfGuests('pet', 'add')}>+</button>
             </div>
         </div>
     </div>

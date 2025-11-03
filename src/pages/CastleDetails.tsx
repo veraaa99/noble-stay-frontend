@@ -4,6 +4,12 @@ import { useNavigate, useParams } from "react-router"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 import DateCalendar from "@/components/DateCalendar"
 
+import profilePic from '../assets/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg'
+import locationIcon from '../assets/Location_On.svg'
+import calendarIcon from '../assets/Calendar_Month.svg'
+import guestsIcon from '../assets/Groups.svg'
+import filterIcon from '../assets/Filter_Alt.svg'
+
 const CastleDetails = () => {
 
   const params = useParams()
@@ -19,30 +25,34 @@ const CastleDetails = () => {
   const castle: CastleListing | undefined  = actions.getListingByID(parseInt(params.castleId))
 
   return (
-    <div>
+    <div className="m-auto px-5">
       <button>Go back to listings</button>
       {/* Full castle details */}
       { castle &&
         <div>
           {/* Castle image */}
           <div>
-            <img src={castle.images[0]} alt="" />
+            <img className="rounded-xl h-60" src={castle.images[0]} alt="" />
           </div>
           {/* Castle information */}
           <div>
-            <div>
-              <div>
-                <h1>{castle.title}</h1>
-                <p>{castle.events}</p>
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-between">
+                  <h1>{castle.title}</h1>
+                  <button>Share</button>
+                </div>
+                { castle.events?.map(event => 
+                  <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">{event}</p>
+                )}
               </div>
-              <button>Share</button>
-            </div>
 
-            <div>
-              <p>{castle.description} </p>
-              <button>Expand</button>
+            <div className="flex flex-col gap-3 mt-3">
               <div>
-                <ul>
+                <p>{castle.description} </p>
+                <button className="underline">Expand</button>
+              </div>
+              <div>
+                <ul className="caption flex flex-col gap-1">
                   {
                     castle.amneties?.map(a =>
                       <li>{a}</li>
@@ -52,9 +62,10 @@ const CastleDetails = () => {
               </div>
             </div>
 
-            <div>
+            <div className="flex flex-col my-5">
               <div>
-                <ul>
+                <p>Rules</p>
+                <ul className="caption flex flex-col gap-1">
                   {
                     castle.rules.map( r =>
                       <li>{r}</li>
@@ -62,51 +73,53 @@ const CastleDetails = () => {
                   }
                 </ul>
               </div>
-              <a href="">Full details</a>
+              <a className="underline" href="">Full details</a>
             </div>
           </div>
 
-          <hr />
+          <hr className="w-85 m-auto border-(--color-gray)"/>
 
           {/* Castle owner details */}
-          <div>
+          <div className="flex my-5">
             <div>
-              <h2>Meet the castle owner</h2>
+              <h2 className="text-(--color-foreground)">Meet the castle owner</h2>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ac turpis tristique. </p>
             </div>
             <div>
-              <img src="" alt="" />
+              {/* PLaceholder image by Joseph Gonzalez at Unsplash.com */}
+              <div className="bg-[url(assets/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg)] bg-cover bg-no-repeat bg-center w-[70px] h-[70px] rounded-full"></div>
+              {/* <img className="rounded-full w-[70px] h-[70px]" src={profilePic} alt="" /> */}
               <p>DummyStars</p>
-              <a href="">Contact host</a>
+              <a className="underline" href="">Contact host</a>
             </div>
           </div>
 
-          <hr />
+          <hr className="w-85 m-auto border-(--color-gray)"/>
 
           {/* Location details */}
-          <div>
-            <h2>{castle.location}</h2>
+          <div className="flex flex-col my-5">
+            <h2 className="text-(--color-foreground)">Location</h2>
             <img src="" alt="" />
           </div>
 
-          <hr />
+          <hr className="w-85 m-auto border-(--color-gray)"/>
 
           {/* Select dates */}
-          <div>
-            <h2>Select dates</h2>
+          <div className="flex flex-col my-5">
+            <h2 className="text-(--color-foreground)">Select dates</h2>
             <DateCalendar />
           </div>
 
           {/* Select guests */}
-          <div>
-            <h2>Select how many guests</h2>
+          <div className="flex flex-col my-5 gap-3">
+            <h2 className="text-(--color-foreground)">Select how many guests</h2>
             <AddGuestsCounter 
             castleListing={castle}/>
           </div>
 
           {/* Select Room */}
-          <div>
-            <h2>Select a room</h2>
+          <div className="flex flex-col my-5">
+            <h2 className="text-(--color-foreground)">Select a room</h2>
             {
               castle.rooms.map (r => 
                 <RoomCard room={r} />
@@ -115,14 +128,14 @@ const CastleDetails = () => {
           </div>
 
           {/* Total price and reserve */}
-          <div>
+          <div className="flex justify-between items-end my-5">
             <div>
               <p>Total:</p>
-              <p>DummyPrice</p>
+              <p className="underline text-(--color-primary)">DummyPrice SEK</p>
             </div>
-            <div>
-              <p>You will not be charged yet</p>
-              <button onClick={() => navigate(`/book/?castleId=${castle.id}`)}>Reserve</button>
+            <div className="flex flex-col items-center gap-2">
+              <p className="caption text-(--color-gray)">You will not be charged yet</p>
+              <button className="btn-primary" onClick={() => navigate(`/book/?castleId=${castle.id}`)}>Reserve</button>
             </div>
           </div>
 

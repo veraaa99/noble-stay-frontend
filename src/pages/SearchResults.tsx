@@ -60,7 +60,7 @@ const SearchResults = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-end">
           <p><strong>1</strong> found</p>
           <button className="btn-secondary" onClick={filterModalHandler}>Filter</button>
         </div>

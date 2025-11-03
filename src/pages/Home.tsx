@@ -9,11 +9,6 @@ import useSelectOptions from "@/hooks/useFilter"
 import DateCalendar from "@/components/DateCalendar"
 import { format } from "date-fns"
 
-import locationIcon from '../assets/Location_On.svg'
-import calendarIcon from '../assets/Calendar_Month.svg'
-import guestsIcon from '../assets/Groups.svg'
-import filterIcon from '../assets/Filter_Alt.svg'
-
 const Home = () => {
   const { listings, selectedGuests, selectedDates, filters } = useCastleListing()
   const navigate = useNavigate()
@@ -162,7 +157,7 @@ const Home = () => {
 
         {/* Sweden castles carousel */}
         <h2 className="ml-2">Sweden</h2>
-        <div className="mb-3">
+        <div className="">
           <Carousel>
             <CarouselContent className="-ml-1">
               {

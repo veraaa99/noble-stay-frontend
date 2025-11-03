@@ -6,6 +6,9 @@ import { useNavigate } from "react-router"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 import DateCalendar from "@/components/DateCalendar"
 
+import locationIcon from '../assets/Location_On.svg'
+import calendarIcon from '../assets/Calendar_Month.svg'
+
 const AllCastles = () => {
 
   const { listings, filters } = useCastleListing()
@@ -38,15 +41,23 @@ const AllCastles = () => {
 
   return (
     <div>
-      <div>
-        <div>
+      <div className="flex flex-col px-4 mt-5 mb-5 gap-8">
+        <div className="flex flex-col gap-5">
           <h1>All castles</h1>
-          <input type="text" placeholder="All locations" />
-          <input type="text" placeholder="No date specified"/>
+          <div className="flex flex-col gap-1">
+            <div className="flex gap-1">
+              <img src={locationIcon} alt="" />
+              <input type="text" placeholder="All Locations"/>
+            </div>
+            <div className="flex gap-1">
+              <img src={calendarIcon} alt="" />
+              <input type="text" placeholder="No date specified" onClick={dateModalHandler}/>
+            </div>
+          </div>
         </div>
-        <div>
+        <div className="flex justify-between items-end">
           <p><strong>{listings.length}</strong> found</p>
-          <button onClick={filterModalHandler}>Filter</button>
+          <button className="btn-secondary" onClick={filterModalHandler}>Filter</button>
         </div>
       </div>
 
