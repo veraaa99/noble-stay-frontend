@@ -6,6 +6,9 @@ import { useCastleListing } from "@/contexts/CastleListingContext"
 import useSelectOptions from "@/hooks/useFilter"
 import DateCalendar from "@/components/DateCalendar"
 
+import locationIcon from '../assets/Location_On.svg'
+import calendarIcon from '../assets/Calendar_Month.svg'
+
 const SearchResults = () => {
   // Använd usesearchparams?
   //  createSearchParams?
@@ -43,15 +46,23 @@ const SearchResults = () => {
   return (
     <div>
       {/* Search filters */}
-      <div>
-        <div>
+      <div className="flex flex-col px-4 mt-5 mb-5 gap-8">
+        <div className="flex flex-col gap-5">
           <h1>Showing results for:</h1>
-          <input type="text" placeholder={urlParams.get('location') == null ? "Select location" : urlParams.get('location')?.toString()} />
-          <input type="text" placeholder={selectedDates == undefined ? "Select date" : `${selectedDates.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}  onClick={dateModalHandler}/>
+          <div className="flex flex-col gap-1">
+            <div className="flex gap-1">
+              <img src={locationIcon} alt="" />
+              <input type="text" placeholder={urlParams.get('location') == null ? "Select location" : urlParams.get('location')?.toString()} />
+            </div>
+            <div className="flex gap-1">
+              <img src={calendarIcon} alt="" />
+              <input type="text" placeholder={selectedDates == undefined ? "Select date" : `${selectedDates.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}  onClick={dateModalHandler}/>
+            </div>
+          </div>
         </div>
-        <div>
-          <p>dummyNumber</p>
-          <button onClick={filterModalHandler}>Filter</button>
+        <div className="flex justify-between">
+          <p><strong>1</strong> found</p>
+          <button className="btn-secondary" onClick={filterModalHandler}>Filter</button>
         </div>
       </div>
 

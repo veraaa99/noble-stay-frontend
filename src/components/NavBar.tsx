@@ -37,7 +37,7 @@ const NavBar = () => {
   }
 
   return (
-    <nav className="flex align-middle justify-between px-5 py-3 drop-shadow-md-gray-400">
+    <nav className="flex align-middle justify-between px-5 py-3 shadow-md">
       <div className="flex align-middle justify-center items-center">
         {/* Logotype */}
         <Link to={'/'}>

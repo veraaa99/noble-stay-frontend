@@ -45,7 +45,7 @@ const AllCastles = () => {
           <input type="text" placeholder="No date specified"/>
         </div>
         <div>
-          <p>3 found</p>
+          <p><strong>{listings.length}</strong> found</p>
           <button onClick={filterModalHandler}>Filter</button>
         </div>
       </div>

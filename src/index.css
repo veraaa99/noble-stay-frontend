@@ -18,6 +18,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -57,6 +58,7 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.6129 0.0729 350.2);
   --primary-foreground: oklch(0.985 0 0);
+  --primary-hover: oklab(71.154% 0.08772 -0.01437);
   --secondary: oklch(0.9975 0.0017 67.8);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -94,6 +96,7 @@
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
+   --primary-hover: oklab(71.154% 0.08772 -0.01437);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -124,32 +127,35 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-svh;
   }
+  /* body > #root > div {
+    min-height: 100vh;
+  } */
 
   h1 {
-    @apply text-(--primary);
+    @apply text-(--color-primary);
     font-family: var(--font-playfair);
     font-size: 31px;
     font-weight: bold;
   }
 
   h2 {
-    @apply text-(--primary);
+    @apply text-(--color-primary);
     font-family: var(--font-playfair);
     font-size: 20px;
     font-weight: bold;
   }
 
   h3 {
-    @apply text-(--primary);
+    @apply text-(--color-primary);
     font-family: var(--font-playfair);
     font-size: 16px;
     font-weight: bold;
   }
 
   h4 {
-    @apply text-(--primary);
+    @apply text-(--color-primary);
     font-family: var(--font-playfair);
     font-size: 20px;
     font-weight: bold;
@@ -168,18 +174,22 @@
   }
 
   .btn-primary {
-    @apply bg-(--primary) rounded-4xl;
+    @apply bg-(--color-primary) rounded-4xl;
     width: 144px;
     height: 40px;
     color: var(--primary-foreground);
   }
 
    .btn-primary:hover {
-    /* @apply bg-(--primary) */
+    @apply bg-(--color-primary-hover) cursor-pointer;
   }
 
   .btn-secondary {
-    /* @apply (styling) */
+    @apply bg-(--color-secondary) rounded-4xl border-2;
+    width: 144px;
+    height: 40px;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
   }
 
   .btn-secondar:hover {
