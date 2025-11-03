@@ -9,6 +9,11 @@ import useSelectOptions from "@/hooks/useFilter"
 import DateCalendar from "@/components/DateCalendar"
 import { format } from "date-fns"
 
+import locationIcon from '../assets/Location_On.svg'
+import calendarIcon from '../assets/Calendar_Month.svg'
+import guestsIcon from '../assets/Groups.svg'
+import filterIcon from '../assets/Filter_Alt.svg'
+
 const Home = () => {
   const { listings, selectedGuests, selectedDates, filters } = useCastleListing()
   const navigate = useNavigate()
@@ -88,14 +93,18 @@ const Home = () => {
   return (
     <div>
       {/* Photo by Rasmus Andersen: https://www.pexels.com/photo/red-brick-castle-in-landskrona-sweden-31599512/ */}
-      <div className="flex p-50 align-middle bg-[url(https://images.pexels.com/photos/31599512/pexels-photo-31599512.jpeg)] bg-cover bg-center">
+      <div className="flex w-full h-100 bg-[url(https://images.pexels.com/photos/31599512/pexels-photo-31599512.jpeg)] bg-cover bg-center rounded-b-lg">
         {/* Search castles */}
-        <div className="flex flex-col p-20 bg-white/70">
-          <input type="text" className="" placeholder="Search location" onChange={handleChange} value={locationInput}/>
-          <input type="text" className=""  placeholder={selectedDates == undefined ? "Select date" : `${selectedDates.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}  onClick={dateModalHandler}/>
-          <input type="text" className="" placeholder="Select guests" onClick={guestsModalHandler}/>
-          <input type="text" className="" placeholder="Filter" onClick={filterModalHandler}/>
-          <button onClick={handleSearch}>Search</button>
+        <div className="flex flex-col bg-white/70 m-auto pt-12 pb-7 px-8 rounded-sm gap-1.5 items-center">
+          <div className="flex flex-col gap-1.5">
+            <input type="text" className="bg-white bg-[url(assets/Filter_Alt.svg)] bg-no-repeat bg-position-[10px] pl-10 py-1 border-1 border-(--sidebar-border) rounded-sm" placeholder="Search location" onChange={handleChange} value={locationInput}/>
+            <input type="text" className="bg-white bg-[url(assets/Calendar_Month.svg)] bg-no-repeat bg-position-[10px] pl-10 py-1 border-1 border-(--sidebar-border) rounded-sm"  placeholder={selectedDates == undefined ? "Select date" : `${selectedDates.from?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})} - ${selectedDates.to?.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}`}  onClick={dateModalHandler}/>
+            <input type="text" className="bg-white bg-[url(assets/Groups.svg)] bg-no-repeat bg-position-[10px] pl-10 py-1 border-1 border-(--sidebar-border) rounded-sm" placeholder="Select guests" onClick={guestsModalHandler}/>
+            <input type="text" className="bg-white bg-[url(assets/Filter_Alt.svg)] bg-no-repeat bg-position-[10px] pl-10 py-1 border-1 border-(--sidebar-border) rounded-sm" placeholder="Filter" onClick={filterModalHandler}/>
+          </div>
+          <div className="mt-15">
+            <button className="btn-primary" onClick={handleSearch}>Search</button>
+          </div>
         </div>
       </div>
 
@@ -126,20 +135,23 @@ const Home = () => {
         </div>
       }
 
-      <div>
+      <div className="text-center w-80 mx-auto my-5">
         <h1>Check Into a Fairytale</h1>
         <p>Sleep in real castles, wake to real magic. Or why not join us for ghost hunting? With Nobal Stay, your storybook stay begins for real.</p>
       </div>
 
-      <div>
+      <div className="ml-1">
         {/* Scandinavia castles carousel */}
-        <h2>Scandinavia</h2>
+        <h2 className="ml-2">Scandinavia</h2>
         <div>
-          <Carousel>
-            <CarouselContent>
+          <Carousel
+          opts={{
+            align: "start"
+          }}>
+            <CarouselContent className="-ml-1">
               {
                 listings.map(c => (
-                  <CarouselItem>
+                  <CarouselItem className="basis-auto">
                     <CastleCardSmall castle={c}/>
                   </CarouselItem>
                 ))
@@ -149,13 +161,13 @@ const Home = () => {
         </div>
 
         {/* Sweden castles carousel */}
-        <h2>Sweden</h2>
-        <div>
+        <h2 className="ml-2">Sweden</h2>
+        <div className="mb-3">
           <Carousel>
-            <CarouselContent>
+            <CarouselContent className="-ml-1">
               {
                 listings.map(c => (
-                  <CarouselItem>
+                  <CarouselItem className="basis-auto">
                     <CastleCardSmall castle={c}/>
                   </CarouselItem>
                 ))
