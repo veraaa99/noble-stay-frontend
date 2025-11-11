@@ -7,7 +7,7 @@ type CastleProps = {
 const CastleCardBig = ({ castle }: CastleProps) => {
   return (
     <div className="h-full w-[369px] rounded-xl overflow-hidden custom-shadow m-auto mb-8">
-        <Link to={`/castles/${castle.id}`}>
+        <Link to={`/castles/${castle._id}`}>
             <div>
                 <div>
                     <img src={castle.images[0]} alt="" />

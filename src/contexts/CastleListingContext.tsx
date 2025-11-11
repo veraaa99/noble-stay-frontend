@@ -1,3 +1,4 @@
+import axios from "@/axios_api/axios";
 import { dummyCastleListings } from "@/data/castleListings";
 import LocalStorageService from "@/utils/LocalStorageService";
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
@@ -11,11 +12,13 @@ type CastleListingState = {
     filterCheckboxes: string[],
     actions: {
         createListing: (listing: CastleListing) => void;
-        getListingByID: (listingId: CastleListing['id']) => CastleListing | undefined;
+        getListingByID: (listingId: CastleListing['_id']) => CastleListing | undefined;
         getListingsByUser: (user: User) => CastleListing[] | undefined;
         updateSelectedDates: (dates: DateRange | undefined) => void;
         updateSelectedGuests: (guests: Guest[]) => void;
-        updateFilterboxes: (option: string) => void
+        updateFilterboxes: (option: string) => void;
+        setSelectedFilters: (filters: Filter[]) => void;
+        resetFilters: () => void;
     }
 }
 
@@ -23,17 +26,17 @@ const defaultState: CastleListingState = {
     listings: dummyCastleListings,
     selectedGuests: [
     {
-        id: 1,
+        // _id: 1,
         category: 'adult',
         number: 0,
     },
     {
-        id: 2,
+        // _id: 2,
         category: 'child',
         number: 0
     },
     {
-        id: 3,
+        // _id: 3,
         category: 'pet',
         number: 0
     }
@@ -44,22 +47,22 @@ const defaultState: CastleListingState = {
     },
     filters: [
     {
-        name: 'Size',
+        name: 'size',
         options: ['50m²', '20m²', '100m²'],
         selectedOptions: []
     },
     {
-        name: 'Number of rooms',
+        name: 'number of rooms',
         options: ['1', '2', '3', '4', '5'],
         selectedOptions: []
     },
     {
-        name: 'Events',
+        name: 'events',
         options: ['Ghost hunting', 'Dance party', 'Photoshoot', 'Guided tour'],
         selectedOptions: []
     },
     {
-        name: 'Amneties',
+        name: 'amneties',
         options: ['Pets allowed', 'Breakfast included', 'Lunch included', 'Gym nearby'],
         selectedOptions: []
     }
@@ -71,7 +74,9 @@ const defaultState: CastleListingState = {
         getListingsByUser: () => undefined,
         updateSelectedDates: () => {},
         updateSelectedGuests: () => {},
-        updateFilterboxes: () => {}
+        updateFilterboxes: () => {},
+        setSelectedFilters: () => {},
+        resetFilters: () => {}
     }
 }
 
@@ -79,7 +84,7 @@ const CastleListingContext = createContext<CastleListingState>(defaultState)
 
 function CastleListingProvider ({ children }: PropsWithChildren){
 
-    const [listings, setListings] = useState<CastleListing[]>(defaultState.listings)
+    const [listings, setListings] = useState<CastleListing[]>([])
     const [selectedGuests, setSelectedGuests] = useState<Guest[]>(defaultState.selectedGuests)
     const [selectedDates, setSelectedDates] = useState<DateRange | undefined>(undefined)
     const [filters, setFilters] = useState<Filter[]>(defaultState.filters)
@@ -88,12 +93,26 @@ function CastleListingProvider ({ children }: PropsWithChildren){
     useEffect(() => {
         _getListings()
         _getSelectedGuests()
+        _getFilterCheckboxes()
+        _getFilters()
+        _getSelectedDates()
     }, [])
     
     // Private functions 
-    const _getListings = () => { 
-        const _listings: CastleListing[] = LocalStorageService.getItem('@booking/listings', defaultState.listings)
-        setListings(_listings)
+    const _getListings = async() => { 
+        try {
+            let res = await axios.get('/api/listings')
+            if(res.status !== 200) return
+
+            LocalStorageService.setItem('@booking/listings', res.data)
+            const _listings: CastleListing[] = LocalStorageService.getItem('@booking/listings', res.data)
+            
+            setListings(_listings)
+            return
+        } catch(error: any) {
+            console.log(error.message)
+            return
+        }
     }
 
     const _setSelectedGuests = (_guests: Guest[]) => {
@@ -106,15 +125,56 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         setSelectedGuests(_selectedGuests)
     }
 
-    // Public functions
-    const createListing: typeof defaultState.actions.createListing = (listing: CastleListing) => {
-        const updatedListings: CastleListing[] = [...listings, listing]
-        setListings(updatedListings)
-        LocalStorageService.setItem<CastleListing[]>('@booking/listings', updatedListings)
+    const _getFilters = () => {
+        const _filters = LocalStorageService.getItem('@booking/filters', filters)
+        setFilters(_filters)
     }
 
-    const getListingByID: typeof defaultState.actions.getListingByID = (listingId: number) => {
-        const listingByID: CastleListing | undefined = listings.find(listing => listing.id == listingId)
+    const _getFilterCheckboxes = () => {
+        const _filterCheckboxes = LocalStorageService.getItem('@booking/checkboxes', filterCheckboxes)
+        setFilterCheckboxes(_filterCheckboxes)
+    }
+
+    const _getSelectedDates = () => {
+        const _selectedDates = LocalStorageService.getItem('@booking/dates', selectedDates)
+
+        if (_selectedDates !== undefined && _selectedDates !== null && _selectedDates.from !== undefined && _selectedDates.to !== undefined) {
+            const startDate = new Date(_selectedDates.from.toString())
+            const endDate = new Date(_selectedDates.to.toString())
+
+            const newDateRange = { from: startDate, to: endDate}
+            setSelectedDates(newDateRange)
+        } else {
+            setSelectedDates(_selectedDates)
+        }
+    }
+
+     const _setSelectedDates = (_dates: DateRange | undefined) => {
+        setSelectedDates(_dates)
+        if(_dates == undefined) {
+            LocalStorageService.setItem('@booking/dates', null)
+        }
+    }
+
+    // Public functions
+    const createListing: typeof defaultState.actions.createListing = async (listing: CastleListing) => {
+        try {
+             const response = await axios.post('api/listings', listing)
+
+             if(response.status === 201){
+                const updatedListings: CastleListing[] = [...listings, listing]
+                setListings(updatedListings)
+            }
+             
+            return
+        } catch(error: any) {
+            console.log(error.message)
+            return
+        }
+    }
+
+    const getListingByID: typeof defaultState.actions.getListingByID = (listingId: string) => {
+        const listingByID: CastleListing | undefined = listings.find(listing => listing._id == listingId)
         if(listingByID == undefined) {
             console.log('Error: Listing could not be found')
             return undefined
@@ -125,7 +185,7 @@ function CastleListingProvider ({ children }: PropsWithChildren){
 
     const getListingsByUser: typeof defaultState.actions.getListingsByUser = (user: User) => {
         const newListings = [...listings]
-        const userListings: CastleListing[] | undefined = newListings.filter(listing => listing.castleOwner.id == user.id)
+        const userListings: CastleListing[] | undefined = newListings.filter(listing => listing.castleOwner._id == user._id)
         if(userListings == undefined || userListings.length == 0) {
             console.log('No listings made by this user')
             return undefined
@@ -135,7 +195,7 @@ function CastleListingProvider ({ children }: PropsWithChildren){
     }
 
     const updateSelectedDates: typeof defaultState.actions.updateSelectedDates = (dates: DateRange | undefined) => {
-        setSelectedDates(dates)
+        _setSelectedDates(dates)
         LocalStorageService.setItem<DateRange |undefined>('@booking/dates', dates)
     }
 
@@ -145,13 +205,78 @@ function CastleListingProvider ({ children }: PropsWithChildren){
     }
     
     const updateFilterboxes: typeof defaultState.actions.updateFilterboxes = (option: string) => {
-        setFilterCheckboxes(prev => {
-        if (prev.includes(option)) {
-            return prev.filter(x => x !== option);
+        const updatedCheckboxes: string[] = [...filterCheckboxes]
+
+        const optionAlreadySelected = updatedCheckboxes.find(b => b == option)
+
+        if (optionAlreadySelected) {
+            const updatedSelectedOptions = updatedCheckboxes.filter(o => o !== option)
+            setFilterCheckboxes(updatedSelectedOptions)
+            LocalStorageService.setItem('@booking/checkboxes', updatedSelectedOptions)
         } else {
-            return [...prev, option];
+            updatedCheckboxes.push(option)
+            setFilterCheckboxes(updatedCheckboxes)
+            LocalStorageService.setItem('@booking/checkboxes', updatedCheckboxes)
         }
+    }
+
+    const setSelectedFilters = (updatedFilters: Filter[]) =>{
+        // const _filters = LocalStorageService.getItem('@booking/filters', defaultState.filters);
+        setFilters(updatedFilters)
+        LocalStorageService.setItem('@booking/filters', updatedFilters)
+    }
+
+     const updateListing = async( id: string, listing: CastleListing ) => {
+        try {
+            const response = await axios.put(`api/listings/${id}`, listing)
+
+            if(response.status === 201){
+
+                const index = listings.findIndex(l => l._id == id)
+
+                const updatedListings = listings.map(listing => {
+                    if(listing._id == id) {
+                        return response.data
+                    } else {
+                        return listing
+                    }
+                })
+                setListings(updatedListings)
+            }
+            
+            return
+        } catch(error: any) {
+            console.log(error.message)
+            return
+        }
+    }
+
+    const removeListing = async (id: string) => {
+        try {
+          let res = await axios.delete(`/api/listings/${id}`)
+          if(res.status !== 204) return
+    
+          const updatedListings = listings.filter((listing) => listing._id !== id)
+          setListings(updatedListings)
+        LocalStorageService.setItem('@booking/listings', updatedListings)
+        
+        } catch(error: any) {
+            console.log(error.message)
+            return
+        }
+    }
+
+    const resetFilters: typeof defaultState.actions.resetFilters = () => {
+        _setSelectedDates(undefined)
+        _setSelectedGuests(defaultState.selectedGuests)
+
+        const resetSelectedfilters = filters.map(filter => { 
+            return {...filter, selectedOptions: []}
         });
+        setSelectedFilters(resetSelectedfilters)
+
+        setFilterCheckboxes([])
+        LocalStorageService.setItem('@booking/checkboxes', filterCheckboxes)
     }
 
     const actions = {
@@ -160,7 +285,9 @@ function CastleListingProvider ({ children }: PropsWithChildren){
         getListingsByUser,
         updateSelectedDates,
         updateSelectedGuests,
-        updateFilterboxes
+        updateFilterboxes,
+        setSelectedFilters,
+        resetFilters
     }
   
     return (

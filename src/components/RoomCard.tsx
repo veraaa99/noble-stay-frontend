@@ -19,7 +19,7 @@ const RoomCard = ({ room }: RoomCardProps ) => {
           <p>{room.price}</p>
           <div>
             <p>Select this room</p>
-            <input type="radio" name={room.title} id={room.id.toString()} />
+            <input type="radio" name="Select room" id={room.title} />
           </div>
       </div>
     </div>

@@ -28,8 +28,6 @@ const useSelectOptions = (filterName: string, filterOption: string, selectedFilt
       newSelectedFilters[filterToUpdateIndex] = updatedFilter
     }
   }
-
-  // Localstorage - set selectedfilters?
   return newSelectedFilters
 
 }

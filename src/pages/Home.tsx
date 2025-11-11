@@ -10,7 +10,7 @@ import DateCalendar from "@/components/DateCalendar"
 import { format } from "date-fns"
 
 const Home = () => {
-  const { listings, selectedGuests, selectedDates, filters } = useCastleListing()
+  const { listings, selectedGuests, selectedDates, filters, actions } = useCastleListing()
   const navigate = useNavigate()
   const [ searchParams ] = useSearchParams()
 
@@ -18,12 +18,11 @@ const Home = () => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [isGuestsModalOpen, setIsGuestsModalOpen] = useState(false)
   
-  const [selectedFilters, setSelectedFilters] = useState(filters)
   const [locationInput, setLocationInput] = useState<string>('')
 
   const handleSelectOptions = (filterName: string, filterOption: string) => {
     const updateSelectedFilters = useSelectOptions(filterName, filterOption, filters)
-    setSelectedFilters(updateSelectedFilters)
+    actions.setSelectedFilters(updateSelectedFilters)
   }
 
   const dateModalHandler = () => {
@@ -67,22 +66,24 @@ const Home = () => {
     })
 
     // Filter params
-     selectedFilters.map(filter => {
-      filter.selectedOptions.length > 0 &&
+     filters.map(filter => {
+      // filter.selectedOptions.length > 0 &&
       filter.selectedOptions.forEach(option =>  
         searchParams.append(filter.name, option)
       )
     })
     
     // Insert searchparams and navigate to /search/ 
-    navigate(`/search/?${searchParams}`)
-    console.log(searchParams)
+    if(searchParams.toString() == '') {
+      navigate(`/search/`)
+    } else {
+      navigate(`/search/?${searchParams}`)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setLocationInput(value)
-    console.log(locationInput)
   }
 
   return (
@@ -115,7 +116,7 @@ const Home = () => {
         isFilterModalOpen &&
         <div>
           <p onClick={filterModalHandler}>X</p>
-          {selectedFilters.map(filter=> 
+          {filters.map(filter => 
             <FilterDropdown name={filter.name} options={filter.options} onHandleSelectOptions={handleSelectOptions}/>
           )}
           <button onClick={filterModalHandler}>Apply</button>

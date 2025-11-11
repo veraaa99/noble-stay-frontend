@@ -2,13 +2,6 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { useUser } from "@/contexts/UserContext"
 import type { Dispatch, SetStateAction } from 'react'
 
-type RegisterInputs = {
-  email: string, 
-  phone: string,
-  password: string,
-  confirmPassword: string
-}
-
 type RegisterFormProps = {
   setIsRegisterModalOpen?: Dispatch<SetStateAction<boolean>>
 }
@@ -21,36 +14,28 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps ) => {
     formState: { errors },
   } = useForm<RegisterInputs>({ defaultValues: { email: "", phone:"", password: "", confirmPassword: "" } })
 
-  const { actions, users } = useUser()
+  const { actions } = useUser()
 
-  const onSubmit: SubmitHandler<RegisterInputs> = (data: RegisterInputs) => {
+  const onSubmit: SubmitHandler<RegisterInputs> = async(data: RegisterInputs) => {
 
-    if(data.confirmPassword !== data.password) {
-      console.log("Error: Passwords don't match")
-      return
-    }
-
-    const _user: User = { 
-      id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1, 
-      email: data.email.trim(), 
-      phone: data.phone.trim(),
-      password: data.password.trim()
-    }
-    
-    const existingUser: User | undefined = users.find((u) => u.email == _user.email)
-
-    if (!existingUser) {
-      actions.createUser(_user)
-      actions.setUser(_user)
-      
-      if(setIsRegisterModalOpen) {
-        setIsRegisterModalOpen(false)
+      if(!data.email || !data.password || !data.phone || !data.confirmPassword){
+          console.log('Please fill in all fields')
+          return
+      } else if(data.password !== data.confirmPassword) {
+          console.log('Passwords do not match')
+          return
       }
-      // setIsSubmitted(true)
-    } else {
-      console.log("Email is already in use")
-      // setFormError("Användarnamnet är redan taget")
-    }
+
+      try {
+          await actions.createUser(data)
+          if(setIsRegisterModalOpen) {
+            setIsRegisterModalOpen(false)
+          }
+          
+      }  catch(error: any) {
+            console.log(error.message)
+            return
+        }
 
     return
   }

@@ -1,8 +1,10 @@
 import AddGuestsCounter from "../components/AddGuestsCounter"
 import RoomCard from "../components/RoomCard"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 import DateCalendar from "@/components/DateCalendar"
+import axios from "@/axios_api/axios"
 
 import profilePic from '../assets/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg'
 import locationIcon from '../assets/Location_On.svg'
@@ -15,46 +17,68 @@ const CastleDetails = () => {
   const params = useParams()
   const { actions } = useCastleListing()
 
+  const [listing, setListing] = useState<CastleListing | undefined>()
+
   if(!params.castleId) {
     console.log('404: Not found')
     return
   }
 
+  useEffect(() => {
+    const getListing = async() => {
+      try {
+        const res = await axios.get(`api/listings/${params.castleId}`)
+        
+        if(res.status !== 200) return
+
+        setListing(res.data)
+        // setImgSrc(res.data.images)
+        // setBigImage(res.data.images[0])
+        return
+  
+      } catch(error: any) {
+        console.log(error.message)
+        return
+      }
+    }
+    getListing()
+  }, [])
+
   const navigate = useNavigate()
 
-  const castle: CastleListing | undefined  = actions.getListingByID(parseInt(params.castleId))
+  // const castle: CastleListing | undefined  = actions.getListingByID(parseInt(params.castleId))
 
   return (
     <div className="m-auto px-5">
       <button>Go back to listings</button>
       {/* Full castle details */}
-      { castle &&
+      { listing &&
         <div>
           {/* Castle image */}
           <div>
-            <img className="rounded-xl h-60" src={castle.images[0]} alt="" />
+            <img className="rounded-xl h-60" src={listing.images[0]} alt="" />
           </div>
-          {/* Castle information */}
+          {/* listing information */}
           <div>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between">
-                  <h1>{castle.title}</h1>
+                  <h1>{listing.title}</h1>
                   <button>Share</button>
                 </div>
-                { castle.events?.map(event => 
+                { listing.events?.map(event => 
                   <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">{event}</p>
                 )}
               </div>
 
             <div className="flex flex-col gap-3 mt-3">
               <div>
-                <p>{castle.description} </p>
+                <p>{listing.description} </p>
                 <button className="underline">Expand</button>
               </div>
               <div>
                 <ul className="caption flex flex-col gap-1">
                   {
-                    castle.amneties?.map(a =>
+                    listing.amneties?.map(a =>
                       <li>{a}</li>
                     )
                   }
@@ -67,7 +91,7 @@ const CastleDetails = () => {
                 <p>Rules</p>
                 <ul className="caption flex flex-col gap-1">
                   {
-                    castle.rules.map( r =>
+                    listing.rules.map( r =>
                       <li>{r}</li>
                     )
                   }
@@ -79,7 +103,7 @@ const CastleDetails = () => {
 
           <hr className="w-85 m-auto border-(--color-gray)"/>
 
-          {/* Castle owner details */}
+          {/* castle owner details */}
           <div className="flex my-5">
             <div>
               <h2 className="text-(--color-foreground)">Meet the castle owner</h2>
@@ -114,14 +138,14 @@ const CastleDetails = () => {
           <div className="flex flex-col my-5 gap-3">
             <h2 className="text-(--color-foreground)">Select how many guests</h2>
             <AddGuestsCounter 
-            castleListing={castle}/>
+            castleListing={listing}/>
           </div>
 
           {/* Select Room */}
           <div className="flex flex-col my-5">
             <h2 className="text-(--color-foreground)">Select a room</h2>
             {
-              castle.rooms.map (r => 
+              listing.rooms.map (r => 
                 <RoomCard room={r} />
               )
             }
@@ -135,7 +159,7 @@ const CastleDetails = () => {
             </div>
             <div className="flex flex-col items-center gap-2">
               <p className="caption text-(--color-gray)">You will not be charged yet</p>
-              <button className="btn-primary" onClick={() => navigate(`/book/?castleId=${castle.id}`)}>Reserve</button>
+              <button className="btn-primary" onClick={() => navigate(`/book/?castleId=${listing._id}`)}>Reserve</button>
             </div>
           </div>
 

@@ -1,12 +1,16 @@
+import axios from "@/axios_api/axios";
 import LocalStorageService from "@/utils/LocalStorageService";
-import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
+import { createContext, useContext, useState, type PropsWithChildren } from "react"
+// import { useNavigate } from "react-router";
 
 type BookingState = {
     bookings: Booking[],
+    // setBookings: typeof useState<Booking[] | null>,
     actions: {
-        createBooking: (booking: Booking) => void;
-        getBookingByID: (id: number) => Booking | undefined
-        getBookingsByUser: (user: User) => Booking[] | undefined;
+        createBooking: (booking: BookingInputs, token: string) => void;
+        setAllBookings: (bookings: Booking[]) => void
+        // getBookingByID: (id: string, token: string) => Booking | undefined
+        // getBookingsByUser: (token: string) => Booking[] | undefined;
     }
 }
 
@@ -14,8 +18,9 @@ const defaultState: BookingState = {
     bookings: [],
     actions: {
         createBooking: () => {},
-        getBookingByID: () => undefined,
-        getBookingsByUser: () => undefined
+        setAllBookings: () => {},
+        // getBookingByID: () => undefined,
+        // getBookingsByUser: () => undefined
     }
 }
 
@@ -24,54 +29,93 @@ const BookingContext = createContext<BookingState>(defaultState)
 function BookingProvider ({ children }: PropsWithChildren){
 
     const [bookings, setBookings] = useState<Booking[]>(defaultState.bookings)
+    const [userBookings, setUserBookings] = useState<Booking[] | null>(defaultState.bookings)
 
-    useEffect(() => {
-        _getBookings()
-    }, [])
-
-    // Private functions
-    const _getBookings = () => {
-        const _bookings: Booking[] = LocalStorageService.getItem('@booking/bookings', defaultState.bookings)
-        setBookings(_bookings)
-    }
+    // const navigate = useNavigate()
 
     // Public functions
-    const createBooking: typeof defaultState.actions.createBooking = (booking: Booking) => {
-        const updatedBookings = [...bookings, booking]
-        setBookings(updatedBookings)
-        LocalStorageService.setItem<Booking[]>('@booking/bookings', updatedBookings)
+    const createBooking: typeof defaultState.actions.createBooking = async (bookingDetails: BookingInputs, token: string) => {
+
+        try {
+            const res = await axios.post(`api/bookings`, (bookingDetails) , {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+            })
+
+            if(res.status === 201){
+                console.log(res.data)
+            }
+
+            const updatedBookings = [...bookings, res.data]
+            setAllBookings(updatedBookings)
+
+            // setBookings(updatedBookings)
+            // setUserBookings(updatedBookings)
+            // LocalStorageService.setItem<Booking[]>('@booking/bookings', updatedBookings)
+
+        } catch(error: any) {
+            console.log(error.response?.data?.message || 'Something went wrong')
+            console.log(error)
+        }
+
     }
 
-    const getBookingByID: typeof defaultState.actions.getBookingByID = (id: number) => {
-        const bookingByID: Booking | undefined = bookings.find(booking => booking.bookingId == id)
-        if(bookingByID == undefined) {
-            console.log('Error: Booking could not be found')
-            return undefined
-        }
+    const setAllBookings = (bookings: Booking[]) => {
+        setBookings(bookings)
+        setUserBookings(bookings)
+        LocalStorageService.setItem<Booking[]>('@booking/bookings', bookings)
+    }
+
+    // const getBookingByID: typeof defaultState.actions.getBookingByID = async (id: string, token: string) => {
+    //     try {
+    //         const res = await axios.get(`/api/bookings/${id}`, {
+    //             headers: {
+    //             authorization: `Bearer ${token}`
+    //             }
+    //         })
         
-        return bookingByID 
-    }
+    //         if(res.status !== 200) return
+    //         return res.data
+        
+    //     } catch(error: any) {
+    //         console.log(error.response?.data?.message || 'Something went wrong')
+    //         console.log(error)
+    //     }
+        
+    // }
 
-    const getBookingsByUser: typeof defaultState.actions.getBookingsByUser = (user: User) => {
-        const newBookings = [...bookings]
-        const bookingsByUser: Booking[] | undefined = newBookings.filter(booking => booking.bookedUser.id == user.id)
-        if(bookingsByUser == undefined || bookingsByUser.length == 0) {
-            console.log('Error: Booking/s could not be found')
-            return undefined
-        }
+    // const getBookingsByUser: typeof defaultState.actions.getBookingsByUser = async (token: string) => {
+    //     try {
+    //         const res = await axios.get('/api/bookings', {
+    //             headers: {
+    //             authorization: `Bearer ${token}`
+    //             }
+    //         })
+        
+    //         if(res.status !== 200) return
+        
+    //         setUserBookings(res.data)
+    //         return
+        
+    //     } catch(error: any) {
+    //         console.log(error.response?.data?.message || 'Something went wrong')
+    //         console.log(error)
+    //     }
 
-        return bookingsByUser
-    }
+    // }
 
     const actions = {
         createBooking,
-        getBookingByID,
-        getBookingsByUser
+        setAllBookings,
+        // getBookingByID,
+        // getBookingsByUser
     }
 
   return (
     <BookingContext.Provider value={{
         bookings,
+        // setBookings,
         actions
     }}>
         { children }

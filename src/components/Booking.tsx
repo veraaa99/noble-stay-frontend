@@ -52,7 +52,7 @@ const Booking = ({ booking }: BookingProps) => {
             <hr />
             <div>
               <h3>Booking ID:</h3>
-              <p>{booking.bookingId}</p>
+              <p>{booking._id}</p>
             </div>
         <hr />
         <div>

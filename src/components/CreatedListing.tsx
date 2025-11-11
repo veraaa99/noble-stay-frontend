@@ -7,7 +7,7 @@ type CreatedListingProps = {
 const CreatedListing = ({ castle }: CreatedListingProps ) => {
   return (
     <div>
-      <Link to={`/castles/${castle.id}`}>
+      <Link to={`/castles/${castle._id}`}>
         <div>
             <div>
                 <img src={castle.images[0]} alt="" />

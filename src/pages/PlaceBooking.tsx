@@ -7,13 +7,14 @@ import { useUser } from "@/contexts/UserContext"
 import { useState } from "react"
 import LoginForm from "@/components/LoginForm"
 import { eachDayOfInterval } from "date-fns"
+import axios from "@/axios_api/axios"
 
 const PlaceBooking = () => {
 
   const [searchParams] = useSearchParams()
   const { bookings, actions: bookingActions } = useBooking()
   const { selectedDates, selectedGuests, actions: castleListingActions } = useCastleListing()
-  const { currentUser } = useUser()  
+  const { currentUser, token } = useUser()  
 
   const navigate = useNavigate()
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
@@ -34,12 +35,9 @@ const PlaceBooking = () => {
     sum += totalAmountOfGuests[i];
   }
   
-  const castle: CastleListing | undefined  = castleListingActions.getListingByID(parseInt(castleId))
+  const castle: CastleListing | undefined  = castleListingActions.getListingByID(castleId)
 
-  const handleBookingSubmit = ()  => {
-
-    const newBookingId = bookings.length > 0 ? Math.max(...bookings.map(b => b.bookingId)) + 1 : 1
-
+  const handleBookingSubmit = async ()  => {
     if(!castle) {
       console.log('Error: No castle listing found, booking could not be completed')
       return
@@ -52,25 +50,35 @@ const PlaceBooking = () => {
     }
 
     const allBookedDates = eachDayOfInterval({ start: selectedDates.from, end: selectedDates.to })
-    // const stringArray = allBookedDates.map(date => { return date.toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})})
-    // console.log(stringArray)
 
-    const newBooking: Booking = {
-      bookingId: newBookingId,
-      castle: castle,
-
-      bookedUser: currentUser,
+    const newBooking: BookingInputs = {
+      castleId: castle._id,
       bookedDates: allBookedDates,
       bookedRooms: castle.rooms,
       bookedGuests: selectedGuests,
-      bookedEvents: castle.events,
-      
-      totalPrice: sum * castle.rooms[0].price
+      bookedEvents: castle.events
     }
 
-    bookingActions.createBooking(newBooking)
-    console.log(newBooking)
-    navigate(`/confirmed?bookingId=${newBookingId}`)
+    try {
+        const res = await axios.post(`api/bookings`, (newBooking) , {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+        })
+
+        if(res.status === 201){
+            console.log(res.data)
+        }
+
+      const updatedBookings = [...bookings, res.data]
+      bookingActions.setBookings(updatedBookings)
+      navigate(`/confirmed?bookingId=${res.data._id}`)
+
+    } catch(error: any) {
+        console.log(error.response?.data?.message || 'Something went wrong')
+        console.log(error)
+    }
+
   }
 
    const loginModalHandler = () => {

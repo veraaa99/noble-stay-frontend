@@ -15,8 +15,8 @@ const Profile = () => {
 
   useEffect(() => {
     if(currentUser) {
-      const currentUserBookings: Booking[] | undefined = bookingActions.getBookingsByUser(currentUser)
-      const currentUserListings: CastleListing[] | undefined = castleListingActions.getListingsByUser(currentUser)
+      const currentUserBookings: Booking[] | undefined = bookingActions.getBookingsByUser(currentUser._id)
+      const currentUserListings: CastleListing[] | undefined = castleListingActions.getListingsByUser(currentUser._id)
 
       if(currentUserBookings) {
         setUserBookings(currentUserBookings)

@@ -2,11 +2,6 @@ import { useUser } from "@/contexts/UserContext"
 import type { Dispatch, SetStateAction } from "react"
 import { useForm, type SubmitHandler } from "react-hook-form"
 
-type LoginInputs = {
-  email: string, 
-  password: string
-}
-
 type LoginFormProps = {
   setIsLoginModalOpen: Dispatch<SetStateAction<boolean>>
 }
@@ -20,32 +15,22 @@ const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
     formState: { errors },
   } = useForm<LoginInputs>({ defaultValues: { email: "", password: "" } })
   
-  const { actions, users } = useUser()
+  const { actions } = useUser()
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data: LoginInputs) => {
-  
-    const existingUser: User | undefined = users.find(u => u.email == data.email)
+  const onSubmit: SubmitHandler<LoginInputs> = async(data: LoginInputs) => {
 
-    if (!existingUser) {
-      console.log("Error: User not found")
-    } else {
-      const _user: User = { 
-        id: existingUser.id, 
-        email: data.email.trim(),
-        phone: existingUser.phone.trim(),
-        password: data.password.trim()      
-      }
-
-      if (existingUser.password == _user.password) {
-        actions.setUser(_user)
-        setIsLoginModalOpen(false)
-        // setIsSubmitted(true)
-        // onSuccess()
-      } else {
-        console.log("Error: Wrong password")
-      }
-    }
+    if(!data.email || !data.password){
+      console.log('Please fill in all fields')
       return
+    }
+
+    try {
+      await actions.loginUser(data)
+      // navigate(location.state?.from || '/')
+    } catch(error: any) {
+      console.log(error.response?.data?.message || 'Something went wrong')
+      return
+    } 
   }
   
   return (

@@ -2,8 +2,28 @@ type amnityCategory = 'pets allowed' | 'gym nearby' | 'breakfast included'
 type guestCategory = 'adult' | 'child' | 'pet'
 type eventCategory = 'ghost hunting' | 'dance night' | 'ball' | 'photoshoot'
 
+type RegisterInputs = {
+  email: string, 
+  phone: string,
+  password: string,
+  confirmPassword: string
+}
+
+type LoginInputs = {
+  email: string, 
+  password: string
+}
+
+type BookingInputs = {
+    castleId: string,
+    bookedDates: Date[],
+    bookedRooms: Room[],
+    bookedGuests: Guest[],
+    bookedEvents?: eventCategory[]
+}
+
 type CastleListing = {
-    id: number,
+    _id: string,
     title: string,
     images: string[],
     location: string,
@@ -21,7 +41,7 @@ type CastleListing = {
 }
 
 type Booking = {
-    bookingId: number,
+    _id: string,
     castle: CastleListing,
 
     bookedUser: User,
@@ -34,7 +54,7 @@ type Booking = {
 }
 
 type Room = {
-    id: number,
+    // _id: number,
     title: string,
     caption: string,
     description: string[],
@@ -42,14 +62,14 @@ type Room = {
 }
 
 type User = {
-    id: number,
+    _id: string,
     email: string,
     phone: string,
     password: string,
 }
 
 type Guest = {
-    id: number,
+    // _id: number,
     category: guestCategory,
     number: number,
 }
