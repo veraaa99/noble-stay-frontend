@@ -1,38 +1,63 @@
+import axios from "@/axios_api/axios"
+import { useEffect, useState } from "react"
+
 type BookingProps = {
   booking: Booking
 }
 
 const Booking = ({ booking }: BookingProps) => {
 
+  const [castle, setCastle] = useState<CastleListing | undefined>()
+  console.log(booking)
+  // TODO: Change castleId name to castle
+
+  useEffect(() => {
+      const getListing = async() => {
+        try {
+          const res = await axios.get(`api/listings/${booking.castleId._id}`)
+          
+          if(res.status !== 200) return
+  
+          setCastle(res.data)
+  
+          return
+    
+        } catch(error: any) {
+          console.log(error.message)
+          return
+        }
+      }
+      getListing()
+    }, [])
+
   return (
     <div>
-      {/* Castle information summary */}
+      { castle && 
+      <>
+      
       <div>
           <div>
             <h1>Booking summary</h1>
-            {/* Castle image */}
             <div>
-              <img src={booking.castle.images[0]} alt="" />
+              <img src={castle.images[0]} alt="" />
             </div>
           </div>
 
-        {/* Castle information */}
         <div>
-          <h2>{booking.castle.title}</h2>
-          <p>{booking.castle.location}</p>
-          <p>{booking.castle.rules}</p>
+          <h2>{castle.title}</h2>
+          <p>{castle.location}</p>
+          <p>{castle.rules}</p>
         </div>
       </div>
 
-      {/* Booking details */}
       <div>
         <hr />
         <div>
           <h3>Date:</h3>
           <div>
-            <p>{booking.bookedDates[0].toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}</p>
+            <p>{new Date(booking.bookedDates[0].toString()).toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}</p>
             <p>→</p>
-            <p>{booking.bookedDates[booking.bookedDates.length-1].toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}</p>
+            <p>{new Date(booking.bookedDates[booking.bookedDates.length-1]).toLocaleString('en-US', {month: 'short', day: 'numeric', year: 'numeric'})}</p>
           </div>
         </div>
         <hr />
@@ -60,6 +85,9 @@ const Booking = ({ booking }: BookingProps) => {
           <p>{booking.totalPrice}</p>
         </div>
       </div>
+      
+      </>
+}
     </div>
   )
 }

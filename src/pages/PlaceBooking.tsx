@@ -4,7 +4,7 @@ import RegisterForm from "../components/RegisterForm"
 import { useBooking } from "@/contexts/BookingContext"
 import { useCastleListing } from "@/contexts/CastleListingContext"
 import { useUser } from "@/contexts/UserContext"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import LoginForm from "@/components/LoginForm"
 import { eachDayOfInterval } from "date-fns"
 import axios from "@/axios_api/axios"
@@ -12,12 +12,13 @@ import axios from "@/axios_api/axios"
 const PlaceBooking = () => {
 
   const [searchParams] = useSearchParams()
-  const { bookings, actions: bookingActions } = useBooking()
+  // const { bookings, actions: bookingActions } = useBooking()
   const { selectedDates, selectedGuests, actions: castleListingActions } = useCastleListing()
   const { currentUser, token } = useUser()  
-
   const navigate = useNavigate()
+
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
+  const [castle, setCastle] = useState<CastleListing | undefined>()
   
   const castleId = searchParams.get('castleId')
 
@@ -25,6 +26,25 @@ const PlaceBooking = () => {
     console.log('404: Not found')
     return
   }
+
+  useEffect(() => {
+    const getListing = async() => {
+      try {
+        const res = await axios.get(`api/listings/${castleId}`)
+        
+        if(res.status !== 200) return
+
+        setCastle(res.data)
+
+        return
+  
+      } catch(error: any) {
+        console.log(error.message)
+        return
+      }
+    }
+    getListing()
+  }, [])
 
   const newAllGuests: Guest[] = [...selectedGuests]
   const totalAmountOfGuests: number[] = newAllGuests.map(g => g.number)
@@ -35,8 +55,6 @@ const PlaceBooking = () => {
     sum += totalAmountOfGuests[i];
   }
   
-  const castle: CastleListing | undefined  = castleListingActions.getListingByID(castleId)
-
   const handleBookingSubmit = async ()  => {
     if(!castle) {
       console.log('Error: No castle listing found, booking could not be completed')
@@ -70,8 +88,8 @@ const PlaceBooking = () => {
             console.log(res.data)
         }
 
-      const updatedBookings = [...bookings, res.data]
-      bookingActions.setBookings(updatedBookings)
+      // const updatedBookings = [...bookings, res.data]
+      // bookingActions.setBookings(updatedBookings)
       navigate(`/confirmed?bookingId=${res.data._id}`)
 
     } catch(error: any) {

@@ -42,7 +42,7 @@ type CastleListing = {
 
 type Booking = {
     _id: string,
-    castle: CastleListing,
+    castleId: CastleListing,
 
     bookedUser: User,
     bookedDates: Date[],

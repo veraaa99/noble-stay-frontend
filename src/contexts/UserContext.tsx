@@ -1,10 +1,9 @@
 import axios from "@/axios_api/axios"
-import LocalStorageService from "@/utils/LocalStorageService"
 import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
 
 type UserState = {
     // users: User[],
-    currentUser: { _id: string, email: string, phone: string} | null,
+    currentUser: { _id: string } | null,
     token: string | null,
     actions: {
         createUser: (userinformation: RegisterInputs) => void
@@ -30,9 +29,8 @@ const UserContext = createContext<UserState>(defaultState)
 
 function UserProvider ({ children }: PropsWithChildren){
 
-    // const [users, setUsers] = useState<User[]>(defaultState.users)
-    const [currentUser, setCurrentUser] = useState<{ _id: string, email: string, phone: string} | null>(null)
-    const [token, setToken] = useState<string | null>(null)
+    const [currentUser, setCurrentUser] = useState<{ _id: string } | null>(null)
+    const [token, setToken] = useState<string | null>('')
 
     useEffect(() => {
         const checkToken = async() => {
@@ -48,11 +46,12 @@ function UserProvider ({ children }: PropsWithChildren){
 
                 if(res.status === 200) {
                     setToken(sessionStorage.getItem('jwt'))
-                    setCurrentUser(res.data)
+                    setCurrentUser(res.data._id)
                 }
 
             } catch(error: any) {
                 console.log(error.message)
+                sessionStorage.removeItem('jwt')
                 return
             }
         }
@@ -82,10 +81,10 @@ function UserProvider ({ children }: PropsWithChildren){
         if(res.status !== 201) return
         
         setToken(res.data.userToken)
-        setCurrentUser({ _id: res.data._id, email: res.data.email, phone: res.data.phone})
+        setCurrentUser(res.data._id)
 
         sessionStorage.setItem('jwt', res.data.userToken)
-        sessionStorage.setItem('@booking/currentUser', res.data)
+        // sessionStorage.setItem('@booking/currentUser', res.data._id)
 
         // const updatedUsers: User[] = [...users, user]
         // LocalStorageService.setItem('@booking/users', updatedUsers)
@@ -95,15 +94,14 @@ function UserProvider ({ children }: PropsWithChildren){
 
     const loginUser: typeof defaultState.actions.loginUser = async(userinformation: LoginInputs) => {
         const res = await axios.post('api/users/login', userinformation)
-        
+        console.log(res)
         if(res.status !== 200) return
                 
         setToken(res.data.userToken)
-        setCurrentUser({ _id: res.data._id, email: res.data.email, phone: res.data.phone})
+        setCurrentUser(res.data._id)
         
-        // if(rememberUser) {
-        //     sessionStorage.setItem('jwt', res.data.userToken)
-        // }
+        sessionStorage.setItem('jwt', res.data.userToken)
+        // sessionStorage.setItem('@booking/currentUser', res.data._id)
     }
 
     // const setUser: typeof defaultState.actions.setUser = (user: User | null) => {
@@ -113,6 +111,7 @@ function UserProvider ({ children }: PropsWithChildren){
 
     const logoutUser: typeof defaultState.actions.logoutUser = () => {
         sessionStorage.removeItem('jwt')
+        // sessionStorage.removeItem('@booking/currentUser')
         setToken(null)
         setCurrentUser(null)
         return
@@ -124,8 +123,6 @@ function UserProvider ({ children }: PropsWithChildren){
         // setUser,
         logoutUser
     }
-
-    // TODO: Add sessionstorage when registered/logged in?
 
   return (
     <UserContext.Provider value={{

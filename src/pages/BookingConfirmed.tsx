@@ -1,27 +1,52 @@
 import { useNavigate, useSearchParams } from "react-router"
 import Booking from "../components/Booking"
 import { useBooking } from "@/contexts/BookingContext"
+import { useEffect, useState } from "react"
+import axios from "@/axios_api/axios"
+import { useUser } from "@/contexts/UserContext"
 
 const BookingConfirmed = () => {
 
+  const { token } = useUser()
   const navigate = useNavigate()
-
   const [searchParams] = useSearchParams()
   const { actions } = useBooking()
 
   const bookingId = searchParams.get('bookingId')
+  const [booking, setBooking] = useState<Booking | undefined>()
 
-  if(!bookingId) {
+   if(!bookingId) {
     console.log('404: Booking not found')
     return
   }
 
-  const confirmedBooking: Booking | undefined = actions.getBookingByID(parseInt(bookingId))
+  useEffect(() => {
+    getConfirmedBooking()
+  }, [])
+
+  const getConfirmedBooking = async() => {
+    try {
+      const res = await axios.get(`/api/bookings/${bookingId}`, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+  
+      if(res.status !== 200) return
+  
+      setBooking(res.data)
+      return
+      
+    } catch (err: any) {
+      console.log(err.response?.data?.message || 'Something went wrong')
+      return
+    }
+  }
 
   return (
     <div>
       {
-        confirmedBooking &&
+        booking &&
         <>
           <div>
             <p>✓</p>
@@ -31,7 +56,7 @@ const BookingConfirmed = () => {
     
           <p>Summary:</p>
           {/* Booking summary */}
-          <Booking booking={confirmedBooking} />
+          <Booking booking={booking} />
     
           <div>
             <p>Download this booking</p>

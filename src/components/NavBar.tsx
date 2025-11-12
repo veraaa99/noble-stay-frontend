@@ -11,7 +11,7 @@ const NavBar = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
 
-  const { currentUser, actions } = useUser()
+  const { currentUser, token, actions } = useUser()
   const navigate = useNavigate()
 
   const menuModalHandler = () => {
@@ -70,13 +70,16 @@ const NavBar = () => {
                 <p>All castles</p>
               </div>
             </Link>
-            <Link to={'/profile'}>
-              <div>
-                <p>My bookings</p>
-              </div>
-            </Link>
+            {
+              token !== null &&
+              <Link to={`/profile`}>
+                <div>
+                  <p>My bookings</p>
+                </div>
+              </Link>
+            }
             <div>
-              { currentUser == null 
+              { token == null
               ?
                 <p onClick={loginModalHandler}>Login / Sign up</p>
               :
