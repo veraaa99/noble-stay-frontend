@@ -3,7 +3,7 @@ import { useEffect, useState, type Dispatch, type SetStateAction } from "react"
 import { useForm, type SubmitHandler } from "react-hook-form"
 
 type LoginFormProps = {
-  setIsLoginModalOpen: Dispatch<SetStateAction<boolean>>
+  setIsLoginModalOpen?: Dispatch<SetStateAction<boolean>>
 }
 
 const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
@@ -43,7 +43,9 @@ const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
       return
     }
     
-    setIsLoginModalOpen(false)
+    if(setIsLoginModalOpen) {
+      setIsLoginModalOpen(false)
+    }
     setIsSubmitted(true)
     return
   }

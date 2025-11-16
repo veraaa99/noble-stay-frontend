@@ -56,7 +56,6 @@ function BookingProvider ({ children }: PropsWithChildren){
 
         } catch(error: any) {
             console.log(error.response?.data?.message || 'Something went wrong')
-            console.log(error)
         }
 
     }

@@ -15,11 +15,29 @@ type LoginInputs = {
 }
 
 type BookingInputs = {
-    castleId: string,
+    castle: string,
     bookedDates: Date[],
     bookedRooms: Room[],
     bookedGuests: Guest[],
     bookedEvents?: eventCategory[]
+}
+
+type ListingInputs = {
+    title: string,
+    images: string[],
+    location: string,
+    description: string,
+
+    amneties?: amnityCategory[],
+    rules: string,
+    dates: {
+    from: Date | undefined;
+    to?: Date | undefined;
+    },
+    guests: Guest[],
+    rooms: Room[],
+    
+    events?: eventCategory[],
 }
 
 type CastleListing = {
@@ -36,13 +54,12 @@ type CastleListing = {
 
     castleOwner: User,
 
-    isEventAvaliable: boolean,
     events?: eventCategory[]
 }
 
 type Booking = {
     _id: string,
-    castleId: CastleListing,
+    castle: CastleListing,
 
     bookedUser: User,
     bookedDates: Date[],

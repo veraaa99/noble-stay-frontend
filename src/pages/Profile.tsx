@@ -1,64 +1,83 @@
-import { useUser } from "@/contexts/UserContext"
-import Booking from "../components/Booking"
-import CreatedListing from "../components/CreatedListing"
-import ListingForm from "../components/ListingForm"
-import { useEffect, useState } from "react"
-import { useBooking } from "@/contexts/BookingContext"
-import { useCastleListing } from "@/contexts/CastleListingContext"
-import axios from "@/axios_api/axios"
+import { useUser } from "@/contexts/UserContext";
+import Booking from "../components/Booking";
+import CreatedListing from "../components/CreatedListing";
+import ListingForm from "../components/ListingForm";
+import { useEffect, useState } from "react";
+import { useBooking } from "@/contexts/BookingContext";
+import { useCastleListing } from "@/contexts/CastleListingContext";
+import axios from "@/axios_api/axios";
 
 const Profile = () => {
-  const { currentUser, token } = useUser()
-  const { actions: bookingActions } = useBooking()
-  const { listings, actions: castleListingActions } = useCastleListing()
+  const { currentUser, token } = useUser();
+  // const { actions: bookingActions } = useBooking();
+  // const { listings, actions: castleListingActions } = useCastleListing();
 
-  const [userBookings, setUserBookings] = useState<Booking[]>([])
-  const [userListings, setUserListings] = useState<CastleListing[]>([])
-  const [user, setUser] = useState<User | undefined>()
+  const [userBookings, setUserBookings] = useState<Booking[]>([]);
+  const [userListings, setUserListings] = useState<CastleListing[]>([]);
+  const [user, setUser] = useState<User | undefined>();
 
   useEffect(() => {
-    getUser()
-    getUserBookings()
-  }, [])
+    getUser();
+    getUserBookings();
+    getUserListings();
+  }, []);
 
-  const getUserBookings = async() => {
+  const getUserBookings = async () => {
     try {
-      const res = await axios.get('/api/bookings', {
+      const res = await axios.get("/api/bookings", {
         headers: {
-          authorization: `Bearer ${token}`
-        }
-      })
-  
-      if(res.status !== 200) return
-  
-      setUserBookings(res.data)
-      return
-      
-    } catch (err: any) {
-      console.log(err.response?.data?.message || 'Something went wrong')
-      return
-    }
-  }
+          authorization: `Bearer ${token}`,
+        },
+      });
 
-  const getUser = async() => {
+      if (res.status !== 200) return;
+
+      setUserBookings(res.data);
+      return;
+    } catch (err: any) {
+      console.log(err.response?.data?.message || "Something went wrong");
+      return;
+    }
+  };
+
+  const getUserListings = async () => {
+    try {
+      const res = await axios.get("/api/listings/user", {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.status !== 200) return;
+
+      setUserListings(res.data);
+      return;
+    } catch (err: any) {
+      console.log(err.response?.data?.message || "Something went wrong");
+      return;
+    }
+  };
+
+  const getUser = async () => {
     try {
       const res = await axios.get(`/api/users/${currentUser}`, {
         headers: {
-          authorization: `Bearer ${token}`
-        }
-      })
-  
-      if(res.status !== 200) return
-  
-      setUser(res.data)
-      return
-      
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.status !== 200) return;
+
+      setUser(res.data);
+      // castleListingActions.getListingsByUser(res.data);
+
+      return;
     } catch (err: any) {
-      console.log(err.response?.data?.message || 'Something went wrong')
-      return
+      console.log(err.response?.data?.message || "Something went wrong");
+      return;
     }
-  }
-  
+  };
+
   return (
     <div>
       {/* Full account information */}
@@ -81,8 +100,8 @@ const Profile = () => {
         <div>
           <h2>My bookings</h2>
           {
-            // userBookings.length > 0 && 
-            userBookings.map(b => (
+            // userBookings.length > 0 &&
+            userBookings.map((b) => (
               <Booking booking={b} />
             ))
           }
@@ -91,20 +110,18 @@ const Profile = () => {
         {/* My listings */}
         <div>
           <h2>My listings</h2>
-          { listings.map(c => (
-            c.castleOwner._id == user?._id) &&
-              <CreatedListing castle={c} />
-          )}
+          {userListings.map((c) => (
+            <CreatedListing castle={c} />
+          ))}
         </div>
 
         {/* Create new castle listing */}
         <div>
           <h2>Create new castle listing</h2>
-          <ListingForm />
+          <ListingForm user={user} />
         </div>
       </div>
-      
     </div>
-  )
-}
-export default Profile
+  );
+};
+export default Profile;

@@ -8,13 +8,11 @@ type BookingProps = {
 const Booking = ({ booking }: BookingProps) => {
 
   const [castle, setCastle] = useState<CastleListing | undefined>()
-  console.log(booking)
-  // TODO: Change castleId name to castle
 
   useEffect(() => {
       const getListing = async() => {
         try {
-          const res = await axios.get(`api/listings/${booking.castleId._id}`)
+          const res = await axios.get(`api/listings/${booking.castle._id}`)
           
           if(res.status !== 200) return
   

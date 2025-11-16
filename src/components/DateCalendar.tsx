@@ -1,19 +1,31 @@
-import { useCastleListing } from "@/contexts/CastleListingContext"
-import { Calendar } from "./ui/calendar"
+import { useCastleListing } from "@/contexts/CastleListingContext";
+import { Calendar } from "./ui/calendar";
+import type { ControllerRenderProps } from "react-hook-form";
 
-const DateCalendar = () => {
-  const { selectedDates, actions } = useCastleListing()
+type DateCalendarProps = {
+  onChange?: (...event: any[]) => void;
+  selected?: any;
+};
+
+const DateCalendar = ({ onChange, selected }: DateCalendarProps) => {
+  const { selectedDates, actions } = useCastleListing();
 
   return (
-    <Calendar 
+    <Calendar
       mode="range"
       defaultMonth={selectedDates?.from}
-      selected={selectedDates}
-      onSelect={(selectedDates) => {actions.updateSelectedDates(selectedDates)}}
+      selected={selected ? selected : selectedDates}
+      onSelect={
+        onChange
+          ? onChange
+          : (selectedDates) => {
+              actions.updateSelectedDates(selectedDates);
+            }
+      }
       numberOfMonths={1}
       timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
       className="w-85 self-center"
     />
-  )
-}
-export default DateCalendar
+  );
+};
+export default DateCalendar;
