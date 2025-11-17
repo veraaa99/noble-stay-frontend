@@ -6,21 +6,55 @@ import { useEffect, useState } from "react";
 import { useBooking } from "@/contexts/BookingContext";
 import { useCastleListing } from "@/contexts/CastleListingContext";
 import axios from "@/axios_api/axios";
+import UpdateListingForm from "@/components/UpdateListingForm";
 
 const Profile = () => {
   const { currentUser, token } = useUser();
-  // const { actions: bookingActions } = useBooking();
-  // const { listings, actions: castleListingActions } = useCastleListing();
+  const { actions } = useCastleListing();
 
   const [userBookings, setUserBookings] = useState<Booking[]>([]);
   const [userListings, setUserListings] = useState<CastleListing[]>([]);
   const [user, setUser] = useState<User | undefined>();
 
+  const [isEditorModalOpen, setIsEditorModalOpen] = useState(false);
+  const [castleToEdit, setCastleToEdit] = useState<CastleListing | null>(null);
+  const [isListingUpdated, setIsListingUpdated] = useState<boolean>(false);
+
+  const listingEditorHandler = (castle: CastleListing) => {
+    setIsEditorModalOpen((isEditorModalOpen) => !isEditorModalOpen);
+
+    if (castleToEdit == null) {
+      setCastleToEdit(castle);
+    } else {
+      setCastleToEdit(null);
+    }
+    return;
+  };
+
+  const removeListingHandler = async (id: string) => {
+    try {
+      let res = await axios.delete(`/api/listings/${id}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.status !== 204) return;
+
+      actions.removeListing(id);
+      setIsListingUpdated((isListingUpdated) => !isListingUpdated);
+    } catch (error: any) {
+      console.log(error.message);
+      return;
+    }
+  };
+
   useEffect(() => {
     getUser();
     getUserBookings();
     getUserListings();
-  }, []);
+    actions.resetFilters();
+  }, [isListingUpdated]);
 
   const getUserBookings = async () => {
     try {
@@ -69,7 +103,6 @@ const Profile = () => {
       if (res.status !== 200) return;
 
       setUser(res.data);
-      // castleListingActions.getListingsByUser(res.data);
 
       return;
     } catch (err: any) {
@@ -99,26 +132,38 @@ const Profile = () => {
         {/* My bookings */}
         <div>
           <h2>My bookings</h2>
-          {
-            // userBookings.length > 0 &&
-            userBookings.map((b) => (
-              <Booking booking={b} />
-            ))
-          }
+          {userBookings.length > 0 &&
+            userBookings.map((b) => <Booking booking={b} />)}
         </div>
 
         {/* My listings */}
         <div>
           <h2>My listings</h2>
           {userListings.map((c) => (
-            <CreatedListing castle={c} />
+            <>
+              <CreatedListing
+                castle={c}
+                listingEditorHandler={listingEditorHandler}
+                removeListingHandler={removeListingHandler}
+              />
+              {castleToEdit !== null && castleToEdit == c && (
+                <div>
+                  <h1>Edit castle {c.title}</h1>
+                  <UpdateListingForm
+                    castle={c}
+                    listingEditorHandler={listingEditorHandler}
+                    setIsListingUpdated={setIsListingUpdated}
+                  />
+                </div>
+              )}
+            </>
           ))}
         </div>
 
         {/* Create new castle listing */}
         <div>
           <h2>Create new castle listing</h2>
-          <ListingForm user={user} />
+          <ListingForm />
         </div>
       </div>
     </div>

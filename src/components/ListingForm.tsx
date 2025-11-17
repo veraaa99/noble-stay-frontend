@@ -1,13 +1,9 @@
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import DateCalendar from "./DateCalendar";
 import { useCastleListing } from "@/contexts/CastleListingContext";
-import { useEffect, useRef, useState, type ChangeEventHandler } from "react";
+import { useEffect, useState } from "react";
 import AddGuestsCounter from "./AddGuestsCounter";
 import { eachDayOfInterval, format } from "date-fns";
-
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-// import "leaflet-geosearch/assets/css/leaflet.css";
-import "leaflet/dist/leaflet.css";
 
 import {
   Tags,
@@ -21,19 +17,12 @@ import {
   TagsValue,
 } from "@/components/ui/shadcn-io/tags";
 
-import { CheckIcon, ImagesIcon } from "lucide-react";
-import { OpenStreetMapProvider } from "leaflet-geosearch";
-import SearchControl from "./SearchField";
+import { CheckIcon } from "lucide-react";
 import RoomCard from "./RoomCard";
 import axios from "@/axios_api/axios";
 import { useUser } from "@/contexts/UserContext";
-import type { DateRange } from "react-day-picker";
 
-type ListingFormProps = {
-  user: User | undefined;
-};
-
-const ListingForm = ({ user }: ListingFormProps) => {
+const ListingForm = () => {
   const {
     register,
     handleSubmit,
@@ -46,12 +35,12 @@ const ListingForm = ({ user }: ListingFormProps) => {
       images: [],
       location: "",
       description: "",
-      amneties: undefined,
-      rules: undefined,
-      dates: undefined,
-      guests: undefined,
-      rooms: undefined,
-      events: undefined,
+      amneties: [],
+      rules: [],
+      dates: {},
+      guests: [],
+      rooms: [],
+      events: [],
     },
   });
 
@@ -102,6 +91,26 @@ const ListingForm = ({ user }: ListingFormProps) => {
       price: 300,
     },
   ];
+
+  useEffect(() => {
+    if (isSubmitted) {
+      reset({
+        title: "",
+        images: [],
+        location: "",
+        description: "",
+        amneties: [],
+        rules: [],
+        dates: {},
+        guests: [],
+        rooms: [],
+        events: [],
+      });
+      console.log("Castlelisting created!");
+    }
+    setIsSubmitted(false);
+    setFormError("");
+  }, [isSubmitted]);
 
   const getDatesInRange = (
     startDate: Date | undefined,
@@ -209,11 +218,9 @@ const ListingForm = ({ user }: ListingFormProps) => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     let files = e.target.files;
-    console.log(files);
 
     if (files) {
       const images = await imagebase64(files);
-      console.log(images);
 
       return images;
     }
@@ -238,8 +245,6 @@ const ListingForm = ({ user }: ListingFormProps) => {
   const onSubmit: SubmitHandler<ListingInputs> = async (
     data: ListingInputs
   ) => {
-    console.log(data);
-
     if (
       !data.title ||
       !data.images ||
@@ -250,6 +255,7 @@ const ListingForm = ({ user }: ListingFormProps) => {
       !data.guests ||
       !data.rooms
     ) {
+      setFormError("Please fill in all required fields");
       console.log("Please fill in all required fields");
       return;
     }
@@ -260,11 +266,7 @@ const ListingForm = ({ user }: ListingFormProps) => {
       return format(date, "yyyy-MM-dd");
     });
 
-    console.log(allDatesInRange);
-    console.log(newArray);
-
     const dataToSubmit = { ...data, dates: newArray };
-    console.log(dataToSubmit);
 
     try {
       const res = await axios.post("api/listings", dataToSubmit, {
@@ -275,13 +277,14 @@ const ListingForm = ({ user }: ListingFormProps) => {
 
       if (res.status === 201) {
         actions.updateListings(res.data);
+        setIsSubmitted(true);
       }
       return;
     } catch (error: any) {
+      setFormError(error.response?.data?.message || "Something went wrong");
       console.log(error.response?.data?.message || "Something went wrong");
     }
 
-    setIsSubmitted(true);
     return;
   };
 
@@ -293,40 +296,24 @@ const ListingForm = ({ user }: ListingFormProps) => {
       >
         <div>
           <h3>Name of castle</h3>
-          <input type="title" id="title" {...register("title")} />
-          {/* {errors.title && errors.title.type === "required" && <p className="text-red-500 text-xs italic mt-1">Enter a name for the castle</p>} */}
+          <input
+            type="title"
+            id="title"
+            {...register("title", { required: true })}
+          />
+          {errors.title && errors.title.type === "required" && (
+            <p className="text-red-500 text-xs italic mt-1">
+              Enter a name for the castle
+            </p>
+          )}
         </div>
         <div>
           <h3>Location</h3>
-          <input type="location" id="location" {...register("location")} />
-          {/* <MapContainer
-              center={[51.505, -0.09]}
-              zoom={13}
-              scrollWheelZoom={false}
-              style={{ width: "100%", height: "100%" }}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <SearchControl
-                provider={prov}
-                showMarker={true}
-                showPopup={false}
-                popupFormat={({ query, result }) => result.label}
-                maxMarkers={3}
-                retainZoomLevel={false}
-                animateZoom={true}
-                autoClose={false}
-                searchLabel={"Enter address, please"}
-                keepResult={true}
-              />
-              <Marker position={[51.505, -0.09]}>
-                <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-              </Marker>
-            </MapContainer> */}
+          <input
+            type="location"
+            id="location"
+            {...register("location", { required: true })}
+          />
           {errors.location && errors.location.type === "required" && (
             <p className="text-red-500 text-xs italic mt-1">
               Enter the castle's location
@@ -338,14 +325,16 @@ const ListingForm = ({ user }: ListingFormProps) => {
           <input
             type="description"
             id="description"
-            {...register("description")}
+            {...register("description", { required: true })}
           />
-          {/* {errors.description && errors.description.type === "required" && <p className="text-red-500 text-xs italic mt-1">Enter a description for the castle</p>} */}
+          {errors.description && errors.description.type === "required" && (
+            <p className="text-red-500 text-xs italic mt-1">
+              Enter a description for the castle
+            </p>
+          )}
         </div>
         <div>
           <h3>Set avaliable dates</h3>
-          {/* <DateCalendar /> */}
-
           <Controller
             name="dates"
             control={control}
@@ -353,19 +342,15 @@ const ListingForm = ({ user }: ListingFormProps) => {
             render={({ field: { onChange, value } }) => (
               <DateCalendar
                 onChange={onChange} // send value to hook form
-                // onBlur={onBlur} // notify when input is touched/blur
                 selected={value}
               />
             )}
           />
-
           {errors.dates && errors.dates.type === "required" && (
             <p className="text-red-500 text-xs italic mt-1">
               Enter a start date and final date
             </p>
           )}
-
-          {/* <DateCalendar type="dates" id="dates"/> */}
         </div>
         <div>
           <h3>Set maximum of guests per booking</h3>
@@ -373,11 +358,11 @@ const ListingForm = ({ user }: ListingFormProps) => {
           <Controller
             name="guests"
             control={control}
-            // rules={{ required: true}}
+            rules={{ required: true }}
             render={({ field: { onChange, value } }) => (
               <AddGuestsCounter
                 onChange={onChange} // send value to hook form
-                selected={value}
+                // selected={value}
               />
             )}
           />
@@ -387,8 +372,6 @@ const ListingForm = ({ user }: ListingFormProps) => {
               Enter at least one maximum amount of guests
             </p>
           )}
-
-          {/* {errors.guests && errors.guests.type === "required" && <p className="text-red-500 text-xs italic mt-1">Enter at least one maximum amount of guests</p>} */}
         </div>
         <div>
           <h3>Add at least one room</h3>
@@ -396,7 +379,7 @@ const ListingForm = ({ user }: ListingFormProps) => {
           <Controller
             name="rooms"
             control={control}
-            // rules={{ required: true }}
+            rules={{ required: true }}
             render={({ field: { onChange, value } }) => (
               <>
                 <RoomCard
@@ -426,6 +409,11 @@ const ListingForm = ({ user }: ListingFormProps) => {
               </>
             )}
           />
+          {errors.rooms && errors.rooms.type === "required" && (
+            <p className="text-red-500 text-xs italic mt-1">
+              Pick at least one room for the castle
+            </p>
+          )}
         </div>
 
         <div>
@@ -433,7 +421,7 @@ const ListingForm = ({ user }: ListingFormProps) => {
           <Controller
             name="amneties"
             control={control}
-            // rules={{ required: true}}
+            rules={{ required: true }}
             render={({ field: { onChange, value } }) => (
               <Tags className="max-w-[300px]">
                 <TagsTrigger>
@@ -441,7 +429,6 @@ const ListingForm = ({ user }: ListingFormProps) => {
                     <TagsValue
                       key={amnety}
                       onRemove={() => {
-                        // handleRemove("amnety", amnety),
                         onChange(handleRemove("amnety", amnety));
                       }}
                     >
@@ -458,7 +445,6 @@ const ListingForm = ({ user }: ListingFormProps) => {
                         <TagsItem
                           key={amnety.id}
                           onSelect={() => {
-                            // handleSelect("amnety", amnety.id),
                             onChange(handleSelect("amnety", amnety.id));
                           }}
                           value={amnety.id}
@@ -478,6 +464,11 @@ const ListingForm = ({ user }: ListingFormProps) => {
               </Tags>
             )}
           />
+          {errors.amneties && errors.amneties.type === "required" && (
+            <p className="text-red-500 text-xs italic mt-1">
+              Pick at least one amnety the castle offers
+            </p>
+          )}
         </div>
         <div>
           <h3>What events do you offer? (optional)</h3>
@@ -485,7 +476,6 @@ const ListingForm = ({ user }: ListingFormProps) => {
           <Controller
             name="events"
             control={control}
-            // rules={{ required: true}}
             render={({ field: { onChange, value } }) => (
               <Tags className="max-w-[300px]">
                 <TagsTrigger>
@@ -534,7 +524,7 @@ const ListingForm = ({ user }: ListingFormProps) => {
           <Controller
             name="rules"
             control={control}
-            // rules={{ required: true}}
+            rules={{ required: true }}
             render={({ field: { onChange, value } }) => (
               <Tags className="max-w-[300px]">
                 <TagsTrigger>
@@ -577,8 +567,11 @@ const ListingForm = ({ user }: ListingFormProps) => {
               </Tags>
             )}
           />
-
-          <input type="text" id="rules" {...register("rules")} />
+          {errors.rules && errors.rules.type === "required" && (
+            <p className="text-red-500 text-xs italic mt-1">
+              Pick at least one house rule for the castle
+            </p>
+          )}
         </div>
         <div>
           <h3>Upload images of your castle</h3>
@@ -597,21 +590,18 @@ const ListingForm = ({ user }: ListingFormProps) => {
                     handleUpdateFileChange(e).then((result) => onChange(result))
                   )
                 }
-                // {...productImageRegister}
-                // onChange={(e) => {
-                //   productImageRegister.onChange(e);
-                //   handleUpdateFileChange(e);
-                // }}
               />
             )}
           />
 
-          {/* <input type="file" id="images" multiple {...register("rules"), { required: true }}/> */}
-
-          {/* // onChange={handleUpdateFileChange} */}
-          {/* /> */}
+          {errors.images && errors.images.type === "required" && (
+            <p className="text-red-500 text-xs italic mt-1">
+              Upload at least one image of your castle
+            </p>
+          )}
         </div>
 
+        <p className="text-center text-lg mt-5">{formError}</p>
         <button type="submit">Submit listing</button>
       </form>
     </div>

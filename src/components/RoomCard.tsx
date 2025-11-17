@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type RoomCardProps = {
   room: Room;
   isBookingRoom: boolean;
   onChange?: (...event: any[]) => void;
   selected?: any;
+  isRoomInCastleListing?: boolean;
 };
 
 const RoomCard = ({
@@ -12,8 +13,9 @@ const RoomCard = ({
   isBookingRoom,
   onChange,
   selected,
+  isRoomInCastleListing,
 }: RoomCardProps) => {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(isRoomInCastleListing ? true : false);
 
   const handleOnChange = () => {
     setChecked(!checked);
@@ -21,6 +23,12 @@ const RoomCard = ({
       onChange();
     }
   };
+
+  // useEffect(() => {
+  //   if (isRoomInCastleListing) {
+  //     setChecked(true);
+  //   }
+  // }, []);
 
   return (
     <div>

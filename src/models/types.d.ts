@@ -29,7 +29,7 @@ type ListingInputs = {
     description: string,
 
     amneties?: amnityCategory[],
-    rules: string,
+    rules: string[],
     dates: {
     from: Date | undefined;
     to?: Date | undefined;

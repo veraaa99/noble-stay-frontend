@@ -19,6 +19,7 @@ type CastleListingState = {
   filterCheckboxes: string[];
   actions: {
     updateListings: (listing: CastleListing) => void;
+    updateListing: (listing: CastleListing) => void;
     getListingByID: (
       listingId: CastleListing["_id"]
     ) => CastleListing | undefined;
@@ -27,6 +28,7 @@ type CastleListingState = {
     updateSelectedGuests: (guests: Guest[]) => void;
     updateFilterboxes: (option: string) => void;
     setSelectedFilters: (filters: Filter[]) => void;
+    removeListing: (id: string) => void;
     resetFilters: () => void;
   };
 };
@@ -84,12 +86,14 @@ const defaultState: CastleListingState = {
   filterCheckboxes: [],
   actions: {
     updateListings: () => {},
+    updateListing: () => {},
     getListingByID: () => undefined,
     // getListingsByUser: () => undefined,
     updateSelectedDates: () => {},
     updateSelectedGuests: () => {},
     updateFilterboxes: () => {},
     setSelectedFilters: () => {},
+    removeListing: () => {},
     resetFilters: () => {},
   },
 };
@@ -297,42 +301,32 @@ function CastleListingProvider({ children }: PropsWithChildren) {
     LocalStorageService.setItem("@booking/filters", updatedFilters);
   };
 
-  const updateListing = async (id: string, listing: CastleListing) => {
-    try {
-      const response = await axios.put(`api/listings/${id}`, listing);
-
-      if (response.status === 201) {
-        const index = listings.findIndex((l) => l._id == id);
-
-        const updatedListings = listings.map((listing) => {
-          if (listing._id == id) {
-            return response.data;
-          } else {
-            return listing;
-          }
-        });
-        setListings(updatedListings);
+  const updateListing: typeof defaultState.actions.updateListing = async (
+    listing: CastleListing
+  ) => {
+    const updatedListings = listings.map((l) => {
+      if (l._id == listing._id) {
+        return listing;
+      } else {
+        return l;
       }
+    });
+    setListings(updatedListings);
+    LocalStorageService.setItem("@booking/listings", updatedListings);
 
-      return;
-    } catch (error: any) {
-      console.log(error.message);
-      return;
-    }
+    console.log(updateListings);
+
+    return;
   };
 
   const removeListing = async (id: string) => {
-    try {
-      let res = await axios.delete(`/api/listings/${id}`);
-      if (res.status !== 204) return;
+    const updatedListings = listings.filter((listing) => listing._id !== id);
+    setListings(updatedListings);
+    LocalStorageService.setItem("@booking/listings", updatedListings);
 
-      const updatedListings = listings.filter((listing) => listing._id !== id);
-      setListings(updatedListings);
-      LocalStorageService.setItem("@booking/listings", updatedListings);
-    } catch (error: any) {
-      console.log(error.message);
-      return;
-    }
+    console.log(updateListings);
+
+    return;
   };
 
   const resetFilters: typeof defaultState.actions.resetFilters = () => {
@@ -350,12 +344,14 @@ function CastleListingProvider({ children }: PropsWithChildren) {
 
   const actions = {
     updateListings,
+    updateListing,
     getListingByID,
     // getListingsByUser,
     updateSelectedDates,
     updateSelectedGuests,
     updateFilterboxes,
     setSelectedFilters,
+    removeListing,
     resetFilters,
   };
 
