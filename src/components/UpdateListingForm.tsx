@@ -63,13 +63,13 @@ const UpdateListingForm = ({
   const [formError, setFormError] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const [selectedAmneties, setSelectedAmneties] = useState<string[]>([
-    ...(castle.amneties as string[]),
+  const [selectedAmneties, setSelectedAmneties] = useState<FilterOption[]>([
+    ...(castle.amneties as FilterOption[]),
   ]);
-  const [selectedEvents, setSelectedEvents] = useState<string[]>([
-    ...(castle.events as string[]),
+  const [selectedEvents, setSelectedEvents] = useState<FilterOption[]>([
+    ...(castle.events as FilterOption[]),
   ]);
-  const [selectedRules, setSelectedRules] = useState<string[]>([
+  const [selectedRules, setSelectedRules] = useState<FilterOption[]>([
     ...castle.rules,
   ]);
   const selectedRooms: Room[] = [...castle.rooms];
@@ -130,7 +130,7 @@ const UpdateListingForm = ({
     }
   };
 
-  const handleRemove = (type: string, value: string) => {
+  const handleRemove = (type: string, value: FilterOption) => {
     if (type == "amnety") {
       if (!selectedAmneties.includes(value)) {
         return;
@@ -167,7 +167,7 @@ const UpdateListingForm = ({
     }
   };
 
-  const handleSelect = (type: string, value: string) => {
+  const handleSelect = (type: string, value: FilterOption) => {
     if (type == "amnety") {
       if (selectedAmneties.includes(value)) {
         handleRemove(type, value);
@@ -508,13 +508,13 @@ const UpdateListingForm = ({
                 <TagsTrigger>
                   {selectedAmneties.map((amnety) => (
                     <TagsValue
-                      key={amnety}
+                      key={amnety.id}
                       onRemove={() => {
                         // handleRemove("amnety", amnety),
                         onChange(handleRemove("amnety", amnety));
                       }}
                     >
-                      {amneties.find((t) => t.id === amnety)?.label}
+                      {amneties.find((a) => a.id === amnety.id)?.label}
                     </TagsValue>
                   ))}
                 </TagsTrigger>
@@ -528,12 +528,12 @@ const UpdateListingForm = ({
                           key={amnety.id}
                           onSelect={() => {
                             // handleSelect("amnety", amnety.id),
-                            onChange(handleSelect("amnety", amnety.id));
+                            onChange(handleSelect("amnety", amnety));
                           }}
                           value={amnety.id}
                         >
                           {amnety.label}
-                          {selectedAmneties.includes(amnety.id) && (
+                          {selectedAmneties.includes(amnety) && (
                             <CheckIcon
                               className="text-muted-foreground"
                               size={14}
@@ -564,12 +564,12 @@ const UpdateListingForm = ({
                 <TagsTrigger>
                   {selectedEvents.map((event) => (
                     <TagsValue
-                      key={event}
+                      key={event.id}
                       onRemove={() => {
                         onChange(handleRemove("event", event));
                       }}
                     >
-                      {events.find((t) => t.id === event)?.label}
+                      {events.find((e) => e.id === event.id)?.label}
                     </TagsValue>
                   ))}
                 </TagsTrigger>
@@ -582,12 +582,12 @@ const UpdateListingForm = ({
                         <TagsItem
                           key={event.id}
                           onSelect={() => {
-                            onChange(handleSelect("event", event.id));
+                            onChange(handleSelect("event", event));
                           }}
                           value={event.id}
                         >
                           {event.label}
-                          {selectedEvents.includes(event.id) && (
+                          {selectedEvents.includes(event) && (
                             <CheckIcon
                               className="text-muted-foreground"
                               size={14}
@@ -613,12 +613,12 @@ const UpdateListingForm = ({
                 <TagsTrigger>
                   {selectedRules.map((rule) => (
                     <TagsValue
-                      key={rule}
+                      key={rule.id}
                       onRemove={() => {
                         onChange(handleRemove("rule", rule));
                       }}
                     >
-                      {rules.find((t) => t.id === rule)?.label}
+                      {rules.find((t) => t.id === rule.id)?.label}
                     </TagsValue>
                   ))}
                 </TagsTrigger>
@@ -631,12 +631,12 @@ const UpdateListingForm = ({
                         <TagsItem
                           key={rule.id}
                           onSelect={() => {
-                            onChange(handleSelect("rule", rule.id));
+                            onChange(handleSelect("rule", rule));
                           }}
                           value={rule.id}
                         >
                           {rule.label}
-                          {selectedRules.includes(rule.id) && (
+                          {selectedRules.includes(rule) && (
                             <CheckIcon
                               className="text-muted-foreground"
                               size={14}

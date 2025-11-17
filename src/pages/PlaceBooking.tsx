@@ -85,7 +85,7 @@ const PlaceBooking = () => {
       bookedDates: allBookedDates,
       bookedRooms: castle.rooms,
       bookedGuests: selectedGuests,
-      bookedEvents: castle.events,
+      // bookedEvents: castle.events,
     };
 
     try {
@@ -133,7 +133,11 @@ const PlaceBooking = () => {
               <div>
                 <h2>{castle.title}</h2>
                 <p>{castle.location}</p>
-                <p>{castle.rules}</p>
+                <ul className="caption flex flex-col gap-1">
+                  {castle.rules.map((r) => (
+                    <li>{r.label}</li>
+                  ))}
+                </ul>
               </div>
             </div>
 

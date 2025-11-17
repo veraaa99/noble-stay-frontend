@@ -1,21 +1,30 @@
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
-import { Button } from './ui/button'
-import { useCastleListing } from '@/contexts/CastleListingContext'
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Button } from "./ui/button";
+import { useCastleListing } from "@/contexts/CastleListingContext";
 
 type DropdownProps = {
-  name: string,
-  options: string[],
-  onHandleSelectOptions: (name: string, option: string) => void
-}
+  name: string;
+  options: FilterOption[];
+  onHandleSelectOptions: (name: string, option: string) => void;
+};
 
-const FilterDropdown = ({ name, options, onHandleSelectOptions }: DropdownProps ) => {
-
+const FilterDropdown = ({
+  name,
+  options,
+  onHandleSelectOptions,
+}: DropdownProps) => {
   //TODO: If size or rooms, only one checkbox/radio button?
-  const { filterCheckboxes, actions } = useCastleListing()
-  
+  const { filterCheckboxes, actions } = useCastleListing();
+
   // https://stackoverflow.com/questions/60408612/how-to-select-one-checkbox-from-a-mapped-multiple-checkboxes-react-js
   const handleChange = (option: string) => () => {
-    onHandleSelectOptions(name, option)
+    onHandleSelectOptions(name, option);
     actions.updateFilterboxes(option);
   };
 
@@ -27,19 +36,21 @@ const FilterDropdown = ({ name, options, onHandleSelectOptions }: DropdownProps 
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuSeparator />
-          { options.map(option => 
+          {options.map((option) => (
             <DropdownMenuCheckboxItem
-              key={option}
-              checked={filterCheckboxes.includes(option)}
-              onCheckedChange={handleChange(option)}
-              onSelect={(e) => {e.preventDefault()}}
+              key={option.id}
+              checked={filterCheckboxes.includes(option.id)}
+              onCheckedChange={handleChange(option.id)}
+              onSelect={(e) => {
+                e.preventDefault();
+              }}
             >
-              {option}
+              {option.label}
             </DropdownMenuCheckboxItem>
-          )}
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  )
-}
-export default FilterDropdown
+  );
+};
+export default FilterDropdown;

@@ -139,31 +139,34 @@ const Profile = () => {
         {/* My listings */}
         <div>
           <h2>My listings</h2>
-          {userListings.map((c) => (
-            <>
-              <CreatedListing
-                castle={c}
-                listingEditorHandler={listingEditorHandler}
-                removeListingHandler={removeListingHandler}
-              />
-              {castleToEdit !== null && castleToEdit == c && (
-                <div>
-                  <h1>Edit castle {c.title}</h1>
-                  <UpdateListingForm
-                    castle={c}
-                    listingEditorHandler={listingEditorHandler}
-                    setIsListingUpdated={setIsListingUpdated}
-                  />
-                </div>
-              )}
-            </>
-          ))}
+          {userListings.length > 0 &&
+            userListings.map((c) => (
+              <>
+                <CreatedListing
+                  castle={c}
+                  listingEditorHandler={listingEditorHandler}
+                  removeListingHandler={removeListingHandler}
+                />
+                {listingEditorHandler &&
+                  castleToEdit !== null &&
+                  castleToEdit == c && (
+                    <div>
+                      <h1>Edit castle {c.title}</h1>
+                      <UpdateListingForm
+                        castle={c}
+                        listingEditorHandler={listingEditorHandler}
+                        setIsListingUpdated={setIsListingUpdated}
+                      />
+                    </div>
+                  )}
+              </>
+            ))}
         </div>
 
         {/* Create new castle listing */}
         <div>
           <h2>Create new castle listing</h2>
-          <ListingForm />
+          <ListingForm setIsListingUpdated={setIsListingUpdated} />
         </div>
       </div>
     </div>

@@ -1,6 +1,16 @@
-type amnityCategory = 'pets allowed' | 'gym nearby' | 'breakfast included'
+type amnityCategory = 
+    { id: "pets_allowed", label: "Pets allowed" } |
+    { id: "breakfast_included", label: "Breakfast included" } |
+    { id: "lunch_included", label: "Lunch included" } |
+    { id: "gym_nearby", label: "Gym nearby" } 
 type guestCategory = 'adult' | 'child' | 'pet'
-type eventCategory = 'ghost hunting' | 'dance night' | 'ball' | 'photoshoot'
+type eventCategory = 
+    { id: "ghost_hunting", label: "Ghost hunting" } |
+    { id: "dance_party", label: "Dance party" } |
+    { id: "photoshoot", label: "Photoshoot" } |
+    { id: "guided_tour", label: "Guided tour" }
+type rulesCategory =
+    { id: "no_smoking", label: "No smoking" }
 
 type RegisterInputs = {
   email: string, 
@@ -19,7 +29,7 @@ type BookingInputs = {
     bookedDates: Date[],
     bookedRooms: Room[],
     bookedGuests: Guest[],
-    bookedEvents?: eventCategory[]
+    // bookedEvents?: eventCategory[]
 }
 
 type ListingInputs = {
@@ -29,7 +39,7 @@ type ListingInputs = {
     description: string,
 
     amneties?: amnityCategory[],
-    rules: string[],
+    rules: rulesCategory[],
     dates: {
     from: Date | undefined;
     to?: Date | undefined;
@@ -47,7 +57,7 @@ type CastleListing = {
     location: string,
     description: string,
     amneties?: amnityCategory[],
-    rules: string[],
+    rules: rulesCategory[],
     dates: string[],
     guests: Guest[],
     rooms: Room[],
@@ -65,7 +75,7 @@ type Booking = {
     bookedDates: Date[],
     bookedRooms: Room[],
     bookedGuests: Guest[],
-    bookedEvents?: eventCategory[],
+    // bookedEvents?: eventCategory[],
     
     totalPrice: number
 }
@@ -93,7 +103,12 @@ type Guest = {
 
 type Filter = {
     name: string,
-    options: string[],
+    options: FilterOption[],
     selectedOptions: string[]
     // ändra selectedoptions så den har key-value par
+}
+
+type FilterOption = {
+    id: string,
+    label: string
 }

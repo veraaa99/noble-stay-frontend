@@ -29,7 +29,6 @@ const useSelectOptions = (filterName: string, filterOption: string, selectedFilt
     }
   }
   return newSelectedFilters
-
 }
 
 export default useSelectOptions

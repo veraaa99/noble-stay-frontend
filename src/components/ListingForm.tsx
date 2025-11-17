@@ -1,7 +1,7 @@
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import DateCalendar from "./DateCalendar";
 import { useCastleListing } from "@/contexts/CastleListingContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import AddGuestsCounter from "./AddGuestsCounter";
 import { eachDayOfInterval, format } from "date-fns";
 
@@ -22,7 +22,11 @@ import RoomCard from "./RoomCard";
 import axios from "@/axios_api/axios";
 import { useUser } from "@/contexts/UserContext";
 
-const ListingForm = () => {
+type ListingFormProps = {
+  setIsListingUpdated: Dispatch<SetStateAction<boolean>>;
+};
+
+const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
   const {
     register,
     handleSubmit,
@@ -50,9 +54,9 @@ const ListingForm = () => {
   const [formError, setFormError] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const [selectedAmneties, setSelectedAmneties] = useState<string[]>([]);
-  const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
-  const [selectedRules, setSelectedRules] = useState<string[]>([]);
+  const [selectedAmneties, setSelectedAmneties] = useState<FilterOption[]>([]);
+  const [selectedEvents, setSelectedEvents] = useState<FilterOption[]>([]);
+  const [selectedRules, setSelectedRules] = useState<FilterOption[]>([]);
   const selectedRooms: Room[] = [];
 
   const amneties = [
@@ -124,7 +128,7 @@ const ListingForm = () => {
     }
   };
 
-  const handleRemove = (type: string, value: string) => {
+  const handleRemove = (type: string, value: FilterOption) => {
     if (type == "amnety") {
       if (!selectedAmneties.includes(value)) {
         return;
@@ -161,7 +165,7 @@ const ListingForm = () => {
     }
   };
 
-  const handleSelect = (type: string, value: string) => {
+  const handleSelect = (type: string, value: FilterOption) => {
     if (type == "amnety") {
       if (selectedAmneties.includes(value)) {
         handleRemove(type, value);
@@ -268,6 +272,8 @@ const ListingForm = () => {
 
     const dataToSubmit = { ...data, dates: newArray };
 
+    console.log(dataToSubmit);
+
     try {
       const res = await axios.post("api/listings", dataToSubmit, {
         headers: {
@@ -277,7 +283,9 @@ const ListingForm = () => {
 
       if (res.status === 201) {
         actions.updateListings(res.data);
+        setFormError("");
         setIsSubmitted(true);
+        setIsListingUpdated((isListingUpdated) => !isListingUpdated);
       }
       return;
     } catch (error: any) {
@@ -427,12 +435,12 @@ const ListingForm = () => {
                 <TagsTrigger>
                   {selectedAmneties.map((amnety) => (
                     <TagsValue
-                      key={amnety}
+                      key={amnety.id}
                       onRemove={() => {
                         onChange(handleRemove("amnety", amnety));
                       }}
                     >
-                      {amneties.find((t) => t.id === amnety)?.label}
+                      {amneties.find((t) => t.id === amnety.id)?.label}
                     </TagsValue>
                   ))}
                 </TagsTrigger>
@@ -445,12 +453,12 @@ const ListingForm = () => {
                         <TagsItem
                           key={amnety.id}
                           onSelect={() => {
-                            onChange(handleSelect("amnety", amnety.id));
+                            onChange(handleSelect("amnety", amnety));
                           }}
                           value={amnety.id}
                         >
                           {amnety.label}
-                          {selectedAmneties.includes(amnety.id) && (
+                          {selectedAmneties.includes(amnety) && (
                             <CheckIcon
                               className="text-muted-foreground"
                               size={14}
@@ -481,12 +489,12 @@ const ListingForm = () => {
                 <TagsTrigger>
                   {selectedEvents.map((event) => (
                     <TagsValue
-                      key={event}
+                      key={event.id}
                       onRemove={() => {
                         onChange(handleRemove("event", event));
                       }}
                     >
-                      {events.find((t) => t.id === event)?.label}
+                      {events.find((t) => t.id === event.id)?.label}
                     </TagsValue>
                   ))}
                 </TagsTrigger>
@@ -499,12 +507,12 @@ const ListingForm = () => {
                         <TagsItem
                           key={event.id}
                           onSelect={() => {
-                            onChange(handleSelect("event", event.id));
+                            onChange(handleSelect("event", event));
                           }}
                           value={event.id}
                         >
                           {event.label}
-                          {selectedEvents.includes(event.id) && (
+                          {selectedEvents.includes(event) && (
                             <CheckIcon
                               className="text-muted-foreground"
                               size={14}
@@ -530,12 +538,12 @@ const ListingForm = () => {
                 <TagsTrigger>
                   {selectedRules.map((rule) => (
                     <TagsValue
-                      key={rule}
+                      key={rule.id}
                       onRemove={() => {
                         onChange(handleRemove("rule", rule));
                       }}
                     >
-                      {rules.find((t) => t.id === rule)?.label}
+                      {rules.find((t) => t.id === rule.id)?.label}
                     </TagsValue>
                   ))}
                 </TagsTrigger>
@@ -548,12 +556,12 @@ const ListingForm = () => {
                         <TagsItem
                           key={rule.id}
                           onSelect={() => {
-                            onChange(handleSelect("rule", rule.id));
+                            onChange(handleSelect("rule", rule));
                           }}
                           value={rule.id}
                         >
                           {rule.label}
-                          {selectedRules.includes(rule.id) && (
+                          {selectedRules.includes(rule) && (
                             <CheckIcon
                               className="text-muted-foreground"
                               size={14}

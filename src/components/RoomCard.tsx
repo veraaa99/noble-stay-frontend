@@ -1,3 +1,4 @@
+import { useCastleListing } from "@/contexts/CastleListingContext";
 import { useEffect, useState } from "react";
 
 type RoomCardProps = {
@@ -15,6 +16,8 @@ const RoomCard = ({
   selected,
   isRoomInCastleListing,
 }: RoomCardProps) => {
+  const { selectedRooms, actions } = useCastleListing();
+  const [radioChecked, setRadioChecked] = useState(false);
   const [checked, setChecked] = useState(isRoomInCastleListing ? true : false);
 
   const handleOnChange = () => {
@@ -24,11 +27,13 @@ const RoomCard = ({
     }
   };
 
-  // useEffect(() => {
-  //   if (isRoomInCastleListing) {
-  //     setChecked(true);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (radioChecked) {
+      actions.updateSelectedRooms(room);
+    } else if (selectedRooms.length > 0 && !radioChecked) {
+      actions.updateSelectedRooms(room);
+    }
+  }, [radioChecked]);
 
   return (
     <div>
@@ -47,7 +52,15 @@ const RoomCard = ({
         {isBookingRoom ? (
           <div>
             <p>Select this room</p>
-            <input type="radio" name="Select room" id={room.title} />
+            <input
+              type="checkbox"
+              name="Select room"
+              checked={radioChecked}
+              id={room.title}
+              onChange={() => {
+                setRadioChecked((radioChecked) => !radioChecked);
+              }}
+            />
           </div>
         ) : (
           <div>

@@ -15,6 +15,7 @@ type CastleListingState = {
   listings: CastleListing[];
   selectedGuests: Guest[];
   selectedDates: DateRange | undefined;
+  selectedRooms: Room[];
   filters: Filter[];
   filterCheckboxes: string[];
   actions: {
@@ -27,6 +28,7 @@ type CastleListingState = {
     updateSelectedDates: (dates: DateRange | undefined) => void;
     updateSelectedGuests: (guests: Guest[]) => void;
     updateFilterboxes: (option: string) => void;
+    updateSelectedRooms: (room: Room) => void;
     setSelectedFilters: (filters: Filter[]) => void;
     removeListing: (id: string) => void;
     resetFilters: () => void;
@@ -34,7 +36,7 @@ type CastleListingState = {
 };
 
 const defaultState: CastleListingState = {
-  listings: dummyCastleListings,
+  listings: [],
   selectedGuests: [
     {
       // _id: 1,
@@ -56,29 +58,41 @@ const defaultState: CastleListingState = {
     from: undefined,
     to: undefined,
   },
+  selectedRooms: [],
   filters: [
-    {
-      name: "size",
-      options: ["50m²", "20m²", "100m²"],
-      selectedOptions: [],
-    },
+    // {
+    //   name: "size",
+    //   options: ["50m²", "20m²", "100m²"],
+    //   selectedOptions: [],
+    // },
     {
       name: "number of rooms",
-      options: ["1", "2", "3", "4", "5"],
+      options: [
+        { id: "1", label: "1" },
+        { id: "2", label: "2" },
+        { id: "3", label: "3" },
+        { id: "4", label: "4" },
+        { id: "5", label: "5" },
+      ],
       selectedOptions: [],
     },
     {
       name: "events",
-      options: ["Ghost hunting", "Dance party", "Photoshoot", "Guided tour"],
+      options: [
+        { id: "ghost_hunting", label: "Ghost hunting" },
+        { id: "dance_party", label: "Dance party" },
+        { id: "photoshoot", label: "Photoshoot" },
+        { id: "guided_tour", label: "Guided tour" },
+      ],
       selectedOptions: [],
     },
     {
       name: "amneties",
       options: [
-        "Pets allowed",
-        "Breakfast included",
-        "Lunch included",
-        "Gym nearby",
+        { id: "pets_allowed", label: "Pets allowed" },
+        { id: "breakfast_included", label: "Breakfast included" },
+        { id: "lunch_included", label: "Lunch included" },
+        { id: "gym_nearby", label: "Gym nearby" },
       ],
       selectedOptions: [],
     },
@@ -92,6 +106,7 @@ const defaultState: CastleListingState = {
     updateSelectedDates: () => {},
     updateSelectedGuests: () => {},
     updateFilterboxes: () => {},
+    updateSelectedRooms: () => {},
     setSelectedFilters: () => {},
     removeListing: () => {},
     resetFilters: () => {},
@@ -101,12 +116,17 @@ const defaultState: CastleListingState = {
 const CastleListingContext = createContext<CastleListingState>(defaultState);
 
 function CastleListingProvider({ children }: PropsWithChildren) {
-  const [listings, setListings] = useState<CastleListing[]>([]);
+  const [listings, setListings] = useState<CastleListing[]>(
+    defaultState.listings
+  );
   const [selectedGuests, setSelectedGuests] = useState<Guest[]>(
     defaultState.selectedGuests
   );
   const [selectedDates, setSelectedDates] = useState<DateRange | undefined>(
     undefined
+  );
+  const [selectedRooms, setSelectedRooms] = useState<Room[]>(
+    defaultState.selectedRooms
   );
   const [filters, setFilters] = useState<Filter[]>(defaultState.filters);
   const [filterCheckboxes, setFilterCheckboxes] = useState<string[]>(
@@ -121,6 +141,7 @@ function CastleListingProvider({ children }: PropsWithChildren) {
     _getFilterCheckboxes();
     _getFilters();
     _getSelectedDates();
+    _getSelectedRooms();
   }, []);
 
   // Private functions
@@ -196,6 +217,16 @@ function CastleListingProvider({ children }: PropsWithChildren) {
     setSelectedDates(_dates);
     if (_dates == undefined) {
       LocalStorageService.setItem("@booking/dates", null);
+    }
+  };
+
+  const _getSelectedRooms = () => {
+    const _selectedRooms = LocalStorageService.getItem(
+      "@booking/rooms",
+      selectedRooms
+    );
+    if (_selectedRooms !== undefined) {
+      setSelectedRooms(_selectedRooms);
     }
   };
 
@@ -314,8 +345,6 @@ function CastleListingProvider({ children }: PropsWithChildren) {
     setListings(updatedListings);
     LocalStorageService.setItem("@booking/listings", updatedListings);
 
-    console.log(updateListings);
-
     return;
   };
 
@@ -342,6 +371,23 @@ function CastleListingProvider({ children }: PropsWithChildren) {
     LocalStorageService.setItem("@booking/checkboxes", filterCheckboxes);
   };
 
+  const updateSelectedRooms = (room: Room) => {
+    let updatedSelectedRooms: Room[] = [...selectedRooms];
+    const roomAlreadySelected = updatedSelectedRooms.find(
+      (r) => r.title == room.title
+    );
+    if (roomAlreadySelected) {
+      updatedSelectedRooms = updatedSelectedRooms.filter(
+        (r) => r.title !== room.title
+      );
+    } else {
+      updatedSelectedRooms = [...selectedRooms, room];
+    }
+
+    setSelectedRooms(updatedSelectedRooms);
+    LocalStorageService.setItem("@booking/rooms", updatedSelectedRooms);
+  };
+
   const actions = {
     updateListings,
     updateListing,
@@ -350,6 +396,7 @@ function CastleListingProvider({ children }: PropsWithChildren) {
     updateSelectedDates,
     updateSelectedGuests,
     updateFilterboxes,
+    updateSelectedRooms,
     setSelectedFilters,
     removeListing,
     resetFilters,
@@ -362,6 +409,7 @@ function CastleListingProvider({ children }: PropsWithChildren) {
         selectedGuests,
         filters,
         selectedDates,
+        selectedRooms,
         filterCheckboxes,
         actions,
       }}
