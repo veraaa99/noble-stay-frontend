@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import CastleCardBig from "../components/CastleCardBig";
 import { useEffect, useState } from "react";
 import FilterDropdown from "../components/FilterDropdown";

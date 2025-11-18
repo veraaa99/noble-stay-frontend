@@ -1,7 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router";
 import PaymentOptions from "../components/PaymentOptions";
 import RegisterForm from "../components/RegisterForm";
-import { useBooking } from "@/contexts/BookingContext";
 import { useCastleListing } from "@/contexts/CastleListingContext";
 import { useUser } from "@/contexts/UserContext";
 import { useEffect, useState } from "react";
@@ -11,7 +10,7 @@ import axios from "@/axios_api/axios";
 
 const PlaceBooking = () => {
   const [searchParams] = useSearchParams();
-  // const { bookings, actions: bookingActions } = useBooking()
+
   const {
     selectedDates,
     selectedGuests,
@@ -85,7 +84,6 @@ const PlaceBooking = () => {
       bookedDates: allBookedDates,
       bookedRooms: castle.rooms,
       bookedGuests: selectedGuests,
-      // bookedEvents: castle.events,
     };
 
     try {
@@ -99,12 +97,9 @@ const PlaceBooking = () => {
         console.log(res.data);
       }
 
-      // const updatedBookings = [...bookings, res.data]
-      // bookingActions.setBookings(updatedBookings)
       navigate(`/confirmed?bookingId=${res.data._id}`);
     } catch (error: any) {
       console.log(error.response?.data?.message || "Something went wrong");
-      console.log(error);
     }
   };
 

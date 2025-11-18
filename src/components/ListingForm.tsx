@@ -272,8 +272,6 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
 
     const dataToSubmit = { ...data, dates: newArray };
 
-    console.log(dataToSubmit);
-
     try {
       const res = await axios.post("api/listings", dataToSubmit, {
         headers: {

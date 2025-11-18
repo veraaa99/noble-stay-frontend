@@ -24,7 +24,6 @@ type CastleListingState = {
     getListingByID: (
       listingId: CastleListing["_id"]
     ) => CastleListing | undefined;
-    // getListingsByUser: (user: User) => CastleListing[] | undefined;
     updateSelectedDates: (dates: DateRange | undefined) => void;
     updateSelectedGuests: (guests: Guest[]) => void;
     updateFilterboxes: (option: string) => void;
@@ -39,17 +38,14 @@ const defaultState: CastleListingState = {
   listings: [],
   selectedGuests: [
     {
-      // _id: 1,
       category: "adult",
       number: 0,
     },
     {
-      // _id: 2,
       category: "child",
       number: 0,
     },
     {
-      // _id: 3,
       category: "pet",
       number: 0,
     },
@@ -60,11 +56,6 @@ const defaultState: CastleListingState = {
   },
   selectedRooms: [],
   filters: [
-    // {
-    //   name: "size",
-    //   options: ["50m²", "20m²", "100m²"],
-    //   selectedOptions: [],
-    // },
     {
       name: "number of rooms",
       options: [
@@ -102,7 +93,6 @@ const defaultState: CastleListingState = {
     updateListings: () => {},
     updateListing: () => {},
     getListingByID: () => undefined,
-    // getListingsByUser: () => undefined,
     updateSelectedDates: () => {},
     updateSelectedGuests: () => {},
     updateFilterboxes: () => {},
@@ -170,89 +160,67 @@ function CastleListingProvider({ children }: PropsWithChildren) {
   };
 
   const _getSelectedGuests = () => {
-    const storedGuests = sessionStorage.getItem("@booking/guests");
+    const _storedGuests = sessionStorage.getItem("@booking/guests");
 
-    if (storedGuests !== null) {
-      const _selectedGuests: Guest[] = JSON.parse(storedGuests);
+    if (_storedGuests !== undefined && _storedGuests !== null) {
+      const _selectedGuests: Guest[] = JSON.parse(_storedGuests);
       setSelectedGuests(_selectedGuests);
     }
   };
 
   const _getFilters = () => {
-    const _filters = LocalStorageService.getItem("@booking/filters", filters);
-    setFilters(_filters);
+    const _storedFilters = sessionStorage.getItem("@booking/filters");
+
+    if (_storedFilters !== undefined && _storedFilters !== null) {
+      const _filters: Filter[] = JSON.parse(_storedFilters);
+      setFilters(_filters);
+    }
   };
 
   const _getFilterCheckboxes = () => {
-    const _filterCheckboxes = LocalStorageService.getItem(
-      "@booking/checkboxes",
-      filterCheckboxes
-    );
-    setFilterCheckboxes(_filterCheckboxes);
+    const _storedCheckBoxes = sessionStorage.getItem("@booking/checkboxes");
+
+    if (_storedCheckBoxes !== undefined && _storedCheckBoxes !== null) {
+      const _filterCheckboxes: string[] = JSON.parse(_storedCheckBoxes);
+      setFilterCheckboxes(_filterCheckboxes);
+    }
   };
 
   const _getSelectedDates = () => {
-    const _selectedDates = LocalStorageService.getItem(
-      "@booking/dates",
-      selectedDates
-    );
+    const _storedSelectedDates = sessionStorage.getItem("@booking/dates");
 
-    if (
-      _selectedDates !== undefined &&
-      _selectedDates !== null &&
-      _selectedDates.from !== undefined &&
-      _selectedDates.to !== undefined
-    ) {
-      const startDate = new Date(_selectedDates.from.toString());
-      const endDate = new Date(_selectedDates.to.toString());
+    if (_storedSelectedDates !== undefined && _storedSelectedDates !== null) {
+      const _selectedDates: DateRange = JSON.parse(_storedSelectedDates);
+      if (
+        _selectedDates !== undefined &&
+        _selectedDates.from !== undefined &&
+        _selectedDates.to !== undefined
+      ) {
+        const startDate = new Date(_selectedDates.from.toString());
+        const endDate = new Date(_selectedDates.to.toString());
 
-      const newDateRange = { from: startDate, to: endDate };
-      setSelectedDates(newDateRange);
-    } else {
-      setSelectedDates(_selectedDates);
+        const newDateRange = { from: startDate, to: endDate };
+        setSelectedDates(newDateRange);
+      }
     }
   };
 
   const _setSelectedDates = (_dates: DateRange | undefined) => {
     setSelectedDates(_dates);
     if (_dates == undefined) {
-      LocalStorageService.setItem("@booking/dates", null);
+      sessionStorage.removeItem("@booking/dates");
     }
   };
 
   const _getSelectedRooms = () => {
-    const _selectedRooms = LocalStorageService.getItem(
-      "@booking/rooms",
-      selectedRooms
-    );
-    if (_selectedRooms !== undefined) {
+    const _storedSelectedRooms = sessionStorage.getItem("@booking/rooms");
+    if (_storedSelectedRooms !== undefined && _storedSelectedRooms !== null) {
+      const _selectedRooms: Room[] = JSON.parse(_storedSelectedRooms);
       setSelectedRooms(_selectedRooms);
     }
   };
 
   // Public functions
-  //   const createListing: typeof defaultState.actions.createListing = async (
-  //     listingInformation: ListingInputs
-  //   ) => {
-  //     try {
-  //       console.log(token);
-  //       const res = await axios.post("api/listings", listingInformation, {
-  //         headers: {
-  //           authorization: `Bearer ${token}`,
-  //         },
-  //       });
-
-  //       if (res.status === 201) {
-  //         const updatedListings: CastleListing[] = [...listings, res.data];
-  //         setListings(updatedListings);
-  //         LocalStorageService.setItem("@booking/listings", updatedListings);
-  //       }
-  //       return;
-  //     } catch (error: any) {
-  //       console.log(error.response?.data?.message || "Something went wrong");
-  //     }
-  //   };
-
   const updateListings: typeof defaultState.actions.updateListings = async (
     listing: CastleListing
   ) => {
@@ -275,26 +243,11 @@ function CastleListingProvider({ children }: PropsWithChildren) {
     return listingByID;
   };
 
-  //   const getListingsByUser: typeof defaultState.actions.getListingsByUser = (
-  //     user: User
-  //   ) => {
-  //     const newListings = [...listings];
-  //     const userListings: CastleListing[] | undefined = newListings.filter(
-  //       (listing) => listing.castleOwner._id == user._id
-  //     );
-  //     if (userListings == undefined || userListings.length == 0) {
-  //       console.log("No listings made by this user");
-  //       return undefined;
-  //     }
-
-  //     return userListings;
-  //   };
-
   const updateSelectedDates: typeof defaultState.actions.updateSelectedDates = (
     dates: DateRange | undefined
   ) => {
     _setSelectedDates(dates);
-    LocalStorageService.setItem<DateRange | undefined>("@booking/dates", dates);
+    sessionStorage.setItem("@booking/dates", JSON.stringify(dates));
   };
 
   const updateSelectedGuests: typeof defaultState.actions.updateSelectedGuests =
@@ -315,21 +268,23 @@ function CastleListingProvider({ children }: PropsWithChildren) {
         (o) => o !== option
       );
       setFilterCheckboxes(updatedSelectedOptions);
-      LocalStorageService.setItem(
+      sessionStorage.setItem(
         "@booking/checkboxes",
-        updatedSelectedOptions
+        JSON.stringify(updatedSelectedOptions)
       );
     } else {
       updatedCheckboxes.push(option);
       setFilterCheckboxes(updatedCheckboxes);
-      LocalStorageService.setItem("@booking/checkboxes", updatedCheckboxes);
+      sessionStorage.setItem(
+        "@booking/checkboxes",
+        JSON.stringify(updatedCheckboxes)
+      );
     }
   };
 
   const setSelectedFilters = (updatedFilters: Filter[]) => {
-    // const _filters = LocalStorageService.getItem('@booking/filters', defaultState.filters);
     setFilters(updatedFilters);
-    LocalStorageService.setItem("@booking/filters", updatedFilters);
+    sessionStorage.setItem("@booking/filters", JSON.stringify(updatedFilters));
   };
 
   const updateListing: typeof defaultState.actions.updateListing = async (
@@ -353,8 +308,6 @@ function CastleListingProvider({ children }: PropsWithChildren) {
     setListings(updatedListings);
     LocalStorageService.setItem("@booking/listings", updatedListings);
 
-    console.log(updateListings);
-
     return;
   };
 
@@ -368,7 +321,7 @@ function CastleListingProvider({ children }: PropsWithChildren) {
     setSelectedFilters(resetSelectedfilters);
 
     setFilterCheckboxes([]);
-    LocalStorageService.setItem("@booking/checkboxes", filterCheckboxes);
+    sessionStorage.removeItem("@booking/checkboxes");
   };
 
   const updateSelectedRooms = (room: Room) => {
@@ -385,14 +338,16 @@ function CastleListingProvider({ children }: PropsWithChildren) {
     }
 
     setSelectedRooms(updatedSelectedRooms);
-    LocalStorageService.setItem("@booking/rooms", updatedSelectedRooms);
+    sessionStorage.setItem(
+      "@booking/rooms",
+      JSON.stringify(updatedSelectedRooms)
+    );
   };
 
   const actions = {
     updateListings,
     updateListing,
     getListingByID,
-    // getListingsByUser,
     updateSelectedDates,
     updateSelectedGuests,
     updateFilterboxes,
