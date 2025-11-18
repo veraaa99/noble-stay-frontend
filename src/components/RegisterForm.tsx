@@ -1,13 +1,6 @@
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { useUser } from "@/contexts/UserContext"
-import type { Dispatch, SetStateAction } from 'react'
-
-type RegisterInputs = {
-  email: string, 
-  phone: string,
-  password: string,
-  confirmPassword: string
-}
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react'
 
 type RegisterFormProps = {
   setIsRegisterModalOpen?: Dispatch<SetStateAction<boolean>>
@@ -21,37 +14,43 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps ) => {
     formState: { errors },
   } = useForm<RegisterInputs>({ defaultValues: { email: "", phone:"", password: "", confirmPassword: "" } })
 
-  const { actions, users } = useUser()
+  const { actions } = useUser()
+  const [formError, setFormError] = useState<string>("")
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
+  
+  useEffect(() => {
+    if (isSubmitted) {
+      reset({ email: "", phone:"", password: "", confirmPassword: "" })
+    }
+    setIsSubmitted(false)
+    setFormError("")
+
+  }, [isSubmitted, reset])
 
   const onSubmit: SubmitHandler<RegisterInputs> = (data: RegisterInputs) => {
 
-    if(data.confirmPassword !== data.password) {
-      console.log("Error: Passwords don't match")
-      return
+    if(!data.email || !data.password || !data.phone || !data.confirmPassword){
+        setFormError('Please fill in all fields')
+        return
+    } else if(data.password !== data.confirmPassword) {
+        setFormError('Passwords do not match')
+        return
     }
 
-    const _user: User = { 
-      id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1, 
-      email: data.email.trim(), 
-      phone: data.phone.trim(),
-      password: data.password.trim()
-    }
-    
-    const existingUser: User | undefined = users.find((u) => u.email == _user.email)
+    setFormError('')
 
-    if (!existingUser) {
-      actions.createUser(_user)
-      actions.setUser(_user)
-      
-      if(setIsRegisterModalOpen) {
-        setIsRegisterModalOpen(false)
-      }
-      // setIsSubmitted(true)
-    } else {
-      console.log("Email is already in use")
-      // setFormError("Användarnamnet är redan taget")
+    try {
+        actions.createUser(data)
+    }  catch(error: any) {
+          console.log(error.message)
+          return
     }
 
+    if(setIsRegisterModalOpen) {
+      setIsRegisterModalOpen(false)
+    }
+
+    setIsSubmitted(true)
     return
   }
   
@@ -61,19 +60,26 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps ) => {
         <div>
             <p>Email</p>            
             <input type="email" id="email" {...register("email", { required: true })}/>
+            {errors.email && errors.email.type === "required" && <p className="text-red-500 text-xs italic mt-1">Enter an email address</p>}
         </div>
         <div>
             <p>Mobile</p>            
             <input type="text" id="phone" {...register("phone", { required: true })} />
+            {errors.phone && errors.phone.type === "required" && <p className="text-red-500 text-xs italic mt-1">Enter a valid phone number</p>}
         </div>
         <div>
             <p>Password</p>            
             <input type="password" id="password" {...register("password", { required: true })}/>
-            <p>Your password must be at least 6 characters long</p>
+            {errors.password && errors.password.type === "required" && <p className="text-red-500 text-xs italic mt-1">Enter a password</p>}
         </div>
         <div>
             <p>Confirm password</p>            
             <input type="password" id="confirmPassword" {...register("confirmPassword", { required: true })}/>
+            {errors.email && errors.email.type === "required" && <p className="text-red-500 text-xs italic mt-1">Repeat password</p>}
+        </div>
+
+        <div>
+          <p className="text-red-500 text-sm italic mb-3">{formError}</p>
         </div>
 
         <button type="submit">SIGN UP</button>

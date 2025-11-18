@@ -7,7 +7,7 @@ const CastleCardSmall = ({ castle }: CastleProps) => {
   return (
     <div className="h-[205px] w-[160px] rounded-md overflow-hidden custom-shadow my-3">
       {/* ÄNDRA HÖJD OCH BREDD TILL PX */}
-      <Link to={`/castles/${castle.id}`}>
+      <Link to={`/castles/${castle._id}`}>
           <div className='flex align-middle object-contain'>
               <img src={castle.images[0]} alt="" />
           </div>

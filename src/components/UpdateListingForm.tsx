@@ -22,11 +22,17 @@ import RoomCard from "./RoomCard";
 import axios from "@/axios_api/axios";
 import { useUser } from "@/contexts/UserContext";
 
-type ListingFormProps = {
+type UpdateListingFormProps = {
+  castle: CastleListing;
+  listingEditorHandler: (castle: CastleListing) => void;
   setIsListingUpdated: Dispatch<SetStateAction<boolean>>;
 };
 
-const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
+const UpdateListingForm = ({
+  castle,
+  listingEditorHandler,
+  setIsListingUpdated,
+}: UpdateListingFormProps) => {
   const {
     register,
     handleSubmit,
@@ -35,16 +41,19 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
     formState: { errors },
   } = useForm<ListingInputs>({
     defaultValues: {
-      title: "",
-      images: [],
-      location: "",
-      description: "",
-      amneties: [],
-      rules: [],
-      dates: {},
-      guests: [],
-      rooms: [],
-      events: [],
+      title: castle.title,
+      images: castle.images,
+      location: castle.location,
+      description: castle.description,
+      amneties: castle.amneties,
+      rules: castle.rules,
+      dates: {
+        from: new Date(castle.dates[0]),
+        to: new Date(castle.dates[castle.dates.length - 1]),
+      },
+      guests: castle.guests,
+      rooms: castle.rooms,
+      events: castle.events,
     },
   });
 
@@ -54,10 +63,16 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
   const [formError, setFormError] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const [selectedAmneties, setSelectedAmneties] = useState<FilterOption[]>([]);
-  const [selectedEvents, setSelectedEvents] = useState<FilterOption[]>([]);
-  const [selectedRules, setSelectedRules] = useState<FilterOption[]>([]);
-  const selectedRooms: Room[] = [];
+  const [selectedAmneties, setSelectedAmneties] = useState<FilterOption[]>([
+    ...(castle.amneties as FilterOption[]),
+  ]);
+  const [selectedEvents, setSelectedEvents] = useState<FilterOption[]>([
+    ...(castle.events as FilterOption[]),
+  ]);
+  const [selectedRules, setSelectedRules] = useState<FilterOption[]>([
+    ...castle.rules,
+  ]);
+  const selectedRooms: Room[] = [...castle.rooms];
 
   const amneties = [
     { id: "pets_allowed", label: "Pets allowed" },
@@ -96,25 +111,12 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
     },
   ];
 
-  useEffect(() => {
-    if (isSubmitted) {
-      reset({
-        title: "",
-        images: [],
-        location: "",
-        description: "",
-        amneties: [],
-        rules: [],
-        dates: {},
-        guests: [],
-        rooms: [],
-        events: [],
-      });
-      console.log("Castlelisting created!");
-    }
-    setIsSubmitted(false);
-    setFormError("");
-  }, [isSubmitted]);
+  function compareArrays<T>(a: Array<T>, b: Array<T>): boolean {
+    const array1 = a.sort();
+    const array2 = b.sort();
+
+    return JSON.stringify(array1) === JSON.stringify(array2);
+  }
 
   const getDatesInRange = (
     startDate: Date | undefined,
@@ -266,25 +268,78 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
 
     const allDatesInRange = getDatesInRange(data.dates.from, data.dates.to);
 
-    const newArray = allDatesInRange?.map((date) => {
+    const formattedDatesInRange = allDatesInRange?.map((date) => {
       return format(date, "yyyy-MM-dd");
     });
 
-    const dataToSubmit = { ...data, dates: newArray };
+    const updatedData = {} as ListingInputs;
+
+    if (castle.title !== data.title) {
+      updatedData.title = data.title;
+    }
+    if (!compareArrays(castle.images, data.images)) {
+      updatedData.images = data.images;
+    }
+    if (castle.location !== data.location) {
+      updatedData.location = data.location;
+    }
+    if (castle.description !== data.description) {
+      updatedData.description = data.description;
+    }
+    if (!compareArrays(castle.rules, data.rules)) {
+      updatedData.rules = data.rules;
+    }
+    if (
+      data.dates &&
+      !compareArrays(castle.dates, formattedDatesInRange as string[])
+    ) {
+      updatedData.dates = data.dates;
+    }
+    if (!compareArrays(castle.guests, data.guests)) {
+      updatedData.guests = data.guests;
+    }
+    if (!compareArrays(castle.rooms, data.rooms)) {
+      updatedData.rooms = data.rooms;
+    }
+    if (
+      castle.events &&
+      data.events &&
+      !compareArrays(castle.events, data.events)
+    ) {
+      updatedData.events = data.events;
+    }
+    if (
+      castle.amneties &&
+      data.amneties &&
+      !compareArrays(castle.amneties, data.amneties)
+    ) {
+      updatedData.amneties = data.amneties;
+    }
+
+    let dataToSubmit = {};
+
+    if (updatedData.dates) {
+      dataToSubmit = { ...updatedData, dates: formattedDatesInRange };
+    } else {
+      dataToSubmit = { ...updatedData };
+    }
 
     try {
-      const res = await axios.post("api/listings", dataToSubmit, {
+      const res = await axios.put(`api/listings/${castle._id}`, dataToSubmit, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
 
-      if (res.status === 201) {
-        actions.updateListings(res.data);
+      if (res.status === 200) {
+        actions.updateListing(res.data);
+        console.log("Castle updated!");
         setFormError("");
         setIsSubmitted(true);
+        listingEditorHandler(res.data);
         setIsListingUpdated((isListingUpdated) => !isListingUpdated);
       }
+
       return;
     } catch (error: any) {
       setFormError(error.response?.data?.message || "Something went wrong");
@@ -320,6 +375,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
             id="location"
             {...register("location", { required: true })}
           />
+
           {errors.location && errors.location.type === "required" && (
             <p className="text-red-500 text-xs italic mt-1">
               Enter the castle's location
@@ -352,6 +408,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
               />
             )}
           />
+
           {errors.dates && errors.dates.type === "required" && (
             <p className="text-red-500 text-xs italic mt-1">
               Enter a start date and final date
@@ -368,7 +425,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
             render={({ field: { onChange, value } }) => (
               <AddGuestsCounter
                 onChange={onChange} // send value to hook form
-                // selected={value}
+                selected={value}
               />
             )}
           />
@@ -395,6 +452,12 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
                   }} // send value to hook form
                   selected={rooms[0]}
                   isBookingRoom={false}
+                  isRoomInCastleListing={
+                    selectedRooms.find((r) => r.title == rooms[0].title) ==
+                    undefined
+                      ? false
+                      : true
+                  }
                 />
                 <RoomCard
                   room={rooms[1]}
@@ -403,6 +466,12 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
                   }} // send value to hook form
                   selected={rooms[1]}
                   isBookingRoom={false}
+                  isRoomInCastleListing={
+                    selectedRooms.find((r) => r.title == rooms[1].title) ==
+                    undefined
+                      ? false
+                      : true
+                  }
                 />
                 <RoomCard
                   room={rooms[2]}
@@ -411,6 +480,12 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
                   }} // send value to hook form
                   selected={rooms[2]}
                   isBookingRoom={false}
+                  isRoomInCastleListing={
+                    selectedRooms.find((r) => r.title == rooms[2].title) ==
+                    undefined
+                      ? false
+                      : true
+                  }
                 />
               </>
             )}
@@ -435,10 +510,11 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
                     <TagsValue
                       key={amnety.id}
                       onRemove={() => {
+                        // handleRemove("amnety", amnety),
                         onChange(handleRemove("amnety", amnety));
                       }}
                     >
-                      {amneties.find((t) => t.id === amnety.id)?.label}
+                      {amneties.find((a) => a.id === amnety.id)?.label}
                     </TagsValue>
                   ))}
                 </TagsTrigger>
@@ -451,6 +527,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
                         <TagsItem
                           key={amnety.id}
                           onSelect={() => {
+                            // handleSelect("amnety", amnety.id),
                             onChange(handleSelect("amnety", amnety));
                           }}
                           value={amnety.id}
@@ -476,9 +553,9 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
             </p>
           )}
         </div>
+
         <div>
           <h3>What events do you offer? (optional)</h3>
-
           <Controller
             name="events"
             control={control}
@@ -492,7 +569,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
                         onChange(handleRemove("event", event));
                       }}
                     >
-                      {events.find((t) => t.id === event.id)?.label}
+                      {events.find((e) => e.id === event.id)?.label}
                     </TagsValue>
                   ))}
                 </TagsTrigger>
@@ -589,7 +666,6 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
               <input
                 type="file"
                 id="images"
-                // value={this.state.images}
                 multiple
                 onChange={(e) =>
                   onChange(
@@ -599,18 +675,16 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
               />
             )}
           />
-
           {errors.images && errors.images.type === "required" && (
             <p className="text-red-500 text-xs italic mt-1">
               Upload at least one image of your castle
             </p>
           )}
         </div>
-
         <p className="text-center text-lg mt-5">{formError}</p>
         <button type="submit">Submit listing</button>
       </form>
     </div>
   );
 };
-export default ListingForm;
+export default UpdateListingForm;
