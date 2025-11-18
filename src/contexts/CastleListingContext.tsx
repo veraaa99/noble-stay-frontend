@@ -313,12 +313,18 @@ function CastleListingProvider({ children }: PropsWithChildren) {
 
   const resetFilters: typeof defaultState.actions.resetFilters = () => {
     _setSelectedDates(undefined);
+
     _setSelectedGuests(defaultState.selectedGuests);
+    sessionStorage.removeItem("@booking/guests");
+
+    setSelectedRooms(defaultState.selectedRooms);
+    sessionStorage.removeItem("@booking/rooms");
 
     const resetSelectedfilters = filters.map((filter) => {
       return { ...filter, selectedOptions: [] };
     });
     setSelectedFilters(resetSelectedfilters);
+    sessionStorage.removeItem("@booking/filters");
 
     setFilterCheckboxes([]);
     sessionStorage.removeItem("@booking/checkboxes");

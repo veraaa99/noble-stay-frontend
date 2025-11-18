@@ -15,7 +15,8 @@ import type { DateRange } from "react-day-picker";
 
 const CastleDetails = () => {
   const params = useParams();
-  const { selectedRooms, actions } = useCastleListing();
+  const { selectedRooms, selectedGuests, selectedDates, actions } =
+    useCastleListing();
 
   const [listing, setListing] = useState<CastleListing | undefined>();
   const [listingDates, setListingDates] = useState<DateRange | undefined>();
@@ -39,10 +40,23 @@ const CastleDetails = () => {
         if (res.status !== 200) return;
 
         setListing(res.data);
-        setListingDates({
-          from: new Date(res.data.dates[0]),
-          to: new Date(res.data.dates[res.data.dates.length - 1]),
-        });
+
+        if (selectedDates == undefined) {
+          setListingDates({
+            from: new Date(res.data.dates[0]),
+            to: new Date(res.data.dates[res.data.dates.length - 1]),
+          });
+          actions.updateSelectedDates({
+            from: new Date(res.data.dates[0]),
+            to: new Date(res.data.dates[res.data.dates.length - 1]),
+          });
+        } else {
+          setListingDates(selectedDates);
+        }
+        // setListingDates({
+        //   from: new Date(res.data.dates[0]),
+        //   to: new Date(res.data.dates[res.data.dates.length - 1]),
+        // });
 
         return;
       } catch (error: any) {
@@ -210,8 +224,16 @@ const CastleDetails = () => {
                 You will not be charged yet
               </p>
               <button
-                className="btn-primary"
+                className="btn-primary disabled:bg-gray-400"
                 onClick={() => navigate(`/book/?id=${listing._id}`)}
+                disabled={
+                  selectedRooms.length == 0 ||
+                  listingDates == undefined ||
+                  selectedGuests.filter((guest) => guest.number == 0).length ==
+                    3
+                    ? true
+                    : false
+                }
               >
                 Reserve
               </button>

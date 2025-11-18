@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CastleCardSmall from "../components/CastleCardSmall";
 import FilterDropdown from "../components/FilterDropdown";
 import { useNavigate, useSearchParams } from "react-router";
@@ -33,6 +33,10 @@ const Home = () => {
     );
     actions.setSelectedFilters(updateSelectedFilters);
   };
+
+  useEffect(() => {
+    actions.resetFilters();
+  }, []);
 
   const dateModalHandler = () => {
     setIsDateModalOpen((isDateModalOpen) => !isDateModalOpen);
