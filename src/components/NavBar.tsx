@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router";
 import { useUser } from "@/contexts/UserContext";
 import nobleStaySmallLogo from "../assets/A.svg";
 import { RxHamburgerMenu } from "react-icons/rx";
+import Modal from "react-modal";
 
 const NavBar = () => {
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
@@ -57,56 +58,96 @@ const NavBar = () => {
         {/* All castles, My Bookings, Login/Sign up */}
       </div>
 
-      {isMenuModalOpen && (
-        <div>
-          <div>
-            <h1>Menu</h1>
-            <p onClick={menuModalHandler}>X</p>
-          </div>
-          <div>
-            <Link to={"/"} onClick={menuModalHandler}>
-              <div>
-                <p>Home</p>
-              </div>
-            </Link>
-            <Link to={"/castles"} onClick={menuModalHandler}>
-              <div>
-                <p>All castles</p>
-              </div>
-            </Link>
-            {token !== null && (
-              <Link to={`/profile`}>
-                <div>
-                  <p>My bookings</p>
-                </div>
-              </Link>
-            )}
-            <div>
-              {!token || token == null ? (
-                <p onClick={loginModalHandler}>Login / Sign up</p>
-              ) : (
-                <p onClick={logoutHandler}>Logout</p>
-              )}
+      <Modal
+        isOpen={isMenuModalOpen}
+        onRequestClose={() => setIsMenuModalOpen(false)}
+        className="h-full w-50 bg-(--color-background) pt-12 rounded-bl-xl shadow-lg max-w-md absolute right-0"
+        overlayClassName="fixed inset-0 bg-black/50 flex justify-center items-start z-50"
+      >
+        <div className="flex flex-row items-center justify-between p-5">
+          <h1 className="text-(--color-foreground)">Menu</h1>
+          <h2
+            className="text-(--color-foreground) font-light"
+            onClick={menuModalHandler}
+          >
+            ✕
+          </h2>
+        </div>
+        <div className="flex flex-col gap-4">
+          <Link to={"/"} onClick={menuModalHandler}>
+            <div className="bg-(--primary) px-5 text-(--background) font-light py-2">
+              <p>Home</p>
             </div>
+          </Link>
+          <Link to={"/castles"} onClick={menuModalHandler}>
+            <div className="bg-(--primary) px-5 text-(--background) font-light py-2">
+              <p>All castles</p>
+            </div>
+          </Link>
+          {token !== null && (
+            <Link to={"/profile"} onClick={menuModalHandler}>
+              <div className="bg-(--primary) px-5 text-(--background) font-light py-2">
+                <p>My bookings</p>
+              </div>
+            </Link>
+          )}
+          <div className="bg-(--primary) px-5 text-(--background) font-light py-2">
+            {!token || token == null ? (
+              <p onClick={loginModalHandler}>Login / Sign up</p>
+            ) : (
+              <p onClick={logoutHandler}>Logout</p>
+            )}
           </div>
         </div>
-      )}
-      {isLoginModalOpen && (
+      </Modal>
+
+      <Modal
+        isOpen={isLoginModalOpen}
+        onRequestClose={() => setIsLoginModalOpen(false)}
+        className="w-70 bg-white pt-3 pb-10 px-5 rounded shadow-lg max-w-md mx-auto mt-20 realtive"
+        overlayClassName="fixed inset-0 bg-black/50 flex justify-center items-start z-50"
+      >
         <div>
-          <p onClick={loginModalHandler}>X</p>
+          <h2
+            className="text-(--color-foreground) font-light text-right"
+            onClick={loginModalHandler}
+          >
+            ✕
+          </h2>
+          <h2 className="text-center">Welcome back</h2>
           <LoginForm setIsLoginModalOpen={setIsLoginModalOpen} />
-          <p>Don't have an account?</p>{" "}
-          <p onClick={registerModalHandler}>SIGN UP</p>
+          <div className="flex items-center justify-center gap-2">
+            <p className="caption">Don't have an account?</p>{" "}
+            <p className="link underline" onClick={registerModalHandler}>
+              SIGN UP
+            </p>
+          </div>
         </div>
-      )}
-      {isRegisterModalOpen && (
+      </Modal>
+
+      <Modal
+        isOpen={isRegisterModalOpen}
+        onRequestClose={() => setIsRegisterModalOpen(false)}
+        className="w-70 bg-white pt-3 pb-10 px-5 rounded shadow-lg max-w-md mx-auto mt-20 realtive"
+        overlayClassName="fixed inset-0 bg-black/50 flex justify-center items-start z-50"
+      >
         <div>
-          <p onClick={registerModalHandler}>X</p>
+          <h2
+            className="text-(--color-foreground) font-light text-right"
+            onClick={registerModalHandler}
+          >
+            ✕
+          </h2>
+          <h2 className="text-center">Sign up to Noble Stay</h2>
           <RegisterForm setIsRegisterModalOpen={setIsRegisterModalOpen} />
-          <p>Already have an account?</p>{" "}
-          <p onClick={loginModalHandler}>LOG IN</p>
+          <div className="flex items-center justify-center gap-2">
+            <p className="caption">Already have an account?</p>{" "}
+            <p className="link underline" onClick={loginModalHandler}>
+              LOG IN
+            </p>
+          </div>
         </div>
-      )}
+      </Modal>
     </nav>
   );
 };

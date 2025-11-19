@@ -51,6 +51,7 @@ const DateCalendar = ({
           }
           numberOfMonths={1}
           timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+          disabled={{ before: new Date() }}
           className="w-85 self-center"
         />
       )}

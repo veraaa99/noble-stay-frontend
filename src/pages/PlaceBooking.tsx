@@ -8,12 +8,15 @@ import LoginForm from "@/components/LoginForm";
 import { eachDayOfInterval } from "date-fns";
 import axios from "@/axios_api/axios";
 
+import locationIcon from "../assets/Location_On.svg";
+
 const PlaceBooking = () => {
   const [searchParams] = useSearchParams();
 
   const {
     selectedDates,
     selectedGuests,
+    selectedRooms,
     actions: castleListingActions,
   } = useCastleListing();
   const { currentUser, token } = useUser();
@@ -21,6 +24,7 @@ const PlaceBooking = () => {
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [castle, setCastle] = useState<CastleListing | undefined>();
+  const [totalSum, setTotalSum] = useState<number>();
 
   const castleId = searchParams.get("id");
 
@@ -44,17 +48,39 @@ const PlaceBooking = () => {
         return;
       }
     };
+    const getTotalSum = () => {
+      const updatedSelectedRooms = [...selectedRooms];
+      let totalSum = 0;
+
+      let roomQuantity: number[] = [];
+      let roomsSum: number[] = [];
+
+      for (let i = 0; i < updatedSelectedRooms.length; i++) {
+        roomQuantity.push(1);
+      }
+
+      updatedSelectedRooms.forEach((room) => {
+        roomsSum.push(room.price);
+      });
+
+      for (let i = 0; i < roomQuantity.length; i++) {
+        totalSum += roomQuantity[i] * roomsSum[i];
+      }
+
+      setTotalSum(totalSum);
+    };
     getListing();
+    getTotalSum();
   }, []);
 
-  const newAllGuests: Guest[] = [...selectedGuests];
-  const totalAmountOfGuests: number[] = newAllGuests.map((g) => g.number);
+  // const newAllGuests: Guest[] = [...selectedGuests];
+  // const totalAmountOfGuests: number[] = newAllGuests.map((g) => g.number);
 
-  let sum = 0;
-  let i = 0;
-  for (i = 0; i < totalAmountOfGuests.length; i++) {
-    sum += totalAmountOfGuests[i];
-  }
+  // let sum = 0;
+  // let i = 0;
+  // for (i = 0; i < totalAmountOfGuests.length; i++) {
+  //   sum += totalAmountOfGuests[i];
+  // }
 
   const handleBookingSubmit = async () => {
     if (!castle) {
@@ -82,7 +108,7 @@ const PlaceBooking = () => {
     const newBooking: BookingInputs = {
       castle: castle._id,
       bookedDates: allBookedDates,
-      bookedRooms: castle.rooms,
+      bookedRooms: selectedRooms,
       bookedGuests: selectedGuests,
     };
 
@@ -108,81 +134,100 @@ const PlaceBooking = () => {
   };
 
   return (
-    <div>
+    <div className="m-auto px-7 pt-10">
       {castle && (
         <div>
-          <button onClick={() => navigate("/")}>Go back without booking</button>
+          <button className="my-6" onClick={() => navigate(-1)}>
+            {"<"} Go back without booking
+          </button>
 
           <div>
             {/* Castle information summary */}
             <div>
-              <div>
+              <div className="flex flex-col gap-2">
                 <h1>Booking summary</h1>
                 {/* Castle image */}
                 <div>
-                  <img src={castle.images[0]} alt="" />
+                  <img
+                    className="rounded-xl h-50"
+                    src={castle.images[0]}
+                    alt=""
+                  />
                 </div>
               </div>
 
               {/* Castle information */}
-              <div>
+              <div className="my-5">
                 <h2>{castle.title}</h2>
-                <p>{castle.location}</p>
+                <div className="flex gap-1">
+                  <img src={locationIcon} alt="" />
+
+                  <p>{castle.location}</p>
+                </div>
                 <ul className="caption flex flex-col gap-1">
                   {castle.rules.map((r) => (
-                    <li>{r.label}</li>
+                    <li className="text-(--gray)">{r.label}</li>
                   ))}
                 </ul>
               </div>
             </div>
 
             {/* Booking details */}
-            <div>
-              <hr />
+            <div className="flex flex-col gap-4 mb-5">
+              <hr className="w-80 m-auto border-(--gray)" />
               <div>
-                <h3>Date:</h3>
+                <h2 className="text-(--color-foreground)">Date:</h2>
                 <div>
                   {/* TODO: Add selected dates */}
                   <p>{`${selectedDates?.from?.toLocaleString("en-US", {
                     month: "short",
                     day: "numeric",
                     year: "numeric",
-                  })} - ${selectedDates?.to?.toLocaleString("en-US", {
+                  })} → ${selectedDates?.to?.toLocaleString("en-US", {
                     month: "short",
                     day: "numeric",
                     year: "numeric",
                   })}`}</p>
                 </div>
               </div>
-              <hr />
+              <hr className="w-80 m-auto border-(--gray)" />
               <div>
-                <h3>Room/s:</h3>
-                <p>{castle.rooms[0].title}</p>
-              </div>
-              <hr />
-              <div>
-                <h3>Guests:</h3>
-                {selectedGuests.map((g) => (
-                  <>
-                    <p>{g.number}</p>
-                    <p>{g.category}</p>
-                  </>
+                <h2 className="text-(--color-foreground)">Room/s:</h2>
+                {/* <p>{castle.rooms[0].title}</p> */}
+                {selectedRooms.map((r) => (
+                  <div className="flex gap-2">
+                    <p>1 {r.title}</p>
+                  </div>
                 ))}
               </div>
-              <hr />
+              <hr className="w-80 m-auto border-(--gray)" />
               <div>
-                <h3>Total:</h3>
-                <p>{sum * castle.rooms[0].price}</p>
+                <h2 className="text-(--color-foreground)">Guests:</h2>
+                {selectedGuests.map((g) => (
+                  <div className="flex gap-2">
+                    <p>{g.number}</p>
+                    <p>{g.category}</p>
+                  </div>
+                ))}
+              </div>
+              <hr className="w-80 m-auto border-(--gray)" />
+              <div>
+                <h2 className="text-(--color-foreground)">Total:</h2>
+                <p>{totalSum} SEK</p>
               </div>
             </div>
           </div>
           {currentUser ? (
             // IF LOGGED IN: Select payment method
-            <div>
+            <div className="flex flex-col items-center mb-15">
               <h2>Select payment method</h2>
-              <p>Disclaimer: you will not be charged</p>
+              <p className="caption mb-3">
+                Disclaimer: you will not be charged
+              </p>
               <PaymentOptions />
-              <button onClick={handleBookingSubmit}>Book</button>
+              <button className="btn-action mt-5" onClick={handleBookingSubmit}>
+                Book
+              </button>
             </div>
           ) : (
             // IF NOT LOGGED IN: Sign up form

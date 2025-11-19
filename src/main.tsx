@@ -17,8 +17,9 @@ import AllCastles from "./pages/AllCastles.tsx";
 import { CastleListingProvider } from "./contexts/CastleListingContext.tsx";
 import { UserProvider } from "./contexts/UserContext.tsx";
 import { BookingProvider } from "./contexts/BookingContext.tsx";
+import Modal from "react-modal";
 
-// import { APIProvider } from "@vis.gl/react-google-maps";
+Modal.setAppElement("#root");
 
 const router = createBrowserRouter([
   {

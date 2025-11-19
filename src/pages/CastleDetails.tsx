@@ -10,7 +10,10 @@ import profilePic from "../assets/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg";
 import locationIcon from "../assets/Location_On.svg";
 import calendarIcon from "../assets/Calendar_Month.svg";
 import guestsIcon from "../assets/Groups.svg";
+import bedIcon from "../assets/King_bed.svg";
 import filterIcon from "../assets/Filter_Alt.svg";
+import shareIcon from "../assets/Share.svg";
+
 import type { DateRange } from "react-day-picker";
 
 const CastleDetails = () => {
@@ -21,6 +24,7 @@ const CastleDetails = () => {
   const [listing, setListing] = useState<CastleListing | undefined>();
   const [listingDates, setListingDates] = useState<DateRange | undefined>();
   const [totalSum, setTotalSum] = useState<number>();
+  const [loading, setLoading] = useState(false);
 
   if (!params.id) {
     console.log("404: Not found");
@@ -34,6 +38,8 @@ const CastleDetails = () => {
 
   useEffect(() => {
     const getListing = async () => {
+      setLoading(true);
+
       try {
         const res = await axios.get(`api/listings/${params.id}`);
 
@@ -53,14 +59,13 @@ const CastleDetails = () => {
         } else {
           setListingDates(selectedDates);
         }
-        // setListingDates({
-        //   from: new Date(res.data.dates[0]),
-        //   to: new Date(res.data.dates[res.data.dates.length - 1]),
-        // });
 
         return;
       } catch (error: any) {
         console.log(error.message);
+        return;
+      } finally {
+        setLoading(false);
         return;
       }
     };
@@ -94,7 +99,10 @@ const CastleDetails = () => {
 
   return (
     <div className="m-auto px-5">
-      <button>Go back to listings</button>
+      <button className="my-6" onClick={() => navigate(-1)}>
+        {"<"} Go back to listings
+      </button>
+      {loading && <p>Loading castle...</p>}
       {/* Full castle details */}
       {listing && (
         <div>
@@ -105,21 +113,27 @@ const CastleDetails = () => {
           {/* listing information */}
           <div>
             <div className="flex flex-col gap-2">
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <h1>{listing.title}</h1>
-                <button>Share</button>
+                <button className="h-fit caption bg-[url(assets/Share_mobile.svg)] bg-no-repeat bg-position-[10px] pl-9 px-5 py-1.5 rounded-4xl custom-shadow">
+                  Share
+                </button>
               </div>
-              {listing.events?.map((event) => (
-                <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">
-                  {event.label}
-                </p>
-              ))}
+              <div className="flex flex-wrap gap-2">
+                {listing.events?.map((event) => (
+                  <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">
+                    {event.label}
+                  </p>
+                ))}
+              </div>
             </div>
 
             <div className="flex flex-col gap-3 mt-3">
               <div>
                 <p>{listing.description} </p>
-                <button className="underline">Expand</button>
+                <button className="link bg-[url(assets/Action_arrow_down.svg)] bg-no-repeat bg-position-[60px] pr-4 py-1.5">
+                  Expand
+                </button>
               </div>
               <div>
                 <ul className="caption flex flex-col gap-1">
@@ -135,12 +149,12 @@ const CastleDetails = () => {
                 <p>Rules</p>
                 <ul className="caption flex flex-col gap-1">
                   {listing.rules.map((r) => (
-                    <li>{r.label}</li>
+                    <li className="text-(--gray)">{r.label}</li>
                   ))}
                 </ul>
               </div>
-              <a className="underline" href="">
-                Full details
+              <a className="underline link" href="">
+                Full details {">"}
               </a>
             </div>
           </div>
@@ -148,22 +162,25 @@ const CastleDetails = () => {
           <hr className="w-85 m-auto border-(--color-gray)" />
 
           {/* castle owner details */}
-          <div className="flex my-5">
-            <div>
+          <div className="flex my-5 justify-between">
+            <div className="w-60">
               <h2 className="text-(--color-foreground)">
                 Meet the castle owner
               </h2>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ac
-                turpis tristique.{" "}
+                turpis tristique.
               </p>
             </div>
-            <div>
+            <div className="flex flex-col items-end">
               {/* PLaceholder image by Joseph Gonzalez at Unsplash.com */}
               <div className="bg-[url(assets/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg)] bg-cover bg-no-repeat bg-center w-[70px] h-[70px] rounded-full"></div>
               {/* <img className="rounded-full w-[70px] h-[70px]" src={profilePic} alt="" /> */}
-              <p>DummyStars</p>
-              <a className="underline" href="">
+              <p>★★★★★</p>
+              <a
+                className="caption link underline bg-[url(assets/Mail.svg)] bg-no-repeat bg-position-[0px] pl-6"
+                href=""
+              >
                 Contact host
               </a>
             </div>
@@ -181,7 +198,10 @@ const CastleDetails = () => {
 
           {/* Select dates */}
           <div className="flex flex-col my-5">
-            <h2 className="text-(--color-foreground)">Select dates</h2>
+            <div className="flex gap-2 items-center">
+              <img src={calendarIcon} alt="" />
+              <h2 className="text-(--color-foreground)">Select dates</h2>
+            </div>
             <DateCalendar
               selected={listingDates}
               onChange={updateDates}
@@ -191,30 +211,39 @@ const CastleDetails = () => {
 
           {/* Select guests */}
           <div className="flex flex-col my-5 gap-3">
-            <h2 className="text-(--color-foreground)">
-              Select how many guests
-            </h2>
+            <div className="flex gap-2 items-center">
+              <img src={guestsIcon} alt="" />
+              <h2 className="text-(--color-foreground)">
+                Select how many guests
+              </h2>
+            </div>
             <AddGuestsCounter castleListing={listing} />
           </div>
 
           {/* Select Room */}
-          <div className="flex flex-col my-5">
-            <h2 className="text-(--color-foreground)">Select a room</h2>
-            {listing.rooms.map((room) => (
-              <RoomCard
-                room={room}
-                isBookingRoom={true}
-                isRoomInCastleListing={
-                  selectedRooms.find((r) => r.title == room.title) == undefined
-                    ? false
-                    : true
-                }
-              />
-            ))}
+          <div className="flex flex-col gap-3">
+            <div className="flex gap-2 items-center">
+              <img src={bedIcon} alt="" />
+              <h2 className="text-(--color-foreground)">Select a room</h2>
+            </div>
+            <div className="flex flex-col gap-5">
+              {listing.rooms.map((room) => (
+                <RoomCard
+                  room={room}
+                  isBookingRoom={true}
+                  isRoomInCastleListing={
+                    selectedRooms.find((r) => r.title == room.title) ==
+                    undefined
+                      ? false
+                      : true
+                  }
+                />
+              ))}
+            </div>
           </div>
 
           {/* Total price and reserve */}
-          <div className="flex justify-between items-end my-5">
+          <div className="flex justify-between items-end my-8">
             <div>
               <p>Total:</p>
               <p className="underline text-(--color-primary)">{totalSum} SEK</p>
@@ -224,7 +253,7 @@ const CastleDetails = () => {
                 You will not be charged yet
               </p>
               <button
-                className="btn-primary disabled:bg-gray-400"
+                className="btn-primary"
                 onClick={() => navigate(`/book/?id=${listing._id}`)}
                 disabled={
                   selectedRooms.length == 0 ||

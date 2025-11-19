@@ -36,22 +36,22 @@ const RoomCard = ({
   }, [radioChecked]);
 
   return (
-    <div>
-      <div>
-        <h3>{room.title}</h3>
-        <p>{room.caption}</p>
-        <ul>
+    <div className="custom-shadow rounded-lg px-4 py-2">
+      <div className="mb-2">
+        <h2>{room.title}</h2>
+        <p className="caption text-(--gray)">{room.caption}</p>
+        <ul className="list-disc ml-8">
           {room.description.map((d) => (
             <li>{d}</li>
           ))}
         </ul>
       </div>
-      <hr />
-      <div>
-        <p>{room.price}</p>
+      <hr className="w-80 m-auto border-(--color-foreground)" />
+      <div className="flex justify-between my-3">
+        <p className="caption">{room.price}kr / night</p>
         {isBookingRoom ? (
-          <div>
-            <p>Select this room</p>
+          <div className="flex gap-2">
+            <p className="caption">Select this room</p>
             <input
               type="checkbox"
               name="Select room"
