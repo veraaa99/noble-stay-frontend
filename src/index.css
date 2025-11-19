@@ -46,8 +46,11 @@
   --color-sidebar-ring: var(--sidebar-ring);
 
   --color-gray: var(--gray);
+  --color-very-dark-brown: (--very-dark-brown);
   --color-action: var(--action);
   --color-action-hover: var(--action-hover);
+  --color-success: var(--success);
+  --color-error: var(--error);
 
   --font-playfair: var(--font-playfair);
   --default-font-family: var(--font-poppins);
@@ -89,8 +92,11 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   --gray: oklch(0.738 0 0);
+  --very-dark-brown: oklch(0.145 0 0);
   --action: oklch(0.7665 0.1387 91.06);
   --action-hover: oklch(0.8637 0.1399 92.07);
+  --success: oklch(0.7141 0.0789 168.72);
+  --error: oklch(0.5054 0.1403 23.57);
 
   --font-playfair: "Playfair Display", "serif";
   --font-poppins: "Poppins", "sans-serif";
@@ -132,6 +138,11 @@
 
   --action: oklch(0.7665 0.1387 91.06);
   --action-hover: oklch(0.8637 0.1399 92.07);
+  --success: oklch(0.7141 0.0789 168.72);
+  --error: oklch(0.5054 0.1403 23.57);
+
+  --font-playfair: "Playfair Display", "serif";
+  --font-poppins: "Poppins", "sans-serif";
 }
 
 @layer base {
@@ -139,7 +150,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground min-h-svh;
+    @apply bg-background text-(--very-dark-brown) min-h-svh;
   }
 
   h1 {
@@ -183,7 +194,7 @@
   }
 
   ::placeholder {
-    color: var(--foreground);
+    color: var(--very-dark-brown);
   }
 
   .btn-primary {
@@ -202,11 +213,10 @@
   }
 
   .btn-secondary {
-    @apply bg-(--color-secondary) rounded-4xl border-2;
+    @apply bg-(--color-secondary) rounded-4xl border-2 border-(--primary)/40;
     width: 144px;
     height: 40px;
-    color: var(--color-foreground);
-    border-color: var(--color-primary) / 40;
+    color: var(--color-primary);
   }
 
   .btn-secondary:hover {
@@ -218,7 +228,7 @@
     @apply bg-(--color-action) rounded-4xl;
     width: 144px;
     height: 40px;
-    color: var(--foreground);
+    color: var(--very-dark-brown);
   }
 
   .btn-action:hover {

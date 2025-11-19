@@ -46,31 +46,44 @@ const RoomCard = ({
           ))}
         </ul>
       </div>
-      <hr className="w-80 m-auto border-(--color-foreground)" />
+      <hr className="w-60 m-auto border-(--color-foreground)" />
       <div className="flex justify-between my-3">
         <p className="caption">{room.price}kr / night</p>
         {isBookingRoom ? (
           <div className="flex gap-2">
             <p className="caption">Select this room</p>
-            <input
-              type="checkbox"
-              name="Select room"
-              checked={radioChecked}
-              id={room.title}
-              onChange={() => {
-                setRadioChecked((radioChecked) => !radioChecked);
-              }}
-            />
+            <label className="container w-fit">
+              <input
+                // Ändra till radio button? kolla senare
+                type="checkbox"
+                checked={radioChecked}
+                name="Select room"
+                onChange={() => {
+                  setRadioChecked((radioChecked) => !radioChecked);
+                }}
+              />
+              <span className="checkmark"></span>
+            </label>
           </div>
         ) : (
-          <div>
+          <div className="flex gap-2">
             <label htmlFor="addRoom">Add room</label>
-            <input
+            <label className="container w-fit">
+              <input
+                type="checkbox"
+                checked={checked}
+                id="addRoom"
+                onChange={handleOnChange}
+              />
+              <span className="checkmark"></span>
+            </label>
+
+            {/* <input
               type="checkbox"
               id="addRoom"
               checked={checked}
               onChange={handleOnChange}
-            />
+            /> */}
           </div>
         )}
       </div>

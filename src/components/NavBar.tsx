@@ -84,7 +84,7 @@ const NavBar = () => {
               <p>All castles</p>
             </div>
           </Link>
-          {token !== null && (
+          {currentUser !== null && (
             <Link to={"/profile"} onClick={menuModalHandler}>
               <div className="bg-(--primary) px-5 text-(--background) font-light py-2">
                 <p>My bookings</p>
@@ -92,7 +92,7 @@ const NavBar = () => {
             </Link>
           )}
           <div className="bg-(--primary) px-5 text-(--background) font-light py-2">
-            {!token || token == null ? (
+            {currentUser == null ? (
               <p onClick={loginModalHandler}>Login / Sign up</p>
             ) : (
               <p onClick={logoutHandler}>Logout</p>

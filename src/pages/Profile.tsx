@@ -20,6 +20,8 @@ const Profile = () => {
   const [castleToEdit, setCastleToEdit] = useState<CastleListing | null>(null);
   const [isListingUpdated, setIsListingUpdated] = useState<boolean>(false);
 
+  const [loading, setLoading] = useState(false);
+
   const listingEditorHandler = (castle: CastleListing) => {
     setIsEditorModalOpen((isEditorModalOpen) => !isEditorModalOpen);
 
@@ -32,6 +34,8 @@ const Profile = () => {
   };
 
   const removeListingHandler = async (id: string) => {
+    setLoading(true);
+
     try {
       let res = await axios.delete(`/api/listings/${id}`, {
         headers: {
@@ -46,6 +50,8 @@ const Profile = () => {
     } catch (error: any) {
       console.log(error.message);
       return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -112,46 +118,58 @@ const Profile = () => {
   };
 
   return (
-    <div>
+    <div className="m-auto px-7 mt-5">
       {/* Full account information */}
-      <div>
+      <div className="flex flex-col gap-5">
         {/* Title */}
         <h1>Profile</h1>
         {/* Account details */}
         <div>
           <h2>Account details</h2>
-          <div>
-            <h3>Email</h3>
-            <p>{user?.email}</p>
-            <hr />
-            <h3>Mobile</h3>
-            <p>{user?.phone}</p>
+          <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3">
+            <div className="flex-flex-col gap-2 mb-3">
+              <h3 className="text-(--very-dark-brown)">Email</h3>
+              <p>{user?.email}</p>
+            </div>
+            <hr className="w-70 m-auto border-(--gray)" />
+            <div className="flex-flex-col gap-2 mt-3">
+              <h3 className="text-(--very-dark-brown)">Mobile</h3>
+              <p>{user?.phone}</p>
+            </div>
           </div>
         </div>
 
         {/* My bookings */}
         <div>
           <h2>My bookings</h2>
-          {userBookings.length > 0 &&
-            userBookings.map((b) => <Booking booking={b} />)}
+          {userBookings.length > 0 ? (
+            userBookings.map((b) => (
+              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3">
+                <Booking booking={b} />
+              </div>
+            ))
+          ) : (
+            <p className="caption mt-3">No bookings placed yet</p>
+          )}
         </div>
 
         {/* My listings */}
         <div>
           <h2>My listings</h2>
-          {userListings.length > 0 &&
+          {userListings.length > 0 ? (
             userListings.map((c) => (
-              <>
+              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3">
                 <CreatedListing
                   castle={c}
                   listingEditorHandler={listingEditorHandler}
                   removeListingHandler={removeListingHandler}
+                  loading={loading}
                 />
                 {listingEditorHandler &&
                   castleToEdit !== null &&
                   castleToEdit == c && (
-                    <div>
-                      <h1>Edit castle {c.title}</h1>
+                    <div className="flex flex-col m-auto">
+                      <h1 className="my-2">Edit castle {c.title}</h1>
                       <UpdateListingForm
                         castle={c}
                         listingEditorHandler={listingEditorHandler}
@@ -159,14 +177,19 @@ const Profile = () => {
                       />
                     </div>
                   )}
-              </>
-            ))}
+              </div>
+            ))
+          ) : (
+            <p className="caption mt-3">No listings created yet</p>
+          )}
         </div>
 
         {/* Create new castle listing */}
         <div>
           <h2>Create new castle listing</h2>
-          <ListingForm setIsListingUpdated={setIsListingUpdated} />
+          <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3">
+            <ListingForm setIsListingUpdated={setIsListingUpdated} />
+          </div>
         </div>
       </div>
     </div>

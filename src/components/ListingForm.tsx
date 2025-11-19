@@ -299,12 +299,14 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
       <form
         action=""
         onSubmit={handleSubmit(async (data) => await onSubmit(data))}
+        className="flex flex-col gap-3.5 mb-5"
       >
         <div>
           <h3>Name of castle</h3>
           <input
             type="title"
             id="title"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
             {...register("title", { required: true })}
           />
           {errors.title && errors.title.type === "required" && (
@@ -318,6 +320,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           <input
             type="location"
             id="location"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
             {...register("location", { required: true })}
           />
           {errors.location && errors.location.type === "required" && (
@@ -331,6 +334,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           <input
             type="description"
             id="description"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
             {...register("description", { required: true })}
           />
           {errors.description && errors.description.type === "required" && (
@@ -359,7 +363,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           )}
         </div>
         <div>
-          <h3>Set maximum of guests per booking</h3>
+          <h3 className="mb-2">Set maximum of guests per booking</h3>
 
           <Controller
             name="guests"
@@ -379,7 +383,8 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
             </p>
           )}
         </div>
-        <div>
+
+        <div className="flex flex-col gap-5">
           <h3>Add at least one room</h3>
 
           <Controller
@@ -422,165 +427,168 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           )}
         </div>
 
-        <div>
-          <h3>What amneties do you offer?</h3>
-          <Controller
-            name="amneties"
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
-              <Tags className="max-w-[300px]">
-                <TagsTrigger>
-                  {selectedAmneties.map((amnety) => (
-                    <TagsValue
-                      key={amnety.id}
-                      onRemove={() => {
-                        onChange(handleRemove("amnety", amnety));
-                      }}
-                    >
-                      {amneties.find((t) => t.id === amnety.id)?.label}
-                    </TagsValue>
-                  ))}
-                </TagsTrigger>
-                <TagsContent>
-                  <TagsInput placeholder="Search amnety..." />
-                  <TagsList>
-                    <TagsEmpty />
-                    <TagsGroup>
-                      {amneties.map((amnety) => (
-                        <TagsItem
-                          key={amnety.id}
-                          onSelect={() => {
-                            onChange(handleSelect("amnety", amnety));
-                          }}
-                          value={amnety.id}
-                        >
-                          {amnety.label}
-                          {selectedAmneties.includes(amnety) && (
-                            <CheckIcon
-                              className="text-muted-foreground"
-                              size={14}
-                            />
-                          )}
-                        </TagsItem>
-                      ))}
-                    </TagsGroup>
-                  </TagsList>
-                </TagsContent>
-              </Tags>
+        <div className="flex flex-col gap-3">
+          <div>
+            <h3 className="mb-2">What amneties do you offer?</h3>
+            <Controller
+              name="amneties"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <Tags className="max-w-[300px]">
+                  <TagsTrigger>
+                    {selectedAmneties.map((amnety) => (
+                      <TagsValue
+                        key={amnety.id}
+                        onRemove={() => {
+                          onChange(handleRemove("amnety", amnety));
+                        }}
+                      >
+                        {amneties.find((t) => t.id === amnety.id)?.label}
+                      </TagsValue>
+                    ))}
+                  </TagsTrigger>
+                  <TagsContent>
+                    <TagsInput placeholder="Search amnety..." />
+                    <TagsList>
+                      <TagsEmpty />
+                      <TagsGroup>
+                        {amneties.map((amnety) => (
+                          <TagsItem
+                            key={amnety.id}
+                            onSelect={() => {
+                              onChange(handleSelect("amnety", amnety));
+                            }}
+                            value={amnety.id}
+                          >
+                            {amnety.label}
+                            {selectedAmneties.includes(amnety) && (
+                              <CheckIcon
+                                className="text-muted-foreground"
+                                size={14}
+                              />
+                            )}
+                          </TagsItem>
+                        ))}
+                      </TagsGroup>
+                    </TagsList>
+                  </TagsContent>
+                </Tags>
+              )}
+            />
+            {errors.amneties && errors.amneties.type === "required" && (
+              <p className="text-red-500 text-xs italic mt-1">
+                Pick at least one amnety the castle offers
+              </p>
             )}
-          />
-          {errors.amneties && errors.amneties.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
-              Pick at least one amnety the castle offers
-            </p>
-          )}
-        </div>
-        <div>
-          <h3>What events do you offer? (optional)</h3>
+          </div>
+          <div>
+            <h3 className="mb-2">What events do you offer? (optional)</h3>
 
-          <Controller
-            name="events"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Tags className="max-w-[300px]">
-                <TagsTrigger>
-                  {selectedEvents.map((event) => (
-                    <TagsValue
-                      key={event.id}
-                      onRemove={() => {
-                        onChange(handleRemove("event", event));
-                      }}
-                    >
-                      {events.find((t) => t.id === event.id)?.label}
-                    </TagsValue>
-                  ))}
-                </TagsTrigger>
-                <TagsContent>
-                  <TagsInput placeholder="Search events..." />
-                  <TagsList>
-                    <TagsEmpty />
-                    <TagsGroup>
-                      {events.map((event) => (
-                        <TagsItem
-                          key={event.id}
-                          onSelect={() => {
-                            onChange(handleSelect("event", event));
-                          }}
-                          value={event.id}
-                        >
-                          {event.label}
-                          {selectedEvents.includes(event) && (
-                            <CheckIcon
-                              className="text-muted-foreground"
-                              size={14}
-                            />
-                          )}
-                        </TagsItem>
-                      ))}
-                    </TagsGroup>
-                  </TagsList>
-                </TagsContent>
-              </Tags>
+            <Controller
+              name="events"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Tags className="max-w-[300px]">
+                  <TagsTrigger>
+                    {selectedEvents.map((event) => (
+                      <TagsValue
+                        key={event.id}
+                        onRemove={() => {
+                          onChange(handleRemove("event", event));
+                        }}
+                      >
+                        {events.find((t) => t.id === event.id)?.label}
+                      </TagsValue>
+                    ))}
+                  </TagsTrigger>
+                  <TagsContent>
+                    <TagsInput placeholder="Search events..." />
+                    <TagsList>
+                      <TagsEmpty />
+                      <TagsGroup>
+                        {events.map((event) => (
+                          <TagsItem
+                            key={event.id}
+                            onSelect={() => {
+                              onChange(handleSelect("event", event));
+                            }}
+                            value={event.id}
+                          >
+                            {event.label}
+                            {selectedEvents.includes(event) && (
+                              <CheckIcon
+                                className="text-muted-foreground"
+                                size={14}
+                              />
+                            )}
+                          </TagsItem>
+                        ))}
+                      </TagsGroup>
+                    </TagsList>
+                  </TagsContent>
+                </Tags>
+              )}
+            />
+          </div>
+          <div>
+            <h3 className="mb-2">Set house rules and cancellation policy</h3>
+            <Controller
+              name="rules"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <Tags className="max-w-[300px]">
+                  <TagsTrigger>
+                    {selectedRules.map((rule) => (
+                      <TagsValue
+                        key={rule.id}
+                        onRemove={() => {
+                          onChange(handleRemove("rule", rule));
+                        }}
+                      >
+                        {rules.find((t) => t.id === rule.id)?.label}
+                      </TagsValue>
+                    ))}
+                  </TagsTrigger>
+                  <TagsContent>
+                    <TagsInput placeholder="Pick a rule..." />
+                    <TagsList>
+                      <TagsEmpty />
+                      <TagsGroup>
+                        {rules.map((rule) => (
+                          <TagsItem
+                            key={rule.id}
+                            onSelect={() => {
+                              onChange(handleSelect("rule", rule));
+                            }}
+                            value={rule.id}
+                          >
+                            {rule.label}
+                            {selectedRules.includes(rule) && (
+                              <CheckIcon
+                                className="text-muted-foreground"
+                                size={14}
+                              />
+                            )}
+                          </TagsItem>
+                        ))}
+                      </TagsGroup>
+                    </TagsList>
+                  </TagsContent>
+                </Tags>
+              )}
+            />
+            {errors.rules && errors.rules.type === "required" && (
+              <p className="text-red-500 text-xs italic mt-1">
+                Pick at least one house rule for the castle
+              </p>
             )}
-          />
+          </div>
         </div>
+
         <div>
-          <h3>Set house rules and cancellation policy</h3>
-          <Controller
-            name="rules"
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
-              <Tags className="max-w-[300px]">
-                <TagsTrigger>
-                  {selectedRules.map((rule) => (
-                    <TagsValue
-                      key={rule.id}
-                      onRemove={() => {
-                        onChange(handleRemove("rule", rule));
-                      }}
-                    >
-                      {rules.find((t) => t.id === rule.id)?.label}
-                    </TagsValue>
-                  ))}
-                </TagsTrigger>
-                <TagsContent>
-                  <TagsInput placeholder="Pick a rule..." />
-                  <TagsList>
-                    <TagsEmpty />
-                    <TagsGroup>
-                      {rules.map((rule) => (
-                        <TagsItem
-                          key={rule.id}
-                          onSelect={() => {
-                            onChange(handleSelect("rule", rule));
-                          }}
-                          value={rule.id}
-                        >
-                          {rule.label}
-                          {selectedRules.includes(rule) && (
-                            <CheckIcon
-                              className="text-muted-foreground"
-                              size={14}
-                            />
-                          )}
-                        </TagsItem>
-                      ))}
-                    </TagsGroup>
-                  </TagsList>
-                </TagsContent>
-              </Tags>
-            )}
-          />
-          {errors.rules && errors.rules.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
-              Pick at least one house rule for the castle
-            </p>
-          )}
-        </div>
-        <div>
-          <h3>Upload images of your castle</h3>
+          <h3 className="mb-2">Upload images of your castle</h3>
           <Controller
             name="images"
             control={control}
@@ -607,8 +615,10 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           )}
         </div>
 
-        <p className="text-center text-lg mt-5">{formError}</p>
-        <button type="submit">Submit listing</button>
+        <p className="text-center caption text-(--error) mt-5">{formError}</p>
+        <button className="btn-action m-auto" type="submit">
+          Submit listing
+        </button>
       </form>
     </div>
   );

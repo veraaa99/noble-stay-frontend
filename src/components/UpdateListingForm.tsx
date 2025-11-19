@@ -63,6 +63,8 @@ const UpdateListingForm = ({
   const [formError, setFormError] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
+  const [loading, setLoading] = useState(false);
+
   const [selectedAmneties, setSelectedAmneties] = useState<FilterOption[]>([
     ...(castle.amneties as FilterOption[]),
   ]);
@@ -324,6 +326,8 @@ const UpdateListingForm = ({
       dataToSubmit = { ...updatedData };
     }
 
+    setLoading(true);
+
     try {
       const res = await axios.put(`api/listings/${castle._id}`, dataToSubmit, {
         headers: {
@@ -333,7 +337,6 @@ const UpdateListingForm = ({
 
       if (res.status === 200) {
         actions.updateListing(res.data);
-        console.log("Castle updated!");
         setFormError("");
         setIsSubmitted(true);
         listingEditorHandler(res.data);
@@ -344,9 +347,10 @@ const UpdateListingForm = ({
     } catch (error: any) {
       setFormError(error.response?.data?.message || "Something went wrong");
       console.log(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+      return;
     }
-
-    return;
   };
 
   return (
@@ -354,12 +358,14 @@ const UpdateListingForm = ({
       <form
         action=""
         onSubmit={handleSubmit(async (data) => await onSubmit(data))}
+        className="flex flex-col gap-3.5 mb-5"
       >
         <div>
           <h3>Name of castle</h3>
           <input
             type="title"
             id="title"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
             {...register("title", { required: true })}
           />
           {errors.title && errors.title.type === "required" && (
@@ -373,6 +379,7 @@ const UpdateListingForm = ({
           <input
             type="location"
             id="location"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
             {...register("location", { required: true })}
           />
 
@@ -387,6 +394,7 @@ const UpdateListingForm = ({
           <input
             type="description"
             id="description"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
             {...register("description", { required: true })}
           />
           {errors.description && errors.description.type === "required" && (
@@ -416,7 +424,7 @@ const UpdateListingForm = ({
           )}
         </div>
         <div>
-          <h3>Set maximum of guests per booking</h3>
+          <h3 className="mb-2">Set maximum of guests per booking</h3>
 
           <Controller
             name="guests"
@@ -437,59 +445,62 @@ const UpdateListingForm = ({
           )}
         </div>
         <div>
-          <h3>Add at least one room</h3>
+          <h3 className="mb-2">Add at least one room</h3>
 
-          <Controller
-            name="rooms"
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
-              <>
-                <RoomCard
-                  room={rooms[0]}
-                  onChange={() => {
-                    onChange(handleRoomsSelect(rooms[0]));
-                  }} // send value to hook form
-                  selected={rooms[0]}
-                  isBookingRoom={false}
-                  isRoomInCastleListing={
-                    selectedRooms.find((r) => r.title == rooms[0].title) ==
-                    undefined
-                      ? false
-                      : true
-                  }
-                />
-                <RoomCard
-                  room={rooms[1]}
-                  onChange={() => {
-                    onChange(handleRoomsSelect(rooms[1]));
-                  }} // send value to hook form
-                  selected={rooms[1]}
-                  isBookingRoom={false}
-                  isRoomInCastleListing={
-                    selectedRooms.find((r) => r.title == rooms[1].title) ==
-                    undefined
-                      ? false
-                      : true
-                  }
-                />
-                <RoomCard
-                  room={rooms[2]}
-                  onChange={() => {
-                    onChange(handleRoomsSelect(rooms[2]));
-                  }} // send value to hook form
-                  selected={rooms[2]}
-                  isBookingRoom={false}
-                  isRoomInCastleListing={
-                    selectedRooms.find((r) => r.title == rooms[2].title) ==
-                    undefined
-                      ? false
-                      : true
-                  }
-                />
-              </>
-            )}
-          />
+          <div className="flex flex-col gap-5">
+            <Controller
+              name="rooms"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <>
+                  <RoomCard
+                    room={rooms[0]}
+                    onChange={() => {
+                      onChange(handleRoomsSelect(rooms[0]));
+                    }} // send value to hook form
+                    selected={rooms[0]}
+                    isBookingRoom={false}
+                    isRoomInCastleListing={
+                      selectedRooms.find((r) => r.title == rooms[0].title) ==
+                      undefined
+                        ? false
+                        : true
+                    }
+                  />
+                  <RoomCard
+                    room={rooms[1]}
+                    onChange={() => {
+                      onChange(handleRoomsSelect(rooms[1]));
+                    }} // send value to hook form
+                    selected={rooms[1]}
+                    isBookingRoom={false}
+                    isRoomInCastleListing={
+                      selectedRooms.find((r) => r.title == rooms[1].title) ==
+                      undefined
+                        ? false
+                        : true
+                    }
+                  />
+                  <RoomCard
+                    room={rooms[2]}
+                    onChange={() => {
+                      onChange(handleRoomsSelect(rooms[2]));
+                    }} // send value to hook form
+                    selected={rooms[2]}
+                    isBookingRoom={false}
+                    isRoomInCastleListing={
+                      selectedRooms.find((r) => r.title == rooms[2].title) ==
+                      undefined
+                        ? false
+                        : true
+                    }
+                  />
+                </>
+              )}
+            />
+          </div>
+
           {errors.rooms && errors.rooms.type === "required" && (
             <p className="text-red-500 text-xs italic mt-1">
               Pick at least one room for the castle
@@ -497,167 +508,170 @@ const UpdateListingForm = ({
           )}
         </div>
 
-        <div>
-          <h3>What amneties do you offer?</h3>
-          <Controller
-            name="amneties"
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
-              <Tags className="max-w-[300px]">
-                <TagsTrigger>
-                  {selectedAmneties.map((amnety) => (
-                    <TagsValue
-                      key={amnety.id}
-                      onRemove={() => {
-                        // handleRemove("amnety", amnety),
-                        onChange(handleRemove("amnety", amnety));
-                      }}
-                    >
-                      {amneties.find((a) => a.id === amnety.id)?.label}
-                    </TagsValue>
-                  ))}
-                </TagsTrigger>
-                <TagsContent>
-                  <TagsInput placeholder="Search amnety..." />
-                  <TagsList>
-                    <TagsEmpty />
-                    <TagsGroup>
-                      {amneties.map((amnety) => (
-                        <TagsItem
-                          key={amnety.id}
-                          onSelect={() => {
-                            // handleSelect("amnety", amnety.id),
-                            onChange(handleSelect("amnety", amnety));
-                          }}
-                          value={amnety.id}
-                        >
-                          {amnety.label}
-                          {selectedAmneties.includes(amnety) && (
-                            <CheckIcon
-                              className="text-muted-foreground"
-                              size={14}
-                            />
-                          )}
-                        </TagsItem>
-                      ))}
-                    </TagsGroup>
-                  </TagsList>
-                </TagsContent>
-              </Tags>
+        <div className="flex flex-col gap-3">
+          <div>
+            <h3 className="mb-2">What amneties do you offer?</h3>
+            <Controller
+              name="amneties"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <Tags className="max-w-[300px]">
+                  <TagsTrigger>
+                    {selectedAmneties.map((amnety) => (
+                      <TagsValue
+                        key={amnety.id}
+                        onRemove={() => {
+                          // handleRemove("amnety", amnety),
+                          onChange(handleRemove("amnety", amnety));
+                        }}
+                      >
+                        {amneties.find((a) => a.id === amnety.id)?.label}
+                      </TagsValue>
+                    ))}
+                  </TagsTrigger>
+                  <TagsContent>
+                    <TagsInput placeholder="Search amnety..." />
+                    <TagsList>
+                      <TagsEmpty />
+                      <TagsGroup>
+                        {amneties.map((amnety) => (
+                          <TagsItem
+                            key={amnety.id}
+                            onSelect={() => {
+                              // handleSelect("amnety", amnety.id),
+                              onChange(handleSelect("amnety", amnety));
+                            }}
+                            value={amnety.id}
+                          >
+                            {amnety.label}
+                            {selectedAmneties.includes(amnety) && (
+                              <CheckIcon
+                                className="text-muted-foreground"
+                                size={14}
+                              />
+                            )}
+                          </TagsItem>
+                        ))}
+                      </TagsGroup>
+                    </TagsList>
+                  </TagsContent>
+                </Tags>
+              )}
+            />
+            {errors.amneties && errors.amneties.type === "required" && (
+              <p className="text-red-500 text-xs italic mt-1">
+                Pick at least one amnety the castle offers
+              </p>
             )}
-          />
-          {errors.amneties && errors.amneties.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
-              Pick at least one amnety the castle offers
-            </p>
-          )}
+          </div>
+
+          <div>
+            <h3 className="mb-2">What events do you offer? (optional)</h3>
+            <Controller
+              name="events"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Tags className="max-w-[300px]">
+                  <TagsTrigger>
+                    {selectedEvents.map((event) => (
+                      <TagsValue
+                        key={event.id}
+                        onRemove={() => {
+                          onChange(handleRemove("event", event));
+                        }}
+                      >
+                        {events.find((e) => e.id === event.id)?.label}
+                      </TagsValue>
+                    ))}
+                  </TagsTrigger>
+                  <TagsContent>
+                    <TagsInput placeholder="Search events..." />
+                    <TagsList>
+                      <TagsEmpty />
+                      <TagsGroup>
+                        {events.map((event) => (
+                          <TagsItem
+                            key={event.id}
+                            onSelect={() => {
+                              onChange(handleSelect("event", event));
+                            }}
+                            value={event.id}
+                          >
+                            {event.label}
+                            {selectedEvents.includes(event) && (
+                              <CheckIcon
+                                className="text-muted-foreground"
+                                size={14}
+                              />
+                            )}
+                          </TagsItem>
+                        ))}
+                      </TagsGroup>
+                    </TagsList>
+                  </TagsContent>
+                </Tags>
+              )}
+            />
+          </div>
+          <div>
+            <h3 className="mb-2">Set house rules and cancellation policy</h3>
+            <Controller
+              name="rules"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, value } }) => (
+                <Tags className="max-w-[300px]">
+                  <TagsTrigger>
+                    {selectedRules.map((rule) => (
+                      <TagsValue
+                        key={rule.id}
+                        onRemove={() => {
+                          onChange(handleRemove("rule", rule));
+                        }}
+                      >
+                        {rules.find((t) => t.id === rule.id)?.label}
+                      </TagsValue>
+                    ))}
+                  </TagsTrigger>
+                  <TagsContent>
+                    <TagsInput placeholder="Pick a rule..." />
+                    <TagsList>
+                      <TagsEmpty />
+                      <TagsGroup>
+                        {rules.map((rule) => (
+                          <TagsItem
+                            key={rule.id}
+                            onSelect={() => {
+                              onChange(handleSelect("rule", rule));
+                            }}
+                            value={rule.id}
+                          >
+                            {rule.label}
+                            {selectedRules.includes(rule) && (
+                              <CheckIcon
+                                className="text-muted-foreground"
+                                size={14}
+                              />
+                            )}
+                          </TagsItem>
+                        ))}
+                      </TagsGroup>
+                    </TagsList>
+                  </TagsContent>
+                </Tags>
+              )}
+            />
+            {errors.rules && errors.rules.type === "required" && (
+              <p className="text-red-500 text-xs italic mt-1">
+                Pick at least one house rule for the castle
+              </p>
+            )}
+          </div>
         </div>
 
         <div>
-          <h3>What events do you offer? (optional)</h3>
-          <Controller
-            name="events"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Tags className="max-w-[300px]">
-                <TagsTrigger>
-                  {selectedEvents.map((event) => (
-                    <TagsValue
-                      key={event.id}
-                      onRemove={() => {
-                        onChange(handleRemove("event", event));
-                      }}
-                    >
-                      {events.find((e) => e.id === event.id)?.label}
-                    </TagsValue>
-                  ))}
-                </TagsTrigger>
-                <TagsContent>
-                  <TagsInput placeholder="Search events..." />
-                  <TagsList>
-                    <TagsEmpty />
-                    <TagsGroup>
-                      {events.map((event) => (
-                        <TagsItem
-                          key={event.id}
-                          onSelect={() => {
-                            onChange(handleSelect("event", event));
-                          }}
-                          value={event.id}
-                        >
-                          {event.label}
-                          {selectedEvents.includes(event) && (
-                            <CheckIcon
-                              className="text-muted-foreground"
-                              size={14}
-                            />
-                          )}
-                        </TagsItem>
-                      ))}
-                    </TagsGroup>
-                  </TagsList>
-                </TagsContent>
-              </Tags>
-            )}
-          />
-        </div>
-        <div>
-          <h3>Set house rules and cancellation policy</h3>
-          <Controller
-            name="rules"
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
-              <Tags className="max-w-[300px]">
-                <TagsTrigger>
-                  {selectedRules.map((rule) => (
-                    <TagsValue
-                      key={rule.id}
-                      onRemove={() => {
-                        onChange(handleRemove("rule", rule));
-                      }}
-                    >
-                      {rules.find((t) => t.id === rule.id)?.label}
-                    </TagsValue>
-                  ))}
-                </TagsTrigger>
-                <TagsContent>
-                  <TagsInput placeholder="Pick a rule..." />
-                  <TagsList>
-                    <TagsEmpty />
-                    <TagsGroup>
-                      {rules.map((rule) => (
-                        <TagsItem
-                          key={rule.id}
-                          onSelect={() => {
-                            onChange(handleSelect("rule", rule));
-                          }}
-                          value={rule.id}
-                        >
-                          {rule.label}
-                          {selectedRules.includes(rule) && (
-                            <CheckIcon
-                              className="text-muted-foreground"
-                              size={14}
-                            />
-                          )}
-                        </TagsItem>
-                      ))}
-                    </TagsGroup>
-                  </TagsList>
-                </TagsContent>
-              </Tags>
-            )}
-          />
-          {errors.rules && errors.rules.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
-              Pick at least one house rule for the castle
-            </p>
-          )}
-        </div>
-        <div>
-          <h3>Upload images of your castle</h3>
+          <h3 className="mb-2">Upload images of your castle</h3>
           <Controller
             name="images"
             control={control}
@@ -681,8 +695,23 @@ const UpdateListingForm = ({
             </p>
           )}
         </div>
-        <p className="text-center text-lg mt-5">{formError}</p>
-        <button type="submit">Submit listing</button>
+        <p className="text-center caption text-(--error) mt-5">{formError}</p>
+
+        <div className="flex justify-between">
+          <button
+            className="btn-action m-auto"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Updating..." : "Update listing"}
+          </button>
+          <button
+            className="btn-secondary m-auto"
+            onClick={() => listingEditorHandler(castle)}
+          >
+            Discard changes
+          </button>
+        </div>
       </form>
     </div>
   );

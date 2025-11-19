@@ -22,15 +22,6 @@ const PaymentOptions = () => {
           />
           <span className="checkmark"></span>
         </label>
-
-        {/* <input
-          type="radio"
-          name="paymentMethod"
-          id="creditCard"
-          value="creditCard"
-          checked={selected === "creditCard"}
-          onChange={handleChange}
-        /> */}
       </div>
       <div className="w-70 flex justify-between bg-white py-3 pl-10 border-1 border-(--sidebar-border)  rounded-md">
         <label htmlFor="payPal">PayPal</label>
@@ -45,15 +36,6 @@ const PaymentOptions = () => {
           />
           <span className="checkmark"></span>
         </label>
-
-        {/* <input
-          type="radio"
-          name="paymentMethod"
-          id="payPal"
-          value="payPal"
-          checked={selected === "payPal"}
-          onChange={handleChange}
-        /> */}
       </div>
       <div className="w-70 flex justify-between bg-white py-3 pl-10 border-1 border-(--sidebar-border) rounded-md">
         <label htmlFor="swish">Swish</label>
@@ -68,15 +50,6 @@ const PaymentOptions = () => {
           />
           <span className="checkmark"></span>
         </label>
-
-        {/* <input
-          type="radio"
-          name="paymentMethod"
-          id="swish"
-          value="swish"
-          checked={selected === "swish"}
-          onChange={handleChange}
-        /> */}
       </div>
     </div>
   );

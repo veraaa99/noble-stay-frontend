@@ -23,8 +23,13 @@ const PlaceBooking = () => {
   const navigate = useNavigate();
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(
+    currentUser ? false : true
+  );
+
   const [castle, setCastle] = useState<CastleListing | undefined>();
   const [totalSum, setTotalSum] = useState<number>();
+  const [loading, setLoading] = useState(false);
 
   const castleId = searchParams.get("id");
 
@@ -73,15 +78,6 @@ const PlaceBooking = () => {
     getTotalSum();
   }, []);
 
-  // const newAllGuests: Guest[] = [...selectedGuests];
-  // const totalAmountOfGuests: number[] = newAllGuests.map((g) => g.number);
-
-  // let sum = 0;
-  // let i = 0;
-  // for (i = 0; i < totalAmountOfGuests.length; i++) {
-  //   sum += totalAmountOfGuests[i];
-  // }
-
   const handleBookingSubmit = async () => {
     if (!castle) {
       console.log(
@@ -112,6 +108,9 @@ const PlaceBooking = () => {
       bookedGuests: selectedGuests,
     };
 
+    // setFormError("");
+    setLoading(true);
+
     try {
       const res = await axios.post(`api/bookings`, newBooking, {
         headers: {
@@ -120,17 +119,24 @@ const PlaceBooking = () => {
       });
 
       if (res.status === 201) {
-        console.log(res.data);
+        navigate(`/confirmed?bookingId=${res.data._id}`);
       }
-
-      navigate(`/confirmed?bookingId=${res.data._id}`);
     } catch (error: any) {
       console.log(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+      return;
     }
   };
 
   const loginModalHandler = () => {
     setIsLoginModalOpen((isLoginModalOpen) => !isLoginModalOpen);
+    setIsRegisterModalOpen(false);
+  };
+
+  const registerModalHandler = () => {
+    setIsRegisterModalOpen((isRegisterModalOpen) => !isRegisterModalOpen);
+    setIsLoginModalOpen(false);
   };
 
   return (
@@ -161,7 +167,6 @@ const PlaceBooking = () => {
                 <h2>{castle.title}</h2>
                 <div className="flex gap-1">
                   <img src={locationIcon} alt="" />
-
                   <p>{castle.location}</p>
                 </div>
                 <ul className="caption flex flex-col gap-1">
@@ -221,27 +226,44 @@ const PlaceBooking = () => {
             // IF LOGGED IN: Select payment method
             <div className="flex flex-col items-center mb-15">
               <h2>Select payment method</h2>
-              <p className="caption mb-3">
+              <p className="caption text-(--gray) mb-3">
                 Disclaimer: you will not be charged
               </p>
               <PaymentOptions />
-              <button className="btn-action mt-5" onClick={handleBookingSubmit}>
-                Book
+              <button
+                className="btn-action mt-5"
+                onClick={handleBookingSubmit}
+                disabled={loading}
+              >
+                {loading ? <p>Placing booking...</p> : "Book"}
               </button>
             </div>
           ) : (
-            // IF NOT LOGGED IN: Sign up form
-            <div>
-              <h1>Sign up to Noble Stay to continue to payment</h1>
-              <RegisterForm />
-              <p>Already have an account?</p>{" "}
-              <p onClick={loginModalHandler}>LOG IN</p>
-            </div>
+            isRegisterModalOpen && (
+              // IF NOT LOGGED IN: Sign up form
+              <div className="flex flex-col items-center px-6 mb-18">
+                <h2 className="text-center">
+                  Sign up to Noble Stay to continue to payment
+                </h2>
+                <RegisterForm />
+                <div className="flex items-center justify-center gap-2">
+                  <p className="caption">Already have an account?</p>{" "}
+                  <p className="link underline" onClick={loginModalHandler}>
+                    LOG IN
+                  </p>
+                </div>
+              </div>
+            )
           )}
           {isLoginModalOpen && (
-            <div>
-              <p onClick={loginModalHandler}>X</p>
+            <div className="flex flex-col items-center px-6 mb-18">
               <LoginForm setIsLoginModalOpen={setIsLoginModalOpen} />
+              <div className="flex items-center justify-center gap-2">
+                <p className="caption">Don't have an account?</p>
+                <p className="link underline" onClick={registerModalHandler}>
+                  SIGN UP
+                </p>
+              </div>
             </div>
           )}
         </div>
