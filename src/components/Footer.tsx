@@ -1,30 +1,36 @@
+import nobleStayLogo from '../assets/Logo.svg'
+
+import { MdOutlinePhoneInTalk } from "react-icons/md";
+import { MdMailOutline } from "react-icons/md";
+import { MdOutlineLocationOn } from "react-icons/md";
+
 const Footer = () => {
   return (
-    <div>
+    <footer className='flex flex-row justify-between items-center px-5 py-2 border-2 mt-5'>
       {/* Logo and full name */}
       <div>
-        <h2>NOBLE STAY</h2>
+        <img src={nobleStayLogo} alt="" />
       </div>
       {/* Contact */}
-      <div>
+      <div className='flex flex-col'>
         <h3>Contact us</h3>
-        <div>
-          <div>
-            <img src="" alt="" />
-            <p>000 000 00 00</p>
+        <div className='flex flex-col gap-1'>
+          <div className='flex flex-row gap-1 items-center'>
+            <MdOutlinePhoneInTalk />
+            <p className='caption'>000 000 00 00</p>
           </div>
-          <div>
-            <img src="" alt="" />
-            <p>noblestay@email.com</p>
+          <div className='flex flex-row gap-1 items-center'>
+            <MdMailOutline />
+            <p className='caption'>noblestay@email.com</p>
           </div>
-          <div>
-            <img src="" alt="" />
-            <p>Stockholm, Sweden</p>
+          <div className='flex flex-row gap-1 items-center'>
+            <MdOutlineLocationOn />
+            <p className='caption'>Stockholm, Sweden</p>
           </div>
         </div>
       </div>
       {/* IF DESKTOP: Follow us? */}
-    </div>
+    </footer>
   )
 }
 export default Footer

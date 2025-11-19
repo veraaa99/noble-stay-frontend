@@ -1,92 +1,121 @@
-import LocalStorageService from "@/utils/LocalStorageService"
-import { createContext, useContext, useEffect, useState, type PropsWithChildren } from "react"
+import axios from "@/axios_api/axios";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type PropsWithChildren,
+} from "react";
 
 type UserState = {
-    users: User[],
-    currentUser: User | null,
-    actions: {
-        createUser: (user: User) => void
-        setUser: (user: User | null) => void
-        logoutUser: () => void
-    }
-}
+  currentUser: { _id: string } | null;
+  token: string | null;
+  actions: {
+    createUser: (userinformation: RegisterInputs) => void;
+    loginUser: (userinformation: LoginInputs) => void;
+    logoutUser: () => void;
+  };
+};
 
 const defaultState: UserState = {
-    users: [],
-    currentUser: null,
-    actions: {
-        createUser: () => {},
-        setUser: () => {},
-        logoutUser: () => {}
-    }
-}
+  currentUser: null,
+  token: null,
+  actions: {
+    createUser: () => {},
+    loginUser: () => {},
+    logoutUser: () => {},
+  },
+};
 
-const UserContext = createContext<UserState>(defaultState) 
+const UserContext = createContext<UserState>(defaultState);
 
-function UserProvider ({ children }: PropsWithChildren){
+function UserProvider({ children }: PropsWithChildren) {
+  const [currentUser, setCurrentUser] = useState<{ _id: string } | null>(null);
+  const [token, setToken] = useState<string | null>("");
 
-    const [users, setUsers] = useState<User[]>(defaultState.users)
-    const [currentUser, setCurrentUser] = useState<User | null>(defaultState.currentUser)
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const token = sessionStorage.getItem("jwt");
+        if (!token) return;
 
-    useEffect(() => {
-      _getUsers()
-      _getCurrentUser()
-    }, [])
-    
-    // Private functions
-    const _getUsers = () => {
-        const _users = LocalStorageService.getItem('@booking/users', defaultState.users)
-        setUsers(_users)
-    }
+        const res = await axios.get("api/users/check", {
+          headers: {
+            authorization: `Bearer ${sessionStorage.getItem("jwt") || ""}`,
+          },
+        });
 
-     const _getCurrentUser = () => {
-        const _currentUser = LocalStorageService.getItem('@booking/currentUser', defaultState.currentUser)
-        setCurrentUser(_currentUser)
-    }
+        if (res.status === 200) {
+          setToken(sessionStorage.getItem("jwt"));
+          setCurrentUser(res.data._id);
+        }
+      } catch (error: any) {
+        console.log(error.message);
+        sessionStorage.removeItem("jwt");
+        return;
+      }
+    };
+    checkToken();
+  }, []);
 
-    // Public functions
-    const createUser: typeof defaultState.actions.createUser = (user: User) => {
-        const updatedUsers: User[] = [...users, user]
-        LocalStorageService.setItem('@booking/users', updatedUsers)
-        setUsers(updatedUsers)
-        setUser(user)
-    }
+  // Public functions
+  const createUser: typeof defaultState.actions.createUser = async (
+    userinformation: RegisterInputs
+  ) => {
+    const res = await axios.post("api/users/register", userinformation);
 
-    const setUser: typeof defaultState.actions.setUser = (user: User | null) => {
-        LocalStorageService.setItem('@booking/currentUser', user)
-        setCurrentUser(user)
-    }
+    if (res.status !== 201) return;
 
-    const logoutUser: typeof defaultState.actions.logoutUser = () => {
-        LocalStorageService.setItem('@booking/currentUser', null)
-        setUser(null)
-    }
+    setToken(res.data.userToken);
+    setCurrentUser(res.data._id);
 
-    const actions = {
-        createUser,
-        setUser,
-        logoutUser
-    }
+    sessionStorage.setItem("jwt", res.data.userToken);
+  };
 
-    // TODO: Add sessionstorage when registered/logged in?
+  const loginUser: typeof defaultState.actions.loginUser = async (
+    userinformation: LoginInputs
+  ) => {
+    const res = await axios.post("api/users/login", userinformation);
+    if (res.status !== 200) return;
+
+    setToken(res.data.userToken);
+    setCurrentUser(res.data._id);
+
+    sessionStorage.setItem("jwt", res.data.userToken);
+  };
+
+  const logoutUser: typeof defaultState.actions.logoutUser = () => {
+    sessionStorage.removeItem("jwt");
+    setToken(null);
+    setCurrentUser(null);
+    return;
+  };
+
+  const actions = {
+    createUser,
+    loginUser,
+    logoutUser,
+  };
 
   return (
-    <UserContext.Provider value={{
-        users,
+    <UserContext.Provider
+      value={{
         currentUser,
-        actions
-    }}>
-        { children }
+        token,
+        actions,
+      }}
+    >
+      {children}
     </UserContext.Provider>
-  )
+  );
 }
 
 function useUser() {
-    const context = useContext(UserContext)
-     if( context === undefined ) {
-        throw new Error('useUser must be called within a UserProvider')
-    }
-    return context
+  const context = useContext(UserContext);
+  if (context === undefined) {
+    throw new Error("useUser must be called within a UserProvider");
+  }
+  return context;
 }
 
-export { UserProvider, useUser }
+export { UserProvider, useUser };

@@ -1,69 +1,105 @@
-import { useUser } from "@/contexts/UserContext"
-import type { Dispatch, SetStateAction } from "react"
-import { useForm, type SubmitHandler } from "react-hook-form"
-
-type LoginInputs = {
-  email: string, 
-  password: string
-}
+import { useUser } from "@/contexts/UserContext";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
 
 type LoginFormProps = {
-  setIsLoginModalOpen: Dispatch<SetStateAction<boolean>>
-}
+  setIsLoginModalOpen?: Dispatch<SetStateAction<boolean>>;
+};
 
 const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
-
-   const {
+  const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<LoginInputs>({ defaultValues: { email: "", password: "" } })
-  
-  const { actions, users } = useUser()
+  } = useForm<LoginInputs>({ defaultValues: { email: "", password: "" } });
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data: LoginInputs) => {
-  
-    const existingUser: User | undefined = users.find(u => u.email == data.email)
+  const { actions } = useUser();
+  const [formError, setFormError] = useState<string>("");
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
 
-    if (!existingUser) {
-      console.log("Error: User not found")
-    } else {
-      const _user: User = { 
-        id: existingUser.id, 
-        email: data.email.trim(),
-        phone: existingUser.phone.trim(),
-        password: data.password.trim()      
-      }
-
-      if (existingUser.password == _user.password) {
-        actions.setUser(_user)
-        setIsLoginModalOpen(false)
-        // setIsSubmitted(true)
-        // onSuccess()
-      } else {
-        console.log("Error: Wrong password")
-      }
+  useEffect(() => {
+    if (isSubmitted) {
+      reset({ email: "", password: "" });
     }
-      return
-  }
-  
+    setIsSubmitted(false);
+    setFormError("");
+  }, [isSubmitted, reset]);
+
+  const onSubmit: SubmitHandler<LoginInputs> = async (data: LoginInputs) => {
+    if (!data.email || !data.password) {
+      setFormError("Please fill in all fields");
+      return;
+    }
+
+    setFormError("");
+    setLoading(true);
+
+    try {
+      await actions.loginUser(data);
+    } catch (error: any) {
+      setFormError(error.response?.data?.message || "Something went wrong");
+      return;
+    }
+
+    if (setIsLoginModalOpen) {
+      setIsLoginModalOpen(false);
+    }
+
+    setIsSubmitted(true);
+    setLoading(false);
+    return;
+  };
+
   return (
     <div>
-      <form action="" onSubmit={handleSubmit(onSubmit)}>
-        <div>
-            <p>Email</p>            
-            <input type="email" id=""  {...register("email", { required: true })}/>
+      <form
+        action=""
+        className="flex flex-col items-center my-3"
+        onSubmit={handleSubmit(async (data) => await onSubmit(data))}
+      >
+        <div className="mb-5">
+          <p className="caption">Email</p>
+          <input
+            type="email"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            id=""
+            {...register("email", { required: true })}
+          />
+          {errors.email && errors.email.type === "required" && (
+            <p className="text-red-500 text-xs italic mt-1">
+              Enter an email address
+            </p>
+          )}
         </div>
-        <div>
-            <p>Password</p>            
-            <input type="password" id=""  {...register("password", { required: true })}/>
-            <p>Forgot password?</p>
+        <div className="mb-3">
+          <p className="caption">Password</p>
+          <input
+            type="password"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            id=""
+            {...register("password", { required: true })}
+          />
+          {errors.password && errors.password.type === "required" && (
+            <p className="text-red-500 text-xs italic mt-1">Enter a password</p>
+          )}
+          <p className="caption text-(--gray) underline">Forgot password?</p>
         </div>
 
-        <button type="submit">LOG IN</button>
+        <div>
+          <p className="text-red-500 text-sm italic mb-3">{formError}</p>
+        </div>
+
+        <button
+          className="cursor-pointer btn-primary"
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? <p>Logging in...</p> : "LOG IN"}
+        </button>
       </form>
     </div>
-  )
-}
-export default LoginForm
+  );
+};
+export default LoginForm;

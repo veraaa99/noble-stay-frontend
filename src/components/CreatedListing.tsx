@@ -1,27 +1,138 @@
-import { Link } from "react-router"
+import { useState, type Dispatch, type SetStateAction } from "react";
+import { Link } from "react-router";
+import locationIcon from "../assets/Location_On.svg";
 
 type CreatedListingProps = {
-  castle: CastleListing
-}
+  castle: CastleListing;
+  listingEditorHandler: (castle: CastleListing) => void;
+  removeListingHandler: (id: string) => void;
+  loading: boolean;
+};
 
-const CreatedListing = ({ castle }: CreatedListingProps ) => {
+const CreatedListing = ({
+  castle,
+  listingEditorHandler,
+  removeListingHandler,
+  loading,
+}: CreatedListingProps) => {
   return (
     <div>
-      <Link to={`/castles/${castle.id}`}>
+      <div>
+        <img src={castle.images[0]} alt="" />
+      </div>
+
+      <div>
+        <div className="mb-5 flex flex-col gap-1.5">
+          <h2>{castle.title}</h2>
+          <div className="flex gap-1 items-center">
+            <img src={locationIcon} alt="" />
+            <p className="caption">{castle.location}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <hr className="w-70 m-auto border-(--gray)" />
         <div>
-            <div>
-                <img src={castle.images[0]} alt="" />
+          <h2 className="text-(--color-foreground)">Date:</h2>
+          <div>
+            <p>
+              {new Date(castle.dates[0].toString()).toLocaleString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}{" "}
+              →{" "}
+              {new Date(castle.dates[castle.dates.length - 1]).toLocaleString(
+                "en-US",
+                {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                }
+              )}
+            </p>
+          </div>
+        </div>
+        <hr className="w-70 m-auto border-(--gray)" />
+        <div>
+          <h2 className="text-(--color-foreground)">Room/s:</h2>
+          {castle.rooms.map((r) => (
+            <div className="flex gap-2">
+              <p>1 {r.title}</p>
             </div>
-            <h3>{castle.title}</h3>
-            <p>{castle.location}</p>
-            <p>{castle.dates[0]} - {castle.dates[castle.dates.length-1]}</p>
-            <p>{castle.rooms.map(r => r.title + ' ')}</p>
-            <p>{castle.guests.map(g => g.number + ' ' + g.category + ' ')}</p>
-            <p>{castle.rules}</p>
-            <p>{castle.amneties?.join(' ')}</p>
-        </div>  
-      </Link>
+          ))}
+        </div>
+        <hr className="w-70 m-auto border-(--gray)" />
+        <div>
+          <h2 className="text-(--color-foreground)">Guests:</h2>
+          {castle.guests.map((g) => (
+            <div className="flex gap-2">
+              <p>{g.number}</p>
+              <p>{g.category}</p>
+            </div>
+          ))}
+        </div>
+
+        <hr className="w-70 m-auto border-(--gray)" />
+
+        <div>
+          <h2 className="text-(--color-foreground)">Rules:</h2>
+
+          <ul>
+            {castle.rules.map((r) => (
+              <li>{r.label}</li>
+            ))}
+          </ul>
+        </div>
+
+        <hr className="w-70 m-auto border-(--gray)" />
+
+        <div>
+          <h2 className="text-(--color-foreground)">Amneties:</h2>
+
+          <ul>
+            {castle.amneties?.map((a) => (
+              <li>{a.label}</li>
+            ))}
+          </ul>
+        </div>
+
+        <hr className="w-70 m-auto border-(--gray)" />
+
+        <div>
+          <h2 className="text-(--color-foreground)">Events:</h2>
+          {castle.events ? (
+            <ul>
+              {castle.events?.map((e) => (
+                <li>{e.label}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No events</p>
+          )}
+        </div>
+
+        <hr className="w-70 m-auto border-(--gray)" />
+
+        <div className="flex justify-between">
+          <button
+            className="btn-secondary"
+            onClick={() => listingEditorHandler(castle)}
+          >
+            Edit listing
+          </button>
+          <button
+            className="btn-secondary text-(--error)"
+            onClick={() => removeListingHandler(castle._id)}
+            disabled={loading}
+          >
+            {" "}
+            {loading ? "Deleting..." : "Remove listing"}
+          </button>
+        </div>
+      </div>
     </div>
-  )
-}
-export default CreatedListing
+  );
+};
+export default CreatedListing;
