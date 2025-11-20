@@ -9,9 +9,10 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import Modal from "react-modal";
 
 const NavBar = () => {
-  const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isMenuModalOpen, setIsMenuModalOpen] = useState<boolean>(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] =
+    useState<boolean>(false);
 
   const { currentUser, actions } = useUser();
   const navigate = useNavigate();

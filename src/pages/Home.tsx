@@ -20,9 +20,9 @@ const Home = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [isGuestsModalOpen, setIsGuestsModalOpen] = useState(false);
+  const [isDateModalOpen, setIsDateModalOpen] = useState<boolean>(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
+  const [isGuestsModalOpen, setIsGuestsModalOpen] = useState<boolean>(false);
 
   const [locationInput, setLocationInput] = useState<string>("");
 

@@ -514,7 +514,7 @@ const UpdateListingForm = ({
               control={control}
               rules={{ required: true }}
               render={({ field: { onChange } }) => (
-                <Tags className="max-w-[300px]">
+                <Tags className="max-w-[380px]">
                   <TagsTrigger>
                     {selectedAmneties.map((amnety) => (
                       <TagsValue
@@ -568,7 +568,7 @@ const UpdateListingForm = ({
               name="events"
               control={control}
               render={({ field: { onChange } }) => (
-                <Tags className="max-w-[300px]">
+                <Tags className="max-w-[380px]">
                   <TagsTrigger>
                     {selectedEvents.map((event) => (
                       <TagsValue
@@ -617,7 +617,7 @@ const UpdateListingForm = ({
               control={control}
               rules={{ required: true }}
               render={({ field: { onChange } }) => (
-                <Tags className="max-w-[300px]">
+                <Tags className="max-w-[380px]">
                   <TagsTrigger>
                     {selectedRules.map((rule) => (
                       <TagsValue

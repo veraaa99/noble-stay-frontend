@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const PaymentOptions = () => {
-  const [selected, setSelected] = useState("creditCard");
+  const [selected, setSelected] = useState<string>("creditCard");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelected(e.target.value);

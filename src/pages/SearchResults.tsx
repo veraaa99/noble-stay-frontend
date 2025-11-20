@@ -24,10 +24,10 @@ const SearchResults = () => {
     actions,
   } = useCastleListing();
 
-  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [isDateModalOpen, setIsDateModalOpen] = useState<boolean>(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
 
-  const [locationInput, setLocationInput] = useState(
+  const [locationInput, setLocationInput] = useState<string | undefined>(
     searchParams.get("location")?.toString()
   );
 

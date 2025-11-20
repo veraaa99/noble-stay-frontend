@@ -15,15 +15,12 @@ const Profile = () => {
   const [userListings, setUserListings] = useState<CastleListing[]>([]);
   const [user, setUser] = useState<User | undefined>();
 
-  const [isEditorModalOpen, setIsEditorModalOpen] = useState(false);
   const [castleToEdit, setCastleToEdit] = useState<CastleListing | null>(null);
   const [isListingUpdated, setIsListingUpdated] = useState<boolean>(false);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const listingEditorHandler = (castle: CastleListing) => {
-    setIsEditorModalOpen((isEditorModalOpen) => !isEditorModalOpen);
-
     if (castleToEdit == null) {
       setCastleToEdit(castle);
     } else {

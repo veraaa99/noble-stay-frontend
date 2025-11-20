@@ -17,7 +17,7 @@ const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
   const { actions } = useUser();
   const [formError, setFormError] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (isSubmitted) {

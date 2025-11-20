@@ -16,8 +16,10 @@ const RoomCard = ({
   isRoomInCastleListing,
 }: RoomCardProps) => {
   const { selectedRooms, actions } = useCastleListing();
-  const [radioChecked, setRadioChecked] = useState(false);
-  const [checked, setChecked] = useState(isRoomInCastleListing ? true : false);
+  const [radioChecked, setRadioChecked] = useState<boolean>(false);
+  const [checked, setChecked] = useState<boolean>(
+    isRoomInCastleListing ? true : false
+  );
 
   const handleOnChange = () => {
     setChecked(!checked);

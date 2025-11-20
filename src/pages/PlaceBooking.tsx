@@ -17,14 +17,14 @@ const PlaceBooking = () => {
   const { currentUser, token } = useUser();
   const navigate = useNavigate();
 
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState<boolean>(
     currentUser ? false : true
   );
 
   const [castle, setCastle] = useState<CastleListing | undefined>();
   const [totalSum, setTotalSum] = useState<number>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const castleId = searchParams.get("id");
 

@@ -20,7 +20,7 @@ const CastleDetails = () => {
   const [listing, setListing] = useState<CastleListing | undefined>();
   const [listingDates, setListingDates] = useState<DateRange | undefined>();
   const [totalSum, setTotalSum] = useState<number>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   if (!params.id) {
     console.log("404: Not found");
