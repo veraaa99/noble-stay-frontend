@@ -249,7 +249,7 @@ const SearchResults = () => {
 
       {/* Search results */}
       {filteredListings !== undefined && (
-        <div className="sm:flex sm:flex-wrap sm:items-start sm:px-5 sm:gap-10">
+        <div className="flex flex-col items-center sm:flex-row sm:flex-wrap sm:justify-between sm:items-start sm:mx-10">
           {filteredListings.map((listing) => (
             <CastleCardBig key={listing._id} castle={listing} />
           ))}
