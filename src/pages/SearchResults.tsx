@@ -237,6 +237,7 @@ const SearchResults = () => {
           {filters.map((filter) => (
             <FilterDropdown
               name={filter.name}
+              key={filter.name}
               options={filter.options}
               onHandleSelectOptions={handleSelectOptions}
             />

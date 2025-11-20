@@ -51,8 +51,9 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
   const { token } = useUser();
   const { actions } = useCastleListing();
 
-  const [formError, setFormError] = useState<string>("");
+  const [formMessage, setFormMessage] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [selectedAmneties, setSelectedAmneties] = useState<FilterOption[]>([]);
   const [selectedEvents, setSelectedEvents] = useState<FilterOption[]>([]);
@@ -129,9 +130,9 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
         rooms: [],
         events: [],
       });
+      setFormMessage("Castle listing succesfully created!");
     }
     setIsSubmitted(false);
-    setFormError("");
   }, [isSubmitted]);
 
   const getDatesInRange = (
@@ -277,7 +278,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
       !data.guests ||
       !data.rooms
     ) {
-      setFormError("Please fill in all required fields");
+      setFormMessage("Please fill in all required fields");
       console.log("Please fill in all required fields");
       return;
     }
@@ -290,6 +291,9 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
 
     const dataToSubmit = { ...data, dates: newArray };
 
+    setLoading(true);
+    setFormMessage("");
+
     try {
       const res = await axios.post("api/listings", dataToSubmit, {
         headers: {
@@ -299,17 +303,18 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
 
       if (res.status === 201) {
         actions.updateListings(res.data);
-        setFormError("");
+        setFormMessage("Castle listing succesfully created!");
         setIsSubmitted(true);
         setIsListingUpdated((isListingUpdated) => !isListingUpdated);
       }
       return;
     } catch (error: any) {
-      setFormError(error.response?.data?.message || "Something went wrong");
+      setFormMessage(error.response?.data?.message || "Something went wrong");
       console.log(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+      return;
     }
-
-    return;
   };
 
   return (
@@ -630,9 +635,9 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           )}
         </div>
 
-        <p className="text-center caption text-(--error) mt-5">{formError}</p>
-        <button className="btn-action m-auto" type="submit">
-          Submit listing
+        <p className="text-center caption mt-5">{formMessage}</p>
+        <button className="btn-action m-auto" type="submit" disabled={loading}>
+          {loading ? "Creating..." : "Submit listing"}
         </button>
       </form>
     </div>

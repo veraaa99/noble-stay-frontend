@@ -9,6 +9,13 @@ type eventCategory =
   | { id: "dance_party"; label: "Dance party" }
   | { id: "photoshoot"; label: "Photoshoot" }
   | { id: "guided_tour"; label: "Guided tour" };
+type ruleCategory =
+  | { id: "no_smoking"; label: "No smoking" }
+  | { id: "check_in_after_3"; label: "Check-in after 3 PM" }
+  | {
+      id: "refund_avaliable";
+      label: "Cancel before check-in for a partial refund";
+    };
 
 type RegisterInputs = {
   email: string;
@@ -36,7 +43,7 @@ type ListingInputs = {
   description: string;
 
   amneties?: amnityCategory[];
-  rules: rulesCategory[];
+  rules: ruleCategory[];
   dates: {
     from: Date | undefined;
     to?: Date | undefined;
@@ -54,7 +61,7 @@ type CastleListing = {
   location: string;
   description: string;
   amneties?: amnityCategory[];
-  rules: rulesCategory[];
+  rules: ruleCategory[];
   dates: string[];
   guests: Guest[];
   rooms: Room[];

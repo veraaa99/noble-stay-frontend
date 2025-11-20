@@ -66,19 +66,19 @@ const Booking = ({ booking }: BookingProps) => {
             <hr className="w-[90%] sm:w-70 m-auto border-(--gray)" />
             <div>
               <h2 className="text-(--color-foreground)">Room/s:</h2>
-              {booking.bookedRooms.map((r) => (
-                <div className="flex gap-2">
-                  <p>1 {r.title}</p>
+              {booking.bookedRooms.map((room) => (
+                <div key={room.title} className="flex gap-2">
+                  <p>1 {room.title}</p>
                 </div>
               ))}
             </div>
             <hr className="w-[90%] sm:w-70 m-auto border-(--gray)" />
             <div>
               <h2 className="text-(--color-foreground)">Guests:</h2>
-              {booking.bookedGuests.map((g) => (
-                <div className="flex gap-2">
-                  <p>{g.number}</p>
-                  <p>{g.category}</p>
+              {booking.bookedGuests.map((guest) => (
+                <div key={guest.category} className="flex gap-2">
+                  <p>{guest.number}</p>
+                  <p>{guest.category}</p>
                 </div>
               ))}
             </div>

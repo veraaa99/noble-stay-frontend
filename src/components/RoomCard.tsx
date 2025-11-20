@@ -42,8 +42,8 @@ const RoomCard = ({
         <h2>{room.title}</h2>
         <p className="caption text-(--gray)">{room.caption}</p>
         <ul className="list-disc ml-8 sm:text-[10px]">
-          {room.description.map((d) => (
-            <li>{d}</li>
+          {room.description.map((description) => (
+            <li key={description}>{description}</li>
           ))}
         </ul>
       </div>

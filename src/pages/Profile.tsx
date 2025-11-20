@@ -139,9 +139,12 @@ const Profile = () => {
         <div className="flex flex-col gap-2">
           <h2>My bookings</h2>
           {userBookings.length > 0 ? (
-            userBookings.map((b) => (
-              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100 md:w-130">
-                <Booking booking={b} />
+            userBookings.map((booking) => (
+              <div
+                key={booking._id}
+                className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100 md:w-130"
+              >
+                <Booking booking={booking} />
               </div>
             ))
           ) : (
@@ -153,21 +156,24 @@ const Profile = () => {
         <div>
           <h2>My listings</h2>
           {userListings.length > 0 ? (
-            userListings.map((c) => (
-              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100 md:w-130">
+            userListings.map((castle) => (
+              <div
+                key={castle._id}
+                className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100 md:w-130"
+              >
                 <CreatedListing
-                  castle={c}
+                  castle={castle}
                   listingEditorHandler={listingEditorHandler}
                   removeListingHandler={removeListingHandler}
                   loading={loading}
                 />
                 {listingEditorHandler &&
                   castleToEdit !== null &&
-                  castleToEdit == c && (
-                    <div className="flex flex-col m-auto">
-                      <h1 className="my-2">Edit castle {c.title}</h1>
+                  castleToEdit == castle && (
+                    <div key={castle._id} className="flex flex-col m-auto">
+                      <h1 className="my-2">Edit castle {castle.title}</h1>
                       <UpdateListingForm
-                        castle={c}
+                        castle={castle}
                         listingEditorHandler={listingEditorHandler}
                         setIsListingUpdated={setIsListingUpdated}
                       />

@@ -164,6 +164,7 @@ const AllCastles = () => {
           {filters.map((filter) => (
             <FilterDropdown
               name={filter.name}
+              key={filter.name}
               options={filter.options}
               onHandleSelectOptions={handleSelectOptions}
             />
@@ -176,8 +177,8 @@ const AllCastles = () => {
 
       {/* Castle card/s */}
       <div className="flex flex-col items-center sm:flex-row sm:flex-wrap sm:justify-between sm:items-start sm:mx-10">
-        {listings.map((c) => (
-          <CastleCardBig castle={c} />
+        {listings.map((castle) => (
+          <CastleCardBig key={castle._id} castle={castle} />
         ))}
       </div>
     </div>

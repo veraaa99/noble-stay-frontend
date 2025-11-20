@@ -170,8 +170,10 @@ const PlaceBooking = () => {
                     <p className="sm:text-small">{castle.location}</p>
                   </div>
                   <ul className="caption flex flex-col gap-1">
-                    {castle.rules.map((r) => (
-                      <li className="text-(--gray)">{r.label}</li>
+                    {castle.rules.map((rule) => (
+                      <li key={rule.id} className="text-(--gray)">
+                        {rule.label}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -199,19 +201,19 @@ const PlaceBooking = () => {
                 <div>
                   <h2 className="text-(--color-foreground)">Room/s:</h2>
                   {/* <p>{castle.rooms[0].title}</p> */}
-                  {selectedRooms.map((r) => (
-                    <div className="flex gap-2">
-                      <p>1 {r.title}</p>
+                  {selectedRooms.map((room) => (
+                    <div key={room.title} className="flex gap-2">
+                      <p>1 {room.title}</p>
                     </div>
                   ))}
                 </div>
                 <hr className="w-80 m-auto border-(--gray)" />
                 <div>
                   <h2 className="text-(--color-foreground)">Guests:</h2>
-                  {selectedGuests.map((g) => (
-                    <div className="flex gap-2">
-                      <p>{g.number}</p>
-                      <p>{g.category}</p>
+                  {selectedGuests.map((guest) => (
+                    <div key={guest.category} className="flex gap-2">
+                      <p>{guest.number}</p>
+                      <p>{guest.category}</p>
                     </div>
                   ))}
                 </div>

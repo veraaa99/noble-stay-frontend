@@ -125,7 +125,10 @@ const CastleDetails = () => {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {listing.events?.map((event) => (
-                    <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">
+                    <p
+                      key={event.id}
+                      className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1"
+                    >
                       {event.label}
                     </p>
                   ))}
@@ -141,8 +144,8 @@ const CastleDetails = () => {
                 </div>
                 <div>
                   <ul className="caption flex flex-col gap-1">
-                    {listing.amneties?.map((a) => (
-                      <li>{a.label}</li>
+                    {listing.amneties?.map((amnety) => (
+                      <li key={amnety.id}>{amnety.label}</li>
                     ))}
                   </ul>
                 </div>
@@ -152,8 +155,10 @@ const CastleDetails = () => {
                 <div>
                   <p>Rules</p>
                   <ul className="caption flex flex-col gap-1">
-                    {listing.rules.map((r) => (
-                      <li className="text-(--gray)">{r.label}</li>
+                    {listing.rules.map((rule) => (
+                      <li key={rule.id} className="text-(--gray)">
+                        {rule.label}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -260,6 +265,7 @@ const CastleDetails = () => {
                 {listing.rooms.map((room) => (
                   <RoomCard
                     room={room}
+                    key={room.title}
                     isBookingRoom={true}
                     isRoomInCastleListing={
                       selectedRooms.find((r) => r.title == room.title) ==
