@@ -88,7 +88,14 @@ const UpdateListingForm = ({
     { id: "guided_tour", label: "Guided tour" },
   ];
 
-  const rules = [{ id: "no_smoking", label: "No smoking" }];
+  const rules = [
+    { id: "no_smoking", label: "No smoking" },
+    { id: "check_in_after_3", label: "Check-in after 3 PM" },
+    {
+      id: "refund_avaliable",
+      label: "Cancel before check-in for a partial refund",
+    },
+  ];
 
   const rooms: Room[] = [
     {

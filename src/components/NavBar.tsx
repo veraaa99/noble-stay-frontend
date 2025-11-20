@@ -93,7 +93,7 @@ const NavBar = () => {
         <div className="flex flex-row items-center justify-between p-5">
           <h1 className="text-(--color-foreground)">Menu</h1>
           <h2
-            className="text-(--color-foreground) font-light"
+            className="text-(--color-foreground) font-light cursor-pointer"
             onClick={menuModalHandler}
           >
             ✕
@@ -117,7 +117,7 @@ const NavBar = () => {
               </div>
             </Link>
           )}
-          <div className="bg-(--primary) px-5 text-(--background) font-light py-2">
+          <div className="bg-(--primary) px-5 text-(--background) font-light py-2 cursor-pointer">
             {currentUser == null ? (
               <p onClick={loginModalHandler}>Login / Sign up</p>
             ) : (
@@ -135,7 +135,7 @@ const NavBar = () => {
       >
         <div>
           <h2
-            className="text-(--color-foreground) font-light text-right"
+            className="text-(--color-foreground) font-light text-right cursor-pointer"
             onClick={loginModalHandler}
           >
             ✕
@@ -144,7 +144,10 @@ const NavBar = () => {
           <LoginForm setIsLoginModalOpen={setIsLoginModalOpen} />
           <div className="flex items-center justify-center gap-2">
             <p className="caption">Don't have an account?</p>{" "}
-            <p className="link underline" onClick={registerModalHandler}>
+            <p
+              className="link underline cursor-pointer"
+              onClick={registerModalHandler}
+            >
               SIGN UP
             </p>
           </div>
@@ -159,7 +162,7 @@ const NavBar = () => {
       >
         <div>
           <h2
-            className="text-(--color-foreground) font-light text-right"
+            className="text-(--color-foreground) font-light text-right cursor-pointer"
             onClick={registerModalHandler}
           >
             ✕
@@ -168,7 +171,10 @@ const NavBar = () => {
           <RegisterForm setIsRegisterModalOpen={setIsRegisterModalOpen} />
           <div className="flex items-center justify-center gap-2">
             <p className="caption">Already have an account?</p>{" "}
-            <p className="link underline" onClick={loginModalHandler}>
+            <p
+              className="link underline cursor-pointer"
+              onClick={loginModalHandler}
+            >
               LOG IN
             </p>
           </div>

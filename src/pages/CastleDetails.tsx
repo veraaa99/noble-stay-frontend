@@ -95,7 +95,10 @@ const CastleDetails = () => {
 
   return (
     <div className="m-auto px-10 sm:mx-15 md:m-auto md:py-10 md:w-180 lg:w-220 lg:m-auto">
-      <button className="my-6 sm:text-xs" onClick={() => navigate(-1)}>
+      <button
+        className="my-6 cursor-pointer sm:text-xs"
+        onClick={() => navigate(-1)}
+      >
         {"<"} Go back to listings
       </button>
       {loading && <p>Loading castle...</p>}
