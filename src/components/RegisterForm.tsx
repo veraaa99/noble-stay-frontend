@@ -29,7 +29,9 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
     setFormError("");
   }, [isSubmitted, reset]);
 
-  const onSubmit: SubmitHandler<RegisterInputs> = (data: RegisterInputs) => {
+  const onSubmit: SubmitHandler<RegisterInputs> = async (
+    data: RegisterInputs
+  ) => {
     if (!data.email || !data.password || !data.phone || !data.confirmPassword) {
       setFormError("Please fill in all fields");
       return;
@@ -42,7 +44,7 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
     setLoading(true);
 
     try {
-      actions.createUser(data);
+      await actions.createUser(data);
     } catch (error: any) {
       console.log(error.message);
       return;
