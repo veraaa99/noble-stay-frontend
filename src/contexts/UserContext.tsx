@@ -10,6 +10,7 @@ import {
 type UserState = {
   currentUser: { _id: string } | null;
   token: string | null;
+  authReady: boolean;
   actions: {
     createUser: (userinformation: RegisterInputs) => void;
     loginUser: (userinformation: LoginInputs) => void;
@@ -20,6 +21,7 @@ type UserState = {
 const defaultState: UserState = {
   currentUser: null,
   token: null,
+  authReady: false,
   actions: {
     createUser: () => {},
     loginUser: () => {},
@@ -32,6 +34,7 @@ const UserContext = createContext<UserState>(defaultState);
 function UserProvider({ children }: PropsWithChildren) {
   const [currentUser, setCurrentUser] = useState<{ _id: string } | null>(null);
   const [token, setToken] = useState<string | null>("");
+  const [authReady, setAuthReady] = useState<boolean>(defaultState.authReady);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -53,6 +56,8 @@ function UserProvider({ children }: PropsWithChildren) {
         console.log(error.message);
         sessionStorage.removeItem("jwt");
         return;
+      } finally {
+        setAuthReady(true);
       }
     };
     checkToken();
@@ -78,6 +83,7 @@ function UserProvider({ children }: PropsWithChildren) {
     const res = await axios.post("api/users/login", userinformation);
     if (res.status !== 200) return;
 
+    console.log(res.data.userToken);
     setToken(res.data.userToken);
     setCurrentUser(res.data._id);
 
@@ -101,6 +107,7 @@ function UserProvider({ children }: PropsWithChildren) {
     <UserContext.Provider
       value={{
         currentUser,
+        authReady,
         token,
         actions,
       }}

@@ -1,6 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import "../node_modules/leaflet/dist/leaflet.css";
-@import "../node_modules/leaflet-geosearch/dist/geosearch.css";
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -62,7 +60,7 @@
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
+  --popover: oklch(72.681% 0.00228 15.216);
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.6129 0.0729 350.2);
   --primary-foreground: oklch(0.985 0 0);
@@ -153,6 +151,10 @@
     @apply bg-background text-(--very-dark-brown) min-h-svh;
   }
 
+  p {
+    font-size: 12px;
+  }
+
   h1 {
     @apply text-(--color-primary);
     font-family: var(--font-playfair);
@@ -191,10 +193,11 @@
 
   .link {
     @apply text-(--color-action);
+    font-size: 12px;
   }
 
   ::placeholder {
-    color: var(--very-dark-brown);
+    color: var(--gray);
   }
 
   .btn-primary {
@@ -220,6 +223,7 @@
   }
 
   .btn-secondary:hover {
+    @apply cursor-pointer;
     border-color: var(--color-primary);
     cursor: cursor-pointer;
   }
@@ -315,8 +319,121 @@
   font-style: normal;
 }
 
+.rdp-selected {
+  font-weight: bold;
+  font-size: 10px;
+}
+
+@media (min-width: 640px) {
+  h1 {
+    font-size: 30px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  h3 {
+    font-size: 15px;
+  }
+
+  h4 {
+    font-size: 13px;
+  }
+
+  p {
+    font-size: 10px;
+  }
+
+  ::placeholder {
+    font-size: 9px;
+  }
+
+  .link {
+    font-size: 10px;
+  }
+
+  .small-text {
+    font-size: 10px;
+  }
+
+  .btn-primary {
+    width: 90px;
+    height: 30px;
+    font-size: 10px;
+  }
+
+  .btn-secondary {
+    width: 105px;
+    height: 30px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .btn-action {
+    width: 105px;
+    height: 30px;
+    font-size: 11px;
+  }
+
+  .caption {
+    font-size: 8px;
+  }
+
+  .checkmark {
+    height: 20px;
+    width: 20px;
+  }
+
+  .container .checkmark:after {
+    top: 2.8px;
+    left: 2.8px;
+    width: 13px;
+    height: 13px;
+  }
+}
+
 @media (min-width: 1024px) {
   h1 {
-    font-size: 61px;
+    font-size: 40px;
+  }
+
+  h2 {
+    font-size: 25px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  h4 {
+    font-size: 18px;
+  }
+
+  p {
+    font-size: 12px;
+  }
+
+  .btn-primary {
+    width: 110px;
+    height: 35px;
+    font-size: 12px;
+  }
+
+  .btn-secondary {
+    width: 110px;
+    height: 35px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .btn-action {
+    width: 110px;
+    height: 35px;
+    font-size: 12px;
+  }
+
+  .caption {
+    font-size: 10px;
   }
 }

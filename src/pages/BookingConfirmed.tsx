@@ -1,6 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router";
 import Booking from "../components/Booking";
-import { useBooking } from "@/contexts/BookingContext";
 import { useEffect, useState } from "react";
 import axios from "@/axios_api/axios";
 import { useUser } from "@/contexts/UserContext";
@@ -11,7 +10,6 @@ const BookingConfirmed = () => {
   const { token } = useUser();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { actions } = useBooking();
 
   const bookingId = searchParams.get("bookingId");
   const [booking, setBooking] = useState<Booking | undefined>();
@@ -44,7 +42,7 @@ const BookingConfirmed = () => {
   };
 
   return (
-    <div className="flex flex-col px-7 pt-10 mb-15">
+    <div className="flex flex-col items-center px-7 pt-10 mb-15 sm:px-40 sm:mx-auto">
       {booking && (
         <>
           <div className="flex-flex-col text-center mb-5 ">
@@ -58,7 +56,7 @@ const BookingConfirmed = () => {
           </div>
 
           <p className="text-center mb-3">Summary:</p>
-          <div className="border-1 border-(--color-gray) rounded-lg px-7 py-5">
+          <div className="border-1 border-(--color-gray) rounded-lg px-10 w-full py-5 sm:w-90 lg:w-100">
             {/* Booking summary */}
             <Booking booking={booking} />
           </div>
@@ -69,7 +67,7 @@ const BookingConfirmed = () => {
           </div>
 
           <button
-            className="btn-secondary m-auto"
+            className="btn-secondary m-auto cursor-pointer"
             onClick={() => navigate("/")}
           >
             Back to start

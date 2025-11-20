@@ -35,7 +35,7 @@ const DateCalendar = ({
             after: new Date(disabledDates[disabledDates.length - 1]),
           }}
           excludeDisabled
-          className="w-85 self-center"
+          className="w-85 sm:w-60 lg:w-70"
         />
       ) : (
         <Calendar
@@ -52,7 +52,8 @@ const DateCalendar = ({
           numberOfMonths={1}
           timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
           disabled={{ before: new Date() }}
-          className="w-75 self-center"
+          className="w-75 sm:w-60 p-0 lg:w-70"
+          classNames={{ month: "space-y-1 flex flex-col" }}
         />
       )}
     </>

@@ -88,7 +88,7 @@ const AddGuestsCounter = ({
   };
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-2.5 sm:w-70">
       <div className="border-2 rounded-lg grid grid-cols-3 px-3 py-1 items-center">
         <div className="col-span-2">
           <p>Adults</p>
@@ -96,7 +96,7 @@ const AddGuestsCounter = ({
         </div>
         <div className="grid grid-cols-3 items-center">
           <button
-            className="col-span-1 border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light text-center"
+            className="col-span-1 border-2 rounded-full border-(-color--gray) px-2 text-2xl font-light text-center cursor-pointer sm:text-lg"
             onClick={(e) => {
               e.preventDefault(), handleAmountOfGuests("adult", "subtract");
             }}
@@ -107,7 +107,7 @@ const AddGuestsCounter = ({
             {selected ? selected[0].number : newAllGuests[0].number}
           </p>
           <button
-            className="col-span-1 border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light"
+            className="col-span-1 border-2 rounded-full border-(-color--gray) px-1 text-2xl font-light cursor-pointer sm:text-lg"
             onClick={(e) => {
               e.preventDefault(), handleAmountOfGuests("adult", "add");
             }}
@@ -124,7 +124,7 @@ const AddGuestsCounter = ({
         </div>
         <div className="grid grid-cols-3 items-center">
           <button
-            className="col-span-1 border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light text-center"
+            className="col-span-1 border-2 rounded-full border-(-color--gray) px-2 text-2xl font-light text-center cursor-pointer sm:text-lg"
             onClick={(e) => {
               e.preventDefault(), handleAmountOfGuests("child", "subtract");
             }}
@@ -135,7 +135,7 @@ const AddGuestsCounter = ({
             {selected ? selected[1].number : newAllGuests[1].number}
           </p>
           <button
-            className="col-span-1 border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light"
+            className="col-span-1 border-2 rounded-full border-(-color--gray) px-1 text-2xl font-light cursor-pointer sm:text-lg"
             onClick={(e) => {
               e.preventDefault(), handleAmountOfGuests("child", "add");
             }}
@@ -151,7 +151,7 @@ const AddGuestsCounter = ({
         </div>
         <div className="grid grid-cols-3 items-center">
           <button
-            className="border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light text-center"
+            className="border-2 rounded-full border-(-color--gray) px-2 text-2xl font-light text-center cursor-pointer sm:text-lg"
             onClick={(e) => {
               e.preventDefault(), handleAmountOfGuests("pet", "subtract");
             }}
@@ -162,7 +162,7 @@ const AddGuestsCounter = ({
             {selected ? selected[2].number : newAllGuests[2].number}
           </p>
           <button
-            className="border-2 rounded-full border-(-color--gray) px-2 text-3xl font-light"
+            className="border-2 rounded-full border-(-color--gray) px-1 text-2xl font-light cursor-pointer sm:text-lg"
             onClick={(e) => {
               e.preventDefault(), handleAmountOfGuests("pet", "add");
             }}

@@ -51,8 +51,9 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
   const { token } = useUser();
   const { actions } = useCastleListing();
 
-  const [formError, setFormError] = useState<string>("");
+  const [formMessage, setFormMessage] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [selectedAmneties, setSelectedAmneties] = useState<FilterOption[]>([]);
   const [selectedEvents, setSelectedEvents] = useState<FilterOption[]>([]);
@@ -73,26 +74,45 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
     { id: "guided_tour", label: "Guided tour" },
   ];
 
-  const rules = [{ id: "no_smoking", label: "No smoking" }];
+  const rules = [
+    { id: "no_smoking", label: "No smoking" },
+    { id: "check_in_after_3", label: "Check-in after 3 PM" },
+    {
+      id: "refund_avaliable",
+      label: "Cancel before check-in for a partial refund",
+    },
+  ];
 
   const rooms: Room[] = [
     {
-      title: "Luxury room",
-      caption: "Lorem ipsum",
-      description: ["Lorem ipsum"],
-      price: 350,
+      title: "The Noble Chamber",
+      caption: "Standard Castle Room",
+      description: [
+        "Queen Bed",
+        "Cozy retreat with stone-carved walls, velvet linens, and antique furnishings",
+        "Amenities: Antique Furnishings, Velvet Linens, Medieval Décor",
+      ],
+      price: 1240,
     },
     {
-      title: "Deluxe room",
-      caption: "Lorem ipsum",
-      description: ["Lorem ipsum"],
-      price: 400,
+      title: "The Royal Suite",
+      caption: "Luxury Suite",
+      description: [
+        "King Bed",
+        "Grand four-poster bed, private sitting room with fireplace, and garden views",
+        "Amenities: Four-Poster Bed, Fireplace, Garden View, Butler Service, Champagne",
+      ],
+      price: 4240,
     },
     {
-      title: "Tower Room",
-      caption: "Lorem ipsum",
-      description: ["Lorem ipsum"],
-      price: 300,
+      title: "The Enchanted Tower Room",
+      caption: "Unique Tower Room",
+      description: [
+        "Canopy Bed",
+        "High in the castle tower with sweeping views, spiral staircase, and gothic chandeliers",
+        "Amenities: Tower Views, Spiral Staircase, Romantic Ambience",
+      ],
+      price: 2240,
     },
   ];
 
@@ -110,10 +130,9 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
         rooms: [],
         events: [],
       });
-      console.log("Castlelisting created!");
+      setFormMessage("Castle listing succesfully created!");
     }
     setIsSubmitted(false);
-    setFormError("");
   }, [isSubmitted]);
 
   const getDatesInRange = (
@@ -259,7 +278,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
       !data.guests ||
       !data.rooms
     ) {
-      setFormError("Please fill in all required fields");
+      setFormMessage("Please fill in all required fields");
       console.log("Please fill in all required fields");
       return;
     }
@@ -272,6 +291,9 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
 
     const dataToSubmit = { ...data, dates: newArray };
 
+    setLoading(true);
+    setFormMessage("");
+
     try {
       const res = await axios.post("api/listings", dataToSubmit, {
         headers: {
@@ -281,17 +303,18 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
 
       if (res.status === 201) {
         actions.updateListings(res.data);
-        setFormError("");
+        setFormMessage("Castle listing succesfully created!");
         setIsSubmitted(true);
         setIsListingUpdated((isListingUpdated) => !isListingUpdated);
       }
       return;
     } catch (error: any) {
-      setFormError(error.response?.data?.message || "Something went wrong");
+      setFormMessage(error.response?.data?.message || "Something went wrong");
       console.log(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+      return;
     }
-
-    return;
   };
 
   return (
@@ -299,18 +322,18 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
       <form
         action=""
         onSubmit={handleSubmit(async (data) => await onSubmit(data))}
-        className="flex flex-col gap-3.5 mb-5"
+        className="flex flex-col gap-3.5 mb-5  sm:px-5"
       >
         <div>
           <h3>Name of castle</h3>
           <input
             type="title"
             id="title"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm sm:py-1"
             {...register("title", { required: true })}
           />
           {errors.title && errors.title.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Enter a name for the castle
             </p>
           )}
@@ -320,11 +343,11 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           <input
             type="location"
             id="location"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm sm:py-1"
             {...register("location", { required: true })}
           />
           {errors.location && errors.location.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Enter the castle's location
             </p>
           )}
@@ -334,11 +357,11 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           <input
             type="description"
             id="description"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm sm:py-1"
             {...register("description", { required: true })}
           />
           {errors.description && errors.description.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Enter a description for the castle
             </p>
           )}
@@ -357,7 +380,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
             )}
           />
           {errors.dates && errors.dates.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Enter a start date and final date
             </p>
           )}
@@ -369,16 +392,13 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
             name="guests"
             control={control}
             rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
-              <AddGuestsCounter
-                onChange={onChange} // send value to hook form
-                // selected={value}
-              />
+            render={({ field: { onChange } }) => (
+              <AddGuestsCounter onChange={onChange} />
             )}
           />
 
           {errors.guests && errors.guests.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Enter at least one maximum amount of guests
             </p>
           )}
@@ -391,13 +411,13 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
             name="rooms"
             control={control}
             rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange } }) => (
               <>
                 <RoomCard
                   room={rooms[0]}
                   onChange={() => {
                     onChange(handleRoomsSelect(rooms[0]));
-                  }} // send value to hook form
+                  }}
                   selected={rooms[0]}
                   isBookingRoom={false}
                 />
@@ -405,7 +425,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
                   room={rooms[1]}
                   onChange={() => {
                     onChange(handleRoomsSelect(rooms[1]));
-                  }} // send value to hook form
+                  }}
                   selected={rooms[1]}
                   isBookingRoom={false}
                 />
@@ -413,7 +433,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
                   room={rooms[2]}
                   onChange={() => {
                     onChange(handleRoomsSelect(rooms[2]));
-                  }} // send value to hook form
+                  }}
                   selected={rooms[2]}
                   isBookingRoom={false}
                 />
@@ -421,7 +441,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
             )}
           />
           {errors.rooms && errors.rooms.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Pick at least one room for the castle
             </p>
           )}
@@ -434,7 +454,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
               name="amneties"
               control={control}
               rules={{ required: true }}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange } }) => (
                 <Tags className="max-w-[300px]">
                   <TagsTrigger>
                     {selectedAmneties.map((amnety) => (
@@ -477,7 +497,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
               )}
             />
             {errors.amneties && errors.amneties.type === "required" && (
-              <p className="text-red-500 text-xs italic mt-1">
+              <p className="text-(--error) text-xs mt-1">
                 Pick at least one amnety the castle offers
               </p>
             )}
@@ -488,7 +508,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
             <Controller
               name="events"
               control={control}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange } }) => (
                 <Tags className="max-w-[300px]">
                   <TagsTrigger>
                     {selectedEvents.map((event) => (
@@ -537,7 +557,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
               name="rules"
               control={control}
               rules={{ required: true }}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange } }) => (
                 <Tags className="max-w-[300px]">
                   <TagsTrigger>
                     {selectedRules.map((rule) => (
@@ -580,7 +600,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
               )}
             />
             {errors.rules && errors.rules.type === "required" && (
-              <p className="text-red-500 text-xs italic mt-1">
+              <p className="text-(--error) text-xs mt-1">
                 Pick at least one house rule for the castle
               </p>
             )}
@@ -593,11 +613,11 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
             name="images"
             control={control}
             rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange } }) => (
               <input
                 type="file"
                 id="images"
-                // value={this.state.images}
+                className=" sm:text-xs"
                 multiple
                 onChange={(e) =>
                   onChange(
@@ -609,15 +629,15 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           />
 
           {errors.images && errors.images.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Upload at least one image of your castle
             </p>
           )}
         </div>
 
-        <p className="text-center caption text-(--error) mt-5">{formError}</p>
-        <button className="btn-action m-auto" type="submit">
-          Submit listing
+        <p className="text-center caption mt-5">{formMessage}</p>
+        <button className="btn-action m-auto" type="submit" disabled={loading}>
+          {loading ? "Creating..." : "Submit listing"}
         </button>
       </form>
     </div>

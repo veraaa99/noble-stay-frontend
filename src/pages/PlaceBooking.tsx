@@ -13,23 +13,18 @@ import locationIcon from "../assets/Location_On.svg";
 const PlaceBooking = () => {
   const [searchParams] = useSearchParams();
 
-  const {
-    selectedDates,
-    selectedGuests,
-    selectedRooms,
-    actions: castleListingActions,
-  } = useCastleListing();
+  const { selectedDates, selectedGuests, selectedRooms } = useCastleListing();
   const { currentUser, token } = useUser();
   const navigate = useNavigate();
 
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState<boolean>(
     currentUser ? false : true
   );
 
   const [castle, setCastle] = useState<CastleListing | undefined>();
   const [totalSum, setTotalSum] = useState<number>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const castleId = searchParams.get("id");
 
@@ -108,7 +103,6 @@ const PlaceBooking = () => {
       bookedGuests: selectedGuests,
     };
 
-    // setFormError("");
     setLoading(true);
 
     try {
@@ -140,132 +134,149 @@ const PlaceBooking = () => {
   };
 
   return (
-    <div className="m-auto px-7 pt-10">
+    <div className="m-auto px-7 pt-10 md:w-200 lg:w-220">
       {castle && (
         <div>
-          <button className="my-6" onClick={() => navigate(-1)}>
+          <button
+            className="cursor-pointer my-6 sm:text-xs sm:mb-3 sm:mt-0"
+            onClick={() => navigate(-1)}
+          >
             {"<"} Go back without booking
           </button>
 
-          <div>
-            {/* Castle information summary */}
-            <div>
-              <div className="flex flex-col gap-2">
-                <h1>Booking summary</h1>
-                {/* Castle image */}
-                <div>
-                  <img
-                    className="rounded-xl h-50"
-                    src={castle.images[0]}
-                    alt=""
-                  />
+          <h1 className="hidden sm:block sm:mb-5">Booking summary</h1>
+
+          <div className="sm:flex sm:justify-between sm:items-center sm:gap-3">
+            <div className="sm:border-1 sm:border-(--gray) sm:rounded-xl sm:px-5 sm:py-5">
+              {/* Castle information summary */}
+              <div className="sm:flex sm:mb-7 sm:gap-3">
+                <div className="flex flex-col gap-2 sm:w-70">
+                  <h1 className="sm:hidden">Booking summary</h1>
+                  {/* Castle image */}
+                  <div className="w-full h-50 sm:h-50 ">
+                    <img
+                      className="h-full w-full rounded-sm object-cover"
+                      src={castle.images[0]}
+                      alt=""
+                    />
+                  </div>
+                </div>
+
+                {/* Castle information */}
+                <div className="my-5 sm:mt-0">
+                  <h2>{castle.title}</h2>
+                  <div className="flex gap-1">
+                    <img src={locationIcon} alt="" />
+                    <p className="sm:text-small">{castle.location}</p>
+                  </div>
+                  <ul className="caption flex flex-col gap-1">
+                    {castle.rules.map((rule) => (
+                      <li key={rule.id} className="text-(--gray)">
+                        {rule.label}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
-              {/* Castle information */}
-              <div className="my-5">
-                <h2>{castle.title}</h2>
-                <div className="flex gap-1">
-                  <img src={locationIcon} alt="" />
-                  <p>{castle.location}</p>
+              {/* Booking details */}
+              <div className="flex flex-col gap-4 mb-5 sm:px-5 lg:gap-2">
+                <hr className="w-80 m-auto border-(--gray)" />
+                <div>
+                  <h2 className="text-(--color-foreground)">Date:</h2>
+                  <div>
+                    {/* TODO: Add selected dates */}
+                    <p>{`${selectedDates?.from?.toLocaleString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })} → ${selectedDates?.to?.toLocaleString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}`}</p>
+                  </div>
                 </div>
-                <ul className="caption flex flex-col gap-1">
-                  {castle.rules.map((r) => (
-                    <li className="text-(--gray)">{r.label}</li>
+                <hr className="w-80 m-auto border-(--gray)" />
+                <div>
+                  <h2 className="text-(--color-foreground)">Room/s:</h2>
+                  {/* <p>{castle.rooms[0].title}</p> */}
+                  {selectedRooms.map((room) => (
+                    <div key={room.title} className="flex gap-2">
+                      <p>1 {room.title}</p>
+                    </div>
                   ))}
-                </ul>
+                </div>
+                <hr className="w-80 m-auto border-(--gray)" />
+                <div>
+                  <h2 className="text-(--color-foreground)">Guests:</h2>
+                  {selectedGuests.map((guest) => (
+                    <div key={guest.category} className="flex gap-2">
+                      <p>{guest.number}</p>
+                      <p>{guest.category}</p>
+                    </div>
+                  ))}
+                </div>
+                <hr className="w-80 m-auto border-(--gray)" />
+                <div>
+                  <h2 className="text-(--color-foreground)">Total:</h2>
+                  <p>{totalSum} SEK</p>
+                </div>
               </div>
             </div>
 
-            {/* Booking details */}
-            <div className="flex flex-col gap-4 mb-5">
-              <hr className="w-80 m-auto border-(--gray)" />
-              <div>
-                <h2 className="text-(--color-foreground)">Date:</h2>
-                <div>
-                  {/* TODO: Add selected dates */}
-                  <p>{`${selectedDates?.from?.toLocaleString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })} → ${selectedDates?.to?.toLocaleString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}`}</p>
+            {currentUser ? (
+              // IF LOGGED IN: Select payment method
+              <div className="flex flex-col items-center mb-15">
+                <h2 className="text-center">Select payment method</h2>
+                <p className="caption text-(--gray) mb-3">
+                  Disclaimer: you will not be charged
+                </p>
+                <PaymentOptions />
+                <button
+                  className="btn-action mt-5"
+                  onClick={handleBookingSubmit}
+                  disabled={loading}
+                >
+                  {loading ? <p>Placing booking...</p> : "Book"}
+                </button>
+              </div>
+            ) : (
+              isRegisterModalOpen && (
+                // IF NOT LOGGED IN: Sign up form
+                <div className="flex flex-col items-center px-6 mb-18">
+                  <h2 className="text-center">
+                    Sign up to Noble Stay to continue to payment
+                  </h2>
+                  <RegisterForm />
+                  <div className="flex items-center justify-center gap-2">
+                    <p className="caption">Already have an account?</p>{" "}
+                    <p
+                      className="link underline cursor-pointer"
+                      onClick={loginModalHandler}
+                    >
+                      LOG IN
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <hr className="w-80 m-auto border-(--gray)" />
-              <div>
-                <h2 className="text-(--color-foreground)">Room/s:</h2>
-                {/* <p>{castle.rooms[0].title}</p> */}
-                {selectedRooms.map((r) => (
-                  <div className="flex gap-2">
-                    <p>1 {r.title}</p>
-                  </div>
-                ))}
-              </div>
-              <hr className="w-80 m-auto border-(--gray)" />
-              <div>
-                <h2 className="text-(--color-foreground)">Guests:</h2>
-                {selectedGuests.map((g) => (
-                  <div className="flex gap-2">
-                    <p>{g.number}</p>
-                    <p>{g.category}</p>
-                  </div>
-                ))}
-              </div>
-              <hr className="w-80 m-auto border-(--gray)" />
-              <div>
-                <h2 className="text-(--color-foreground)">Total:</h2>
-                <p>{totalSum} SEK</p>
-              </div>
-            </div>
-          </div>
-          {currentUser ? (
-            // IF LOGGED IN: Select payment method
-            <div className="flex flex-col items-center mb-15">
-              <h2>Select payment method</h2>
-              <p className="caption text-(--gray) mb-3">
-                Disclaimer: you will not be charged
-              </p>
-              <PaymentOptions />
-              <button
-                className="btn-action mt-5"
-                onClick={handleBookingSubmit}
-                disabled={loading}
-              >
-                {loading ? <p>Placing booking...</p> : "Book"}
-              </button>
-            </div>
-          ) : (
-            isRegisterModalOpen && (
-              // IF NOT LOGGED IN: Sign up form
+              )
+            )}
+
+            {isLoginModalOpen && (
               <div className="flex flex-col items-center px-6 mb-18">
-                <h2 className="text-center">
-                  Sign up to Noble Stay to continue to payment
-                </h2>
-                <RegisterForm />
+                <LoginForm setIsLoginModalOpen={setIsLoginModalOpen} />
                 <div className="flex items-center justify-center gap-2">
-                  <p className="caption">Already have an account?</p>{" "}
-                  <p className="link underline" onClick={loginModalHandler}>
-                    LOG IN
+                  <p className="caption">Don't have an account?</p>
+                  <p
+                    className="link underline cursor-pointer"
+                    onClick={registerModalHandler}
+                  >
+                    SIGN UP
                   </p>
                 </div>
               </div>
-            )
-          )}
-          {isLoginModalOpen && (
-            <div className="flex flex-col items-center px-6 mb-18">
-              <LoginForm setIsLoginModalOpen={setIsLoginModalOpen} />
-              <div className="flex items-center justify-center gap-2">
-                <p className="caption">Don't have an account?</p>
-                <p className="link underline" onClick={registerModalHandler}>
-                  SIGN UP
-                </p>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
     </div>

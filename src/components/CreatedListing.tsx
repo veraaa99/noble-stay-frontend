@@ -1,5 +1,3 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
-import { Link } from "react-router";
 import locationIcon from "../assets/Location_On.svg";
 
 type CreatedListingProps = {
@@ -17,12 +15,16 @@ const CreatedListing = ({
 }: CreatedListingProps) => {
   return (
     <div>
-      <div>
-        <img src={castle.images[0]} alt="" />
+      <div className="h-50 sm:h-60">
+        <img
+          className="w-full h-full object-cover rounded-lg"
+          src={castle.images[0]}
+          alt=""
+        />
       </div>
 
       <div>
-        <div className="mb-5 flex flex-col gap-1.5">
+        <div className="mb-5 mt-2 flex flex-col gap-1.5">
           <h2>{castle.title}</h2>
           <div className="flex gap-1 items-center">
             <img src={locationIcon} alt="" />
@@ -32,7 +34,7 @@ const CreatedListing = ({
       </div>
 
       <div className="flex flex-col gap-4">
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
         <div>
           <h2 className="text-(--color-foreground)">Date:</h2>
           <div>
@@ -54,58 +56,58 @@ const CreatedListing = ({
             </p>
           </div>
         </div>
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
         <div>
           <h2 className="text-(--color-foreground)">Room/s:</h2>
-          {castle.rooms.map((r) => (
-            <div className="flex gap-2">
-              <p>1 {r.title}</p>
+          {castle.rooms.map((room) => (
+            <div key={room.title} className="flex gap-2">
+              <p>1 {room.title}</p>
             </div>
           ))}
         </div>
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
         <div>
           <h2 className="text-(--color-foreground)">Guests:</h2>
-          {castle.guests.map((g) => (
-            <div className="flex gap-2">
-              <p>{g.number}</p>
-              <p>{g.category}</p>
+          {castle.guests.map((guest) => (
+            <div key={guest.category} className="flex gap-2">
+              <p>{guest.number}</p>
+              <p>{guest.category}</p>
             </div>
           ))}
         </div>
 
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
 
         <div>
           <h2 className="text-(--color-foreground)">Rules:</h2>
 
-          <ul>
-            {castle.rules.map((r) => (
-              <li>{r.label}</li>
+          <ul className="text-[10px]">
+            {castle.rules.map((rule) => (
+              <li key={rule.id}>{rule.label}</li>
             ))}
           </ul>
         </div>
 
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
 
         <div>
           <h2 className="text-(--color-foreground)">Amneties:</h2>
 
-          <ul>
-            {castle.amneties?.map((a) => (
-              <li>{a.label}</li>
+          <ul className="text-[10px]">
+            {castle.amneties?.map((amnety) => (
+              <li key={amnety.id}>{amnety.label}</li>
             ))}
           </ul>
         </div>
 
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
 
         <div>
           <h2 className="text-(--color-foreground)">Events:</h2>
           {castle.events ? (
-            <ul>
-              {castle.events?.map((e) => (
-                <li>{e.label}</li>
+            <ul className="text-[10px]">
+              {castle.events?.map((event) => (
+                <li key={event.id}>{event.label}</li>
               ))}
             </ul>
           ) : (
@@ -113,9 +115,9 @@ const CreatedListing = ({
           )}
         </div>
 
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
 
-        <div className="flex justify-between">
+        <div className="flex justify-between sm:justify-start sm:gap-2">
           <button
             className="btn-secondary"
             onClick={() => listingEditorHandler(castle)}

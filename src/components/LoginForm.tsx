@@ -17,7 +17,7 @@ const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
   const { actions } = useUser();
   const [formError, setFormError] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (isSubmitted) {
@@ -59,36 +59,36 @@ const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
         className="flex flex-col items-center my-3"
         onSubmit={handleSubmit(async (data) => await onSubmit(data))}
       >
-        <div className="mb-5">
+        <div className="mb-5 sm:mb-2">
           <p className="caption">Email</p>
           <input
             type="email"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm text-xs"
             id=""
             {...register("email", { required: true })}
           />
           {errors.email && errors.email.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Enter an email address
             </p>
           )}
         </div>
-        <div className="mb-3">
+        <div className="mb-3 sm:mb-2">
           <p className="caption">Password</p>
           <input
             type="password"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm text-xs"
             id=""
             {...register("password", { required: true })}
           />
           {errors.password && errors.password.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">Enter a password</p>
+            <p className="text-(--error) text-xs mt-1">Enter a password</p>
           )}
           <p className="caption text-(--gray) underline">Forgot password?</p>
         </div>
 
         <div>
-          <p className="text-red-500 text-sm italic mb-3">{formError}</p>
+          <p className="text-(--error) text-xs mb-3">{formError}</p>
         </div>
 
         <button

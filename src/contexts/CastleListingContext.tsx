@@ -1,5 +1,4 @@
 import axios from "@/axios_api/axios";
-import { dummyCastleListings } from "@/data/castleListings";
 import LocalStorageService from "@/utils/LocalStorageService";
 import {
   createContext,
@@ -122,8 +121,6 @@ function CastleListingProvider({ children }: PropsWithChildren) {
   const [filterCheckboxes, setFilterCheckboxes] = useState<string[]>(
     defaultState.filterCheckboxes
   );
-
-  const { token } = useUser();
 
   useEffect(() => {
     _getListings();

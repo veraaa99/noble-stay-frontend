@@ -2,7 +2,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
@@ -19,7 +18,6 @@ const FilterDropdown = ({
   options,
   onHandleSelectOptions,
 }: DropdownProps) => {
-  //TODO: If size or rooms, only one checkbox/radio button?
   const { filterCheckboxes, actions } = useCastleListing();
 
   // https://stackoverflow.com/questions/60408612/how-to-select-one-checkbox-from-a-mapped-multiple-checkboxes-react-js
@@ -31,11 +29,15 @@ const FilterDropdown = ({
   return (
     <div>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline">{name}</Button>
+        <DropdownMenuTrigger asChild className="w-60 flex justify-between">
+          <Button
+            variant="default"
+            className="bg-[url(assets/Arrow_down.svg)] bg-no-repeat bg-position-[200px]"
+          >
+            {name}
+          </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
-          <DropdownMenuSeparator />
+        <DropdownMenuContent className="w-50 bg-(--primary) text-white">
           {options.map((option) => (
             <DropdownMenuCheckboxItem
               key={option.id}
