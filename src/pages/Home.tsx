@@ -112,7 +112,7 @@ const Home = () => {
           </h4>
         </div>
         {/* Search castles */}
-        <div className="flex flex-col bg-white/70 m-auto pt-12 pb-7 px-8 rounded-sm gap-1.5 items-center sm:py-3 sm:flex-row sm:px-2 sm:mb-10 md:pt-5 md:pb-5 sm:rounded-full sm:items-center md:gap-5 lg:py-2">
+        <div className="flex flex-col bg-white/70 m-auto pt-12 pb-7 px-8 rounded-sm gap-1.5 items-center sm:py-3 sm:flex-row sm:px-2 sm:mb-10  sm:rounded-full sm:items-center md:gap-5 lg:py-2">
           <div className="flex flex-col gap-1.5 sm:flex-row">
             <input
               type="text"
