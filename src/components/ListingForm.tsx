@@ -299,14 +299,14 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
       <form
         action=""
         onSubmit={handleSubmit(async (data) => await onSubmit(data))}
-        className="flex flex-col gap-3.5 mb-5"
+        className="flex flex-col gap-3.5 mb-5  sm:px-5"
       >
         <div>
           <h3>Name of castle</h3>
           <input
             type="title"
             id="title"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm sm:py-1"
             {...register("title", { required: true })}
           />
           {errors.title && errors.title.type === "required" && (
@@ -320,7 +320,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           <input
             type="location"
             id="location"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm sm:py-1"
             {...register("location", { required: true })}
           />
           {errors.location && errors.location.type === "required" && (
@@ -334,7 +334,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
           <input
             type="description"
             id="description"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm sm:py-1"
             {...register("description", { required: true })}
           />
           {errors.description && errors.description.type === "required" && (
@@ -597,7 +597,7 @@ const ListingForm = ({ setIsListingUpdated }: ListingFormProps) => {
               <input
                 type="file"
                 id="images"
-                // value={this.state.images}
+                className=" sm:text-xs"
                 multiple
                 onChange={(e) =>
                   onChange(

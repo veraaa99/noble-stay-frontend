@@ -59,11 +59,11 @@ const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
         className="flex flex-col items-center my-3"
         onSubmit={handleSubmit(async (data) => await onSubmit(data))}
       >
-        <div className="mb-5">
+        <div className="mb-5 sm:mb-2">
           <p className="caption">Email</p>
           <input
             type="email"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm text-xs"
             id=""
             {...register("email", { required: true })}
           />
@@ -73,11 +73,11 @@ const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
             </p>
           )}
         </div>
-        <div className="mb-3">
+        <div className="mb-3 sm:mb-2">
           <p className="caption">Password</p>
           <input
             type="password"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm text-xs"
             id=""
             {...register("password", { required: true })}
           />

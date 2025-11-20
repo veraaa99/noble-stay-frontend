@@ -365,7 +365,7 @@ const UpdateListingForm = ({
           <input
             type="title"
             id="title"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm sm:text-xs"
             {...register("title", { required: true })}
           />
           {errors.title && errors.title.type === "required" && (
@@ -379,7 +379,7 @@ const UpdateListingForm = ({
           <input
             type="location"
             id="location"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm sm:text-xs"
             {...register("location", { required: true })}
           />
 
@@ -394,7 +394,7 @@ const UpdateListingForm = ({
           <input
             type="description"
             id="description"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm sm:text-xs"
             {...register("description", { required: true })}
           />
           {errors.description && errors.description.type === "required" && (
@@ -522,7 +522,6 @@ const UpdateListingForm = ({
                       <TagsValue
                         key={amnety.id}
                         onRemove={() => {
-                          // handleRemove("amnety", amnety),
                           onChange(handleRemove("amnety", amnety));
                         }}
                       >
@@ -530,9 +529,9 @@ const UpdateListingForm = ({
                       </TagsValue>
                     ))}
                   </TagsTrigger>
-                  <TagsContent>
+                  <TagsContent className="bg-(--primary) ">
                     <TagsInput placeholder="Search amnety..." />
-                    <TagsList>
+                    <TagsList className="bg-(--primary)">
                       <TagsEmpty />
                       <TagsGroup>
                         {amneties.map((amnety) => (
@@ -589,7 +588,7 @@ const UpdateListingForm = ({
                     <TagsInput placeholder="Search events..." />
                     <TagsList>
                       <TagsEmpty />
-                      <TagsGroup>
+                      <TagsGroup className="bg-(--primary) ">
                         {events.map((event) => (
                           <TagsItem
                             key={event.id}
@@ -638,7 +637,7 @@ const UpdateListingForm = ({
                     <TagsInput placeholder="Pick a rule..." />
                     <TagsList>
                       <TagsEmpty />
-                      <TagsGroup>
+                      <TagsGroup className="bg-(--primary) ">
                         {rules.map((rule) => (
                           <TagsItem
                             key={rule.id}
@@ -680,6 +679,7 @@ const UpdateListingForm = ({
               <input
                 type="file"
                 id="images"
+                className="text-xs"
                 multiple
                 onChange={(e) =>
                   onChange(

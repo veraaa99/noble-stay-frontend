@@ -1,11 +1,16 @@
 import { useCastleListing } from "@/contexts/CastleListingContext";
 import { Calendar } from "./ui/calendar";
 
+import classNames from "react-day-picker/style.module.css";
+import { getDefaultClassNames } from "react-day-picker";
+
 type DateCalendarProps = {
   onChange?: (...event: any[]) => void;
   selected?: any;
   disabledDates?: string[];
 };
+
+console.log(classNames);
 
 const DateCalendar = ({
   onChange,
@@ -13,6 +18,8 @@ const DateCalendar = ({
   disabledDates,
 }: DateCalendarProps) => {
   const { selectedDates, actions } = useCastleListing();
+  const defaultClassNames = getDefaultClassNames();
+  console.log(defaultClassNames.day_button);
 
   return (
     <>
@@ -35,7 +42,7 @@ const DateCalendar = ({
             after: new Date(disabledDates[disabledDates.length - 1]),
           }}
           excludeDisabled
-          className="w-85 self-center"
+          className="w-85 self-center sm:w-60"
         />
       ) : (
         <Calendar
@@ -52,7 +59,8 @@ const DateCalendar = ({
           numberOfMonths={1}
           timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
           disabled={{ before: new Date() }}
-          className="w-75 self-center"
+          className="w-75 self-center sm:w-60 p-0"
+          classNames={{ month: "space-y-1 flex flex-col" }}
         />
       )}
     </>

@@ -126,13 +126,13 @@ const Profile = () => {
         {/* Account details */}
         <div>
           <h2>Account details</h2>
-          <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3">
-            <div className="flex-flex-col gap-2 mb-3">
+          <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:flex sm:px-12 sm:w-100 sm:items-center">
+            <div className="flex-flex-col gap-2 mb-3 sm:mb-0">
               <h3 className="text-(--very-dark-brown)">Email</h3>
               <p>{user?.email}</p>
             </div>
-            <hr className="w-70 m-auto border-(--gray)" />
-            <div className="flex-flex-col gap-2 mt-3">
+            <hr className="w-70 m-auto border-(--gray) sm:rotate-90 sm:w-10" />
+            <div className="flex-flex-col gap-2 mt-3 sm:mt-0">
               <h3 className="text-(--very-dark-brown)">Mobile</h3>
               <p>{user?.phone}</p>
             </div>
@@ -140,11 +140,11 @@ const Profile = () => {
         </div>
 
         {/* My bookings */}
-        <div>
+        <div className="flex flex-col gap-2">
           <h2>My bookings</h2>
           {userBookings.length > 0 ? (
             userBookings.map((b) => (
-              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3">
+              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100">
                 <Booking booking={b} />
               </div>
             ))
@@ -158,7 +158,7 @@ const Profile = () => {
           <h2>My listings</h2>
           {userListings.length > 0 ? (
             userListings.map((c) => (
-              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3">
+              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100">
                 <CreatedListing
                   castle={c}
                   listingEditorHandler={listingEditorHandler}
@@ -187,7 +187,7 @@ const Profile = () => {
         {/* Create new castle listing */}
         <div>
           <h2>Create new castle listing</h2>
-          <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3">
+          <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100">
             <ListingForm setIsListingUpdated={setIsListingUpdated} />
           </div>
         </div>

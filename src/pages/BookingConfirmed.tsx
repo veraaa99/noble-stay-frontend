@@ -44,7 +44,7 @@ const BookingConfirmed = () => {
   };
 
   return (
-    <div className="flex flex-col px-7 pt-10 mb-15">
+    <div className="flex flex-col px-7 pt-10 mb-15 sm:px-40">
       {booking && (
         <>
           <div className="flex-flex-col text-center mb-5 ">
@@ -69,7 +69,7 @@ const BookingConfirmed = () => {
           </div>
 
           <button
-            className="btn-secondary m-auto"
+            className="btn-secondary m-auto cursor-pointer"
             onClick={() => navigate("/")}
           >
             Back to start

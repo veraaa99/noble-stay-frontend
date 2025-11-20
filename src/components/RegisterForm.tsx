@@ -62,14 +62,14 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
     <div>
       <form
         action=""
-        className="flex flex-col items-center my-3"
+        className="flex flex-col items-center my-2"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="mb-5">
+        <div className="mb-5 sm:mb-1">
           <p className="caption">Email</p>
           <input
             type="email"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-1 border-1 border-(--sidebar-border) rounded-sm text-xs"
             id="email"
             {...register("email", { required: true })}
           />
@@ -79,11 +79,11 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
             </p>
           )}
         </div>
-        <div className="mb-3">
+        <div className="mb-3 sm:mb-1">
           <p className="caption">Mobile</p>
           <input
             type="text"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-1 border-1 border-(--sidebar-border) rounded-sm text-xs"
             id="phone"
             {...register("phone", { required: true })}
           />
@@ -93,11 +93,11 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
             </p>
           )}
         </div>
-        <div className="mb-3">
+        <div className="mb-3 sm:mb-1">
           <p className="caption">Password</p>
           <input
             type="password"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-1 border-1 border-(--sidebar-border) rounded-sm text-xs"
             id="password"
             {...register("password", { required: true })}
           />
@@ -105,11 +105,11 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
             <p className="text-red-500 text-xs italic mt-1">Enter a password</p>
           )}
         </div>
-        <div className="mb-3">
+        <div className="mb-3 sm:mb-1">
           <p className="caption">Confirm password</p>
           <input
             type="password"
-            className="bg-white pl-3 pr-7 py-2 border-1 border-(--sidebar-border) rounded-sm"
+            className="bg-white pl-3 pr-7 py-1 border-1 border-(--sidebar-border) rounded-sm text-xs"
             id="confirmPassword"
             {...register("confirmPassword", { required: true })}
           />

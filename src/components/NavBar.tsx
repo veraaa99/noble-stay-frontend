@@ -4,6 +4,7 @@ import RegisterForm from "./RegisterForm";
 import { Link, useNavigate } from "react-router";
 import { useUser } from "@/contexts/UserContext";
 import nobleStaySmallLogo from "../assets/A.svg";
+import nobleStayBigLogo from "../assets/LOGO Navbar.svg";
 import { RxHamburgerMenu } from "react-icons/rx";
 import Modal from "react-modal";
 
@@ -42,20 +43,45 @@ const NavBar = () => {
       <div className="flex align-middle justify-center items-center">
         {/* Logotype */}
         <Link to={"/"}>
-          <img src={nobleStaySmallLogo} alt="" />
-          {/* IF DESKTOP: Show logo + full name */}
+          <img className="sm:hidden" src={nobleStaySmallLogo} alt="" />
+          <img className="hidden sm:block w-50" src={nobleStayBigLogo} alt="" />
         </Link>
         {/* NOBLE STAY */}
       </div>
       <div className="flex align-middle justify-center items-center">
         {/* Hamburger menu */}
         <RxHamburgerMenu
-          className="cursor-pointer"
+          className="cursor-pointer sm:hidden"
           size={30}
           onClick={menuModalHandler}
         />
-        {/* IF DESKTOP:  Show all options*/}
-        {/* All castles, My Bookings, Login/Sign up */}
+        {/* Desktop menu */}
+        <div className="hidden sm:flex md:gap-4">
+          <Link to={"/"}>
+            <div className=" px-5  font-light py-2">
+              <p>Home</p>
+            </div>
+          </Link>
+          <Link to={"/castles"}>
+            <div className=" px-5  font-light py-2">
+              <p>All castles</p>
+            </div>
+          </Link>
+          {currentUser !== null && (
+            <Link to={"/profile"}>
+              <div className=" px-5  font-light py-2">
+                <p>My bookings</p>
+              </div>
+            </Link>
+          )}
+          <div className=" px-5  font-light py-2 cursor-pointer">
+            {currentUser == null ? (
+              <p onClick={loginModalHandler}>Login / Sign up</p>
+            ) : (
+              <p onClick={logoutHandler}>Logout</p>
+            )}
+          </div>
+        </div>
       </div>
 
       <Modal
@@ -104,7 +130,7 @@ const NavBar = () => {
       <Modal
         isOpen={isLoginModalOpen}
         onRequestClose={() => setIsLoginModalOpen(false)}
-        className="w-70 bg-white pt-3 pb-10 px-5 rounded shadow-lg max-w-md mx-auto mt-20 realtive"
+        className="w-70 bg-white pt-2 pb-5 px-5 rounded shadow-lg max-w-md mx-auto mt-5 realtive"
         overlayClassName="fixed inset-0 bg-black/50 flex justify-center items-start z-50"
       >
         <div>
@@ -128,7 +154,7 @@ const NavBar = () => {
       <Modal
         isOpen={isRegisterModalOpen}
         onRequestClose={() => setIsRegisterModalOpen(false)}
-        className="w-70 bg-white pt-3 pb-10 px-5 rounded shadow-lg max-w-md mx-auto mt-20 realtive"
+        className="w-70 bg-white pt-2 pb-5 px-5 rounded shadow-lg max-w-md mx-auto mt-2 realtive sm:pb-3"
         overlayClassName="fixed inset-0 bg-black/50 flex justify-center items-start z-50"
       >
         <div>

@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
+import arrowDown from "../assets/Arrow_down.svg";
 import { useCastleListing } from "@/contexts/CastleListingContext";
 
 type DropdownProps = {
@@ -31,11 +32,16 @@ const FilterDropdown = ({
   return (
     <div>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline">{name}</Button>
+        <DropdownMenuTrigger asChild className="w-60 flex justify-between">
+          <Button
+            variant="default"
+            className="bg-[url(assets/Arrow_down.svg)] bg-no-repeat bg-position-[200px]"
+          >
+            {name}
+          </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
-          <DropdownMenuSeparator />
+        <DropdownMenuContent className="w-50 bg-(--primary) text-white">
+          {/* <DropdownMenuSeparator /> */}
           {options.map((option) => (
             <DropdownMenuCheckboxItem
               key={option.id}

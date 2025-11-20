@@ -10,6 +10,7 @@ import locationIcon from "../assets/Location_On.svg";
 import calendarIcon from "../assets/Calendar_Month.svg";
 import axios from "@/axios_api/axios";
 import { format } from "date-fns";
+import Modal from "react-modal";
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
@@ -128,14 +129,15 @@ const SearchResults = () => {
   return (
     <div>
       {/* Search filters */}
-      <div className="flex flex-col px-4 mt-5 mb-5 gap-8">
-        <div className="flex flex-col gap-5">
+      <div className="flex flex-col px-4 mt-5 mb-5 gap-8 sm:gap-5 sm:mx-5">
+        <div className="flex flex-col gap-5 sm:gap-2">
           <h1>Showing results for:</h1>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 sm:flex-row">
             <div className="flex gap-1">
               <img src={locationIcon} alt="" />
               <input
                 type="text"
+                className="sm:w-25"
                 placeholder={
                   searchParams.get("location") == null
                     ? "Select location"
@@ -149,6 +151,7 @@ const SearchResults = () => {
               <img src={calendarIcon} alt="" />
               <input
                 type="text"
+                className="sm:w-25"
                 placeholder={
                   selectedDates == undefined
                     ? "Select date"
@@ -166,6 +169,28 @@ const SearchResults = () => {
               />
             </div>
           </div>
+
+          {selectedGuests.map(
+            (guest) =>
+              guest.number > 0 && (
+                <div className="flex flex-col gap-1">
+                  <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">
+                    {guest.category}: {guest.number}
+                  </p>
+                </div>
+              )
+          )}
+
+          {filters.map(
+            (filter) =>
+              filter.selectedOptions.length > 0 && (
+                <div className="flex flex-col gap-1">
+                  <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">
+                    {filter.name}: {filter.selectedOptions}
+                  </p>
+                </div>
+              )
+          )}
         </div>
         <div className="flex justify-between items-end">
           <p>
@@ -177,16 +202,26 @@ const SearchResults = () => {
         </div>
       </div>
 
-      {isDateModalOpen && (
+      {/* {isDateModalOpen && (
         <div>
           <p onClick={dateModalHandler}>X</p>
           <DateCalendar />
         </div>
-      )}
+      )} */}
 
-      {isFilterModalOpen && (
-        <div>
-          <p onClick={filterModalHandler}>X</p>
+      <Modal
+        isOpen={isFilterModalOpen}
+        onRequestClose={filterModalHandler}
+        className="w-70 bg-white py-5 px-5 mt-10 rounded shadow-lg max-w-md mx-auto realtive"
+        overlayClassName="fixed inset-0 bg-black/50 flex justify-center items-start z-50"
+      >
+        <div className="flex flex-col justify-center gap-3">
+          <h2
+            className="cursor-pointer text-(--color-foreground) font-light text-right"
+            onClick={filterModalHandler}
+          >
+            ✕
+          </h2>
           {filters.map((filter) => (
             <FilterDropdown
               name={filter.name}
@@ -194,13 +229,15 @@ const SearchResults = () => {
               onHandleSelectOptions={handleSelectOptions}
             />
           ))}
-          <button onClick={handleSearch}>Apply</button>
+          <button className="btn-secondary self-center" onClick={handleSearch}>
+            Search
+          </button>
         </div>
-      )}
+      </Modal>
 
       {/* Search results */}
       {filteredListings !== undefined && (
-        <div>
+        <div className="sm:flex sm:flex-wrap sm:items-start sm:px-5">
           {filteredListings.map((listing) => (
             <CastleCardBig castle={listing} />
           ))}

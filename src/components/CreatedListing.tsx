@@ -79,7 +79,7 @@ const CreatedListing = ({
         <div>
           <h2 className="text-(--color-foreground)">Rules:</h2>
 
-          <ul>
+          <ul className="text-[10px]">
             {castle.rules.map((r) => (
               <li>{r.label}</li>
             ))}
@@ -91,7 +91,7 @@ const CreatedListing = ({
         <div>
           <h2 className="text-(--color-foreground)">Amneties:</h2>
 
-          <ul>
+          <ul className="text-[10px]">
             {castle.amneties?.map((a) => (
               <li>{a.label}</li>
             ))}
@@ -103,7 +103,7 @@ const CreatedListing = ({
         <div>
           <h2 className="text-(--color-foreground)">Events:</h2>
           {castle.events ? (
-            <ul>
+            <ul className="text-[10px]">
               {castle.events?.map((e) => (
                 <li>{e.label}</li>
               ))}
@@ -115,7 +115,7 @@ const CreatedListing = ({
 
         <hr className="w-70 m-auto border-(--gray)" />
 
-        <div className="flex justify-between">
+        <div className="flex justify-between sm:justify-start sm:gap-2">
           <button
             className="btn-secondary"
             onClick={() => listingEditorHandler(castle)}
