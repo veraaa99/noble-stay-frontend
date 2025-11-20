@@ -1,10 +1,10 @@
-import { Outlet } from "react-router"
+import { Outlet } from "react-router";
 
 const BookingLayout = () => {
   return (
     <div>
-        <Outlet />
+      <Outlet />
     </div>
-  )
-}
-export default BookingLayout
+  );
+};
+export default BookingLayout;

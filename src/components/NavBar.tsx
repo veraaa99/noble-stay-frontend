@@ -13,7 +13,7 @@ const NavBar = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
-  const { currentUser, token, actions } = useUser();
+  const { currentUser, actions } = useUser();
   const navigate = useNavigate();
 
   const menuModalHandler = () => {

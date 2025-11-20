@@ -42,19 +42,10 @@ const Footer = () => {
       <div className="hidden sm:flex sm:flex-col sm:gap-1">
         <h3>Follow us</h3>
         <div className="flex gap-2">
-          {/* <div className="flex flex-row gap-1 items-center"> */}
           <FiFacebook />
-          {/* <p className="caption">000 000 00 00</p> */}
-          {/* </div> */}
-          {/* <div className="flex flex-row gap-1 items-center"> */}
           <FaInstagram />
-          {/* <p className="caption">noblestay@email.com</p> */}
-          {/* </div> */}
-          {/* <div className="flex flex-row gap-1 items-center"> */}
           <FaXTwitter />
           <SlSocialLinkedin />
-          {/* <p className="caption">Stockholm, Sweden</p>
-          </div> */}
         </div>
       </div>
     </footer>

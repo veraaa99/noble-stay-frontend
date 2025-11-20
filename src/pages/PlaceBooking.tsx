@@ -13,12 +13,7 @@ import locationIcon from "../assets/Location_On.svg";
 const PlaceBooking = () => {
   const [searchParams] = useSearchParams();
 
-  const {
-    selectedDates,
-    selectedGuests,
-    selectedRooms,
-    actions: castleListingActions,
-  } = useCastleListing();
+  const { selectedDates, selectedGuests, selectedRooms } = useCastleListing();
   const { currentUser, token } = useUser();
   const navigate = useNavigate();
 
@@ -108,7 +103,6 @@ const PlaceBooking = () => {
       bookedGuests: selectedGuests,
     };
 
-    // setFormError("");
     setLoading(true);
 
     try {
@@ -140,7 +134,7 @@ const PlaceBooking = () => {
   };
 
   return (
-    <div className="m-auto px-7 pt-10 sm:px-10">
+    <div className="m-auto px-7 pt-10 md:w-200 lg:w-220">
       {castle && (
         <div>
           <button
@@ -152,16 +146,16 @@ const PlaceBooking = () => {
 
           <h1 className="hidden sm:block sm:mb-5">Booking summary</h1>
 
-          <div className="sm:flex sm:justify-between sm:items-center">
+          <div className="sm:flex sm:justify-between sm:items-center sm:gap-3">
             <div className="sm:border-1 sm:border-(--gray) sm:rounded-xl sm:px-5 sm:py-5">
               {/* Castle information summary */}
               <div className="sm:flex sm:mb-7 sm:gap-3">
                 <div className="flex flex-col gap-2 sm:w-70">
                   <h1 className="sm:hidden">Booking summary</h1>
                   {/* Castle image */}
-                  <div>
+                  <div className="w-full h-50 sm:h-50 ">
                     <img
-                      className="rounded-xl h-50"
+                      className="h-full w-full rounded-sm object-cover"
                       src={castle.images[0]}
                       alt=""
                     />
@@ -184,7 +178,7 @@ const PlaceBooking = () => {
               </div>
 
               {/* Booking details */}
-              <div className="flex flex-col gap-4 mb-5 sm:px-5">
+              <div className="flex flex-col gap-4 mb-5 sm:px-5 lg:gap-2">
                 <hr className="w-80 m-auto border-(--gray)" />
                 <div>
                   <h2 className="text-(--color-foreground)">Date:</h2>
@@ -232,7 +226,7 @@ const PlaceBooking = () => {
             {currentUser ? (
               // IF LOGGED IN: Select payment method
               <div className="flex flex-col items-center mb-15">
-                <h2>Select payment method</h2>
+                <h2 className="text-center">Select payment method</h2>
                 <p className="caption text-(--gray) mb-3">
                   Disclaimer: you will not be charged
                 </p>

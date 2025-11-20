@@ -1,16 +1,13 @@
 import axios from "@/axios_api/axios";
-import LocalStorageService from "@/utils/LocalStorageService";
 import {
   createContext,
   useContext,
   useState,
   type PropsWithChildren,
 } from "react";
-// import { useNavigate } from "react-router";
 
 type BookingState = {
   bookings: Booking[];
-  // setBookings: typeof useState<Booking[] | null>,
   actions: {
     createBooking: (booking: BookingInputs, token: string) => void;
     setAllBookings: (bookings: Booking[]) => void;
@@ -29,9 +26,6 @@ const BookingContext = createContext<BookingState>(defaultState);
 
 function BookingProvider({ children }: PropsWithChildren) {
   const [bookings, setBookings] = useState<Booking[]>(defaultState.bookings);
-  const [userBookings, setUserBookings] = useState<Booking[] | null>(
-    defaultState.bookings
-  );
 
   // Public functions
   const createBooking: typeof defaultState.actions.createBooking = async (
@@ -58,8 +52,6 @@ function BookingProvider({ children }: PropsWithChildren) {
 
   const setAllBookings = (bookings: Booking[]) => {
     setBookings(bookings);
-    setUserBookings(bookings);
-    LocalStorageService.setItem<Booking[]>("@booking/bookings", bookings);
   };
 
   const actions = {

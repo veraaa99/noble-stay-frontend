@@ -6,13 +6,9 @@ import { useCastleListing } from "@/contexts/CastleListingContext";
 import DateCalendar from "@/components/DateCalendar";
 import axios from "@/axios_api/axios";
 
-import profilePic from "../assets/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg";
-import locationIcon from "../assets/Location_On.svg";
 import calendarIcon from "../assets/Calendar_Month.svg";
 import guestsIcon from "../assets/Groups.svg";
 import bedIcon from "../assets/King_bed.svg";
-import filterIcon from "../assets/Filter_Alt.svg";
-import shareIcon from "../assets/Share.svg";
 
 import type { DateRange } from "react-day-picker";
 
@@ -98,7 +94,7 @@ const CastleDetails = () => {
   };
 
   return (
-    <div className="m-auto px-5 sm:px-15 md:px-15 md:py-10">
+    <div className="m-auto px-10 sm:mx-15 md:m-auto md:py-10 md:w-180 lg:w-220 lg:m-auto">
       <button className="my-6 sm:text-xs" onClick={() => navigate(-1)}>
         {"<"} Go back to listings
       </button>
@@ -107,16 +103,16 @@ const CastleDetails = () => {
       {listing && (
         <div>
           {/* Castle image */}
-          <div className="sm:w-full">
+          <div className="sm:h-80 w-full">
             <img
-              className="rounded-xl h-60 md:h-100 md:w-full"
+              className="rounded-xl max-h-90 object-cover w-full sm:h-full sm:rounded-sm"
               src={listing.images[0]}
               alt=""
             />
           </div>
           {/* listing information */}
           <div className="sm:flex sm:justify-between sm:gap-5 md:relative">
-            <div className="sm:w-3xl md:w-4xl">
+            <div className="sm:w-3xl lg:w-xl">
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center sm:items-baseline">
                   <h1>{listing.title}</h1>
@@ -165,12 +161,9 @@ const CastleDetails = () => {
             </div>
 
             <hr className="w-85 m-auto border-(--color-gray) sm:hidden" />
-            {/* <hr className="hidden absolute sm:block rotate-90 w-85 border-(--color-gray) bottom-45 right-100" /> */}
-
-            <hr className="hidden md:block rotate-90 w-[50%] mt-50 border-(--color-gray)" />
 
             {/* castle owner details */}
-            <div className="sm:flex-col sm:w-60 md:w-lg">
+            <div className="sm:flex-col sm:w-60 ">
               <div className="flex my-5 justify-between sm:flex-row-reverse sm:gap-2">
                 <div className="w-60 md:w-80">
                   <h2 className="text-(--color-foreground) sm:hidden">
@@ -185,9 +178,8 @@ const CastleDetails = () => {
                   </p>
                 </div>
                 <div className="flex flex-col items-end sm:items-center md:w-50">
-                  {/* PLaceholder image by Joseph Gonzalez at Unsplash.com */}
+                  {/* Placeholder image by Joseph Gonzalez at Unsplash.com: https://unsplash.com/photos/man-wearing-white-v-neck-shirt-iFgRcqHznqg */}
                   <div className="bg-[url(assets/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg)] bg-cover bg-no-repeat bg-center w-[70px] h-[70px] rounded-full sm:w-[40px] sm:h-[40px]"></div>
-                  {/* <img className="rounded-full w-[70px] h-[70px]" src={profilePic} alt="" /> */}
                   <p>★★★★★</p>
                   <a
                     className="caption link underline bg-[url(assets/Mail.svg)] bg-no-repeat bg-position-[0px] pl-6"
@@ -198,14 +190,14 @@ const CastleDetails = () => {
                 </div>
               </div>
               {/* Location details */}
-              <div className="hidden sm:flex sm:flex-col md:ml-10">
+              <div className="hidden sm:flex sm:flex-col ">
                 <h4 className="text-(--color-foreground)">Location</h4>
                 <p> {listing.location}</p>
               </div>
             </div>
           </div>
 
-          <hr className="w-85 m-auto border-(--color-gray) sm:w-xl md:w-7xl md:my-10" />
+          <hr className="w-85 m-auto border-(--color-gray) sm:w-xl  md:my-10" />
 
           {/* Location details */}
           <div className="flex flex-col my-5 sm:hidden">
@@ -215,10 +207,10 @@ const CastleDetails = () => {
 
           <hr className="w-85 m-auto border-(--color-gray) sm:hidden" />
 
-          <div className="sm:flex sm:w-full sm:justify-around sm:mt-5">
-            <div className="sm:flex sm:flex-col md:w-4xl">
+          <div className="sm:flex sm:w-full sm:justify-around sm:mt-5 md:justify-center">
+            <div className="sm:flex sm:flex-col md:w-4xl lg:w-full">
               {/* Select dates */}
-              <div className="flex flex-col my-5 sm:my-0">
+              <div className="flex flex-col my-5 sm:my-0 ">
                 <div className="flex gap-2 items-center">
                   <img src={calendarIcon} alt="" />
                   <h2 className="text-(--color-foreground) sm:hidden">

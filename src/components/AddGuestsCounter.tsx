@@ -88,7 +88,7 @@ const AddGuestsCounter = ({
   };
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-2.5 sm:w-70">
       <div className="border-2 rounded-lg grid grid-cols-3 px-3 py-1 items-center">
         <div className="col-span-2">
           <p>Adults</p>

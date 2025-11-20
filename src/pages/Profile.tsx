@@ -3,7 +3,6 @@ import Booking from "../components/Booking";
 import CreatedListing from "../components/CreatedListing";
 import ListingForm from "../components/ListingForm";
 import { useEffect, useState } from "react";
-import { useBooking } from "@/contexts/BookingContext";
 import { useCastleListing } from "@/contexts/CastleListingContext";
 import axios from "@/axios_api/axios";
 import UpdateListingForm from "@/components/UpdateListingForm";
@@ -126,7 +125,7 @@ const Profile = () => {
         {/* Account details */}
         <div>
           <h2>Account details</h2>
-          <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:flex sm:px-12 sm:w-100 sm:items-center">
+          <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:flex sm:px-12 sm:w-100 sm:items-center md:w-130">
             <div className="flex-flex-col gap-2 mb-3 sm:mb-0">
               <h3 className="text-(--very-dark-brown)">Email</h3>
               <p>{user?.email}</p>
@@ -144,7 +143,7 @@ const Profile = () => {
           <h2>My bookings</h2>
           {userBookings.length > 0 ? (
             userBookings.map((b) => (
-              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100">
+              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100 md:w-130">
                 <Booking booking={b} />
               </div>
             ))
@@ -158,7 +157,7 @@ const Profile = () => {
           <h2>My listings</h2>
           {userListings.length > 0 ? (
             userListings.map((c) => (
-              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100">
+              <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100 md:w-130">
                 <CreatedListing
                   castle={c}
                   listingEditorHandler={listingEditorHandler}
@@ -187,7 +186,7 @@ const Profile = () => {
         {/* Create new castle listing */}
         <div>
           <h2>Create new castle listing</h2>
-          <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100">
+          <div className="border-1 border-(--color-gray) rounded-lg px-5 py-5 mt-3 sm:w-100 md:w-130">
             <ListingForm setIsListingUpdated={setIsListingUpdated} />
           </div>
         </div>

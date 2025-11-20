@@ -1,10 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import "../node_modules/leaflet/dist/leaflet.css";
-@import "../node_modules/leaflet-geosearch/dist/geosearch.css";
 
 @import "tailwindcss";
 @import "tw-animate-css";
-/* @import "react-day-picker/style.css"; */
 
 @custom-variant dark (&:is(.dark *));
 
@@ -196,6 +193,7 @@
 
   .link {
     @apply text-(--color-action);
+    font-size: 12px;
   }
 
   ::placeholder {
@@ -225,6 +223,7 @@
   }
 
   .btn-secondary:hover {
+    @apply cursor-pointer;
     border-color: var(--color-primary);
     cursor: cursor-pointer;
   }
@@ -380,49 +379,61 @@
   .caption {
     font-size: 8px;
   }
+
+  .checkmark {
+    height: 20px;
+    width: 20px;
+  }
+
+  .container .checkmark:after {
+    top: 2.8px;
+    left: 2.8px;
+    width: 13px;
+    height: 13px;
+  }
 }
 
 @media (min-width: 1024px) {
   h1 {
-    font-size: 61px;
+    font-size: 40px;
   }
 
   h2 {
-    font-size: 49px;
+    font-size: 25px;
   }
 
   h3 {
-    font-size: 39px;
+    font-size: 20px;
   }
 
   h4 {
-    font-size: 31px;
-  }
-
-  p {
     font-size: 18px;
   }
 
+  p {
+    font-size: 12px;
+  }
+
   .btn-primary {
-    width: 182px;
-    height: 68px;
-    font-size: 20px;
+    width: 110px;
+    height: 35px;
+    font-size: 12px;
   }
 
   .btn-secondary {
-    width: 182px;
-    height: 68px;
-    font-size: 20px;
+    width: 110px;
+    height: 35px;
+    font-size: 12px;
     font-weight: 600;
   }
 
   .btn-action {
-    width: 182px;
-    height: 68px;
-    font-size: 20px;
+    width: 110px;
+    height: 35px;
+    font-size: 12px;
   }
 
   .caption {
-    font-size: 16px;
+    font-size: 10px;
   }
 }

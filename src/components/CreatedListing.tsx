@@ -1,5 +1,3 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
-import { Link } from "react-router";
 import locationIcon from "../assets/Location_On.svg";
 
 type CreatedListingProps = {
@@ -17,8 +15,12 @@ const CreatedListing = ({
 }: CreatedListingProps) => {
   return (
     <div>
-      <div>
-        <img src={castle.images[0]} alt="" />
+      <div className="h-50 sm:h-60">
+        <img
+          className="w-full h-full object-cover rounded-lg"
+          src={castle.images[0]}
+          alt=""
+        />
       </div>
 
       <div>
@@ -32,7 +34,7 @@ const CreatedListing = ({
       </div>
 
       <div className="flex flex-col gap-4">
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
         <div>
           <h2 className="text-(--color-foreground)">Date:</h2>
           <div>
@@ -54,7 +56,7 @@ const CreatedListing = ({
             </p>
           </div>
         </div>
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
         <div>
           <h2 className="text-(--color-foreground)">Room/s:</h2>
           {castle.rooms.map((r) => (
@@ -63,7 +65,7 @@ const CreatedListing = ({
             </div>
           ))}
         </div>
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
         <div>
           <h2 className="text-(--color-foreground)">Guests:</h2>
           {castle.guests.map((g) => (
@@ -74,7 +76,7 @@ const CreatedListing = ({
           ))}
         </div>
 
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
 
         <div>
           <h2 className="text-(--color-foreground)">Rules:</h2>
@@ -86,7 +88,7 @@ const CreatedListing = ({
           </ul>
         </div>
 
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
 
         <div>
           <h2 className="text-(--color-foreground)">Amneties:</h2>
@@ -98,7 +100,7 @@ const CreatedListing = ({
           </ul>
         </div>
 
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
 
         <div>
           <h2 className="text-(--color-foreground)">Events:</h2>
@@ -113,7 +115,7 @@ const CreatedListing = ({
           )}
         </div>
 
-        <hr className="w-70 m-auto border-(--gray)" />
+        <hr className="w-[70%] m-auto border-(--gray)" />
 
         <div className="flex justify-between sm:justify-start sm:gap-2">
           <button

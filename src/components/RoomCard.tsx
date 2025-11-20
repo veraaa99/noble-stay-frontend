@@ -13,7 +13,6 @@ const RoomCard = ({
   room,
   isBookingRoom,
   onChange,
-  selected,
   isRoomInCastleListing,
 }: RoomCardProps) => {
   const { selectedRooms, actions } = useCastleListing();
@@ -36,18 +35,18 @@ const RoomCard = ({
   }, [radioChecked]);
 
   return (
-    <div className="custom-shadow rounded-lg px-4 py-2 md:py-5">
+    <div className=" custom-shadow rounded-lg px-4 py-2 sm:w-60 md:w-70">
       <div className="mb-2">
         <h2>{room.title}</h2>
         <p className="caption text-(--gray)">{room.caption}</p>
-        <ul className="list-disc ml-8 small-text">
+        <ul className="list-disc ml-8 sm:text-[10px]">
           {room.description.map((d) => (
             <li>{d}</li>
           ))}
         </ul>
       </div>
-      <hr className="w-60 m-auto border-(--color-foreground)" />
-      <div className="flex justify-between my-3  items-center">
+      <hr className="w-35 m-auto border-(--color-foreground) md:w-30" />
+      <div className="flex justify-between my-3 items-center">
         <p className="caption">{room.price}kr / night</p>
         {isBookingRoom ? (
           <div className="flex gap-2">

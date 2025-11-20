@@ -64,7 +64,6 @@ const AllCastles = () => {
 
     // Filter params
     filters.map((filter) => {
-      // filter.selectedOptions.length > 0 &&
       filter.selectedOptions.forEach((option) =>
         searchParams.append(filter.name, option)
       );
@@ -175,34 +174,12 @@ const AllCastles = () => {
         </div>
       </Modal>
 
-      {/* {isDateModalOpen && (
-        <div>
-          <p onClick={dateModalHandler}>X</p>
-          <DateCalendar />
-        </div>
-      )} */}
-
-      {/* {isFilterModalOpen && (
-        <div>
-          <p onClick={filterModalHandler}>X</p>
-          {filters.map((filter) => (
-            <FilterDropdown
-              name={filter.name}
-              options={filter.options}
-              onHandleSelectOptions={handleSelectOptions}
-            />
-          ))}
-          <button onClick={handleSearch}>Apply</button>
-        </div>
-      )} */}
-
-      {/* Search results */}
       {/* Castle card/s */}
-      {listings.map((c) => (
-        <div className="sm:flex sm:flex-wrap sm:items-start sm:px-5">
+      <div className="sm:flex sm:flex-wrap sm:items-start sm:px-5 sm:gap-10">
+        {listings.map((c) => (
           <CastleCardBig castle={c} />
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

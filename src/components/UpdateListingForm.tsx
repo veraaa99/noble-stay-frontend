@@ -1,7 +1,7 @@
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import DateCalendar from "./DateCalendar";
 import { useCastleListing } from "@/contexts/CastleListingContext";
-import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import AddGuestsCounter from "./AddGuestsCounter";
 import { eachDayOfInterval, format } from "date-fns";
 
@@ -37,7 +37,6 @@ const UpdateListingForm = ({
     register,
     handleSubmit,
     control,
-    reset,
     formState: { errors },
   } = useForm<ListingInputs>({
     defaultValues: {
@@ -61,7 +60,6 @@ const UpdateListingForm = ({
   const { actions } = useCastleListing();
 
   const [formError, setFormError] = useState<string>("");
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -338,7 +336,6 @@ const UpdateListingForm = ({
       if (res.status === 200) {
         actions.updateListing(res.data);
         setFormError("");
-        setIsSubmitted(true);
         listingEditorHandler(res.data);
         setIsListingUpdated((isListingUpdated) => !isListingUpdated);
       }
@@ -369,7 +366,7 @@ const UpdateListingForm = ({
             {...register("title", { required: true })}
           />
           {errors.title && errors.title.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs  mt-1">
               Enter a name for the castle
             </p>
           )}
@@ -384,7 +381,7 @@ const UpdateListingForm = ({
           />
 
           {errors.location && errors.location.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs  mt-1">
               Enter the castle's location
             </p>
           )}
@@ -398,7 +395,7 @@ const UpdateListingForm = ({
             {...register("description", { required: true })}
           />
           {errors.description && errors.description.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs  mt-1">
               Enter a description for the castle
             </p>
           )}
@@ -410,15 +407,12 @@ const UpdateListingForm = ({
             control={control}
             rules={{ required: true }}
             render={({ field: { onChange, value } }) => (
-              <DateCalendar
-                onChange={onChange} // send value to hook form
-                selected={value}
-              />
+              <DateCalendar onChange={onChange} selected={value} />
             )}
           />
 
           {errors.dates && errors.dates.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs  mt-1">
               Enter a start date and final date
             </p>
           )}
@@ -431,15 +425,12 @@ const UpdateListingForm = ({
             control={control}
             rules={{ required: true }}
             render={({ field: { onChange, value } }) => (
-              <AddGuestsCounter
-                onChange={onChange} // send value to hook form
-                selected={value}
-              />
+              <AddGuestsCounter onChange={onChange} selected={value} />
             )}
           />
 
           {errors.guests && errors.guests.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs  mt-1">
               Enter at least one maximum amount of guests
             </p>
           )}
@@ -452,13 +443,13 @@ const UpdateListingForm = ({
               name="rooms"
               control={control}
               rules={{ required: true }}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange } }) => (
                 <>
                   <RoomCard
                     room={rooms[0]}
                     onChange={() => {
                       onChange(handleRoomsSelect(rooms[0]));
-                    }} // send value to hook form
+                    }}
                     selected={rooms[0]}
                     isBookingRoom={false}
                     isRoomInCastleListing={
@@ -472,7 +463,7 @@ const UpdateListingForm = ({
                     room={rooms[1]}
                     onChange={() => {
                       onChange(handleRoomsSelect(rooms[1]));
-                    }} // send value to hook form
+                    }}
                     selected={rooms[1]}
                     isBookingRoom={false}
                     isRoomInCastleListing={
@@ -486,7 +477,7 @@ const UpdateListingForm = ({
                     room={rooms[2]}
                     onChange={() => {
                       onChange(handleRoomsSelect(rooms[2]));
-                    }} // send value to hook form
+                    }}
                     selected={rooms[2]}
                     isBookingRoom={false}
                     isRoomInCastleListing={
@@ -502,7 +493,7 @@ const UpdateListingForm = ({
           </div>
 
           {errors.rooms && errors.rooms.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs  mt-1">
               Pick at least one room for the castle
             </p>
           )}
@@ -515,7 +506,7 @@ const UpdateListingForm = ({
               name="amneties"
               control={control}
               rules={{ required: true }}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange } }) => (
                 <Tags className="max-w-[300px]">
                   <TagsTrigger>
                     {selectedAmneties.map((amnety) => (
@@ -538,7 +529,6 @@ const UpdateListingForm = ({
                           <TagsItem
                             key={amnety.id}
                             onSelect={() => {
-                              // handleSelect("amnety", amnety.id),
                               onChange(handleSelect("amnety", amnety));
                             }}
                             value={amnety.id}
@@ -559,7 +549,7 @@ const UpdateListingForm = ({
               )}
             />
             {errors.amneties && errors.amneties.type === "required" && (
-              <p className="text-red-500 text-xs italic mt-1">
+              <p className="text-(--error) text-xs  mt-1">
                 Pick at least one amnety the castle offers
               </p>
             )}
@@ -570,7 +560,7 @@ const UpdateListingForm = ({
             <Controller
               name="events"
               control={control}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange } }) => (
                 <Tags className="max-w-[300px]">
                   <TagsTrigger>
                     {selectedEvents.map((event) => (
@@ -619,7 +609,7 @@ const UpdateListingForm = ({
               name="rules"
               control={control}
               rules={{ required: true }}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange } }) => (
                 <Tags className="max-w-[300px]">
                   <TagsTrigger>
                     {selectedRules.map((rule) => (
@@ -662,7 +652,7 @@ const UpdateListingForm = ({
               )}
             />
             {errors.rules && errors.rules.type === "required" && (
-              <p className="text-red-500 text-xs italic mt-1">
+              <p className="text-(--error) text-xs  mt-1">
                 Pick at least one house rule for the castle
               </p>
             )}
@@ -675,7 +665,7 @@ const UpdateListingForm = ({
             name="images"
             control={control}
             rules={{ required: true }}
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange } }) => (
               <input
                 type="file"
                 id="images"
@@ -690,7 +680,7 @@ const UpdateListingForm = ({
             )}
           />
           {errors.images && errors.images.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs  mt-1">
               Upload at least one image of your castle
             </p>
           )}

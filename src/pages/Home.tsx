@@ -102,9 +102,9 @@ const Home = () => {
   return (
     <div>
       {/* Photo by Rasmus Andersen: https://www.pexels.com/photo/red-brick-castle-in-landskrona-sweden-31599512/ */}
-      <div className="flex w-full h-100 bg-[url(https://images.pexels.com/photos/31599512/pexels-photo-31599512.jpeg)] bg-cover bg-center rounded-b-lg sm:rounded-none sm:flex-col sm:h-full md:py-20">
+      <div className="flex w-full h-100 bg-[url(https://images.pexels.com/photos/31599512/pexels-photo-31599512.jpeg)] bg-cover bg-center rounded-b-lg sm:rounded-none sm:flex-col sm:h-full">
         {/* Welcome (desktop) */}
-        <div className="hidden sm:flex flex-col bg-white/80 m-auto sm:w-100 sm:mt-10 sm:px-10 sm:mb-10 sm:pt-5 sm:pb-8 md:mb-20 md:pt-12 md:pb-20 md:px-20 rounded-sm gap-1.5 items-center">
+        <div className="hidden sm:flex text-center flex-col bg-white/80 m-auto sm:w-100 sm:mt-10 sm:px-10 sm:mb-10 sm:pt-5 sm:pb-8 md:mb-20 md:pt-12 md:pb-20 lg:w-xl rounded-sm gap-1.5 items-center">
           <h1>Check Into a Fairytale</h1>
           <h4 className=" text-(--very-dark-brown) text-center">
             Sleep in real castles, wake to real magic. Or why not join us for
@@ -112,8 +112,7 @@ const Home = () => {
           </h4>
         </div>
         {/* Search castles */}
-        {/* TODO: FIX FILTER POPUPS */}
-        <div className="flex flex-col bg-white/70 m-auto pt-12 pb-7 px-8 rounded-sm gap-1.5 items-center sm:py-3 sm:flex-row sm:px-2 sm:mb-10 md:pt-5 md:pb-5 sm:rounded-full sm:items-center md:gap-5">
+        <div className="flex flex-col bg-white/70 m-auto pt-12 pb-7 px-8 rounded-sm gap-1.5 items-center sm:py-3 sm:flex-row sm:px-2 sm:mb-10 md:pt-5 md:pb-5 sm:rounded-full sm:items-center md:gap-5 lg:py-2">
           <div className="flex flex-col gap-1.5 sm:flex-row">
             <input
               type="text"
@@ -233,7 +232,7 @@ const Home = () => {
         </p>
       </div>
 
-      <div className="ml-1 sm:mt-8 sm:mx-5 md:mx-20">
+      <div className="ml-1 sm:mt-8 sm:mx-5">
         {/* Scandinavia castles carousel */}
         <h2 className="ml-2 md:hidden">Scandinavia</h2>
         <h3 className="hidden ml-2 md:block">Scandinavia</h3>
@@ -246,7 +245,7 @@ const Home = () => {
           >
             <CarouselContent className="-ml-1">
               {listings.map((c) => (
-                <CarouselItem className="basis-auto">
+                <CarouselItem className="basis-auto" key={c._id}>
                   <CastleCardSmall castle={c} />
                 </CarouselItem>
               ))}
@@ -261,7 +260,7 @@ const Home = () => {
           <Carousel>
             <CarouselContent className="-ml-1">
               {listings.map((c) => (
-                <CarouselItem className="basis-auto">
+                <CarouselItem className="basis-auto" key={c._id}>
                   <CastleCardSmall castle={c} />
                 </CarouselItem>
               ))}

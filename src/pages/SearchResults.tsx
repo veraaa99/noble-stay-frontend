@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import FilterDropdown from "../components/FilterDropdown";
 import { useCastleListing } from "@/contexts/CastleListingContext";
 import useSelectOptions from "@/hooks/useFilter";
-import DateCalendar from "@/components/DateCalendar";
 
 import locationIcon from "../assets/Location_On.svg";
 import calendarIcon from "../assets/Calendar_Month.svg";
 import axios from "@/axios_api/axios";
 import { format } from "date-fns";
 import Modal from "react-modal";
+import DateCalendar from "@/components/DateCalendar";
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
@@ -36,11 +36,6 @@ const SearchResults = () => {
 
   useEffect(() => {
     const getListingsByFilter = async () => {
-      if (searchParams.toString() == "") {
-        setFilteredListings(listings);
-        return;
-      }
-
       try {
         let res = await axios.get(`/api/listings/search?${searchParams}`);
         if (res.status !== 200) return;
@@ -52,12 +47,12 @@ const SearchResults = () => {
         return;
       }
     };
-    if (!searchParams.toString()) {
+    if (searchParams.size == 0) {
       setFilteredListings(listings);
     } else {
       getListingsByFilter();
     }
-  }, [searchParams]);
+  }, []);
 
   const handleSelectOptions = (filterName: string, filterOption: string) => {
     const updateSelectedFilters = useSelectOptions(
@@ -117,7 +112,6 @@ const SearchResults = () => {
       });
     });
 
-    // getListingsByFilter();
     window.location.search = searchParams.toString();
   };
 
@@ -170,12 +164,32 @@ const SearchResults = () => {
             </div>
           </div>
 
+          <Modal
+            isOpen={isDateModalOpen}
+            onRequestClose={dateModalHandler}
+            className="w-90 bg-white pb-5 px-5 rounded shadow-lg max-w-md mx-auto realtive"
+            overlayClassName="fixed inset-0 bg-black/50 flex justify-center items-start z-50"
+          >
+            <div className="flex flex-col items-center justify-center">
+              <DateCalendar />
+              <p
+                className="link underline cursor-pointer"
+                onClick={dateModalHandler}
+              >
+                Select dates
+              </p>
+            </div>
+          </Modal>
+
           {selectedGuests.map(
             (guest) =>
               guest.number > 0 && (
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-row gap-1">
                   <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">
-                    {guest.category}: {guest.number}
+                    {guest.category}:{" "}
+                  </p>
+                  <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">
+                    {guest.number}
                   </p>
                 </div>
               )
@@ -184,10 +198,15 @@ const SearchResults = () => {
           {filters.map(
             (filter) =>
               filter.selectedOptions.length > 0 && (
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-row gap-1">
                   <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">
-                    {filter.name}: {filter.selectedOptions}
+                    {filter.name}:
                   </p>
+                  {filter.selectedOptions.map((option) => (
+                    <p className="w-fit caption text-(--primary) border-3 border-(--primary)/40 rounded-xl py-0.5 px-1">
+                      {option}
+                    </p>
+                  ))}
                 </div>
               )
           )}
@@ -201,13 +220,6 @@ const SearchResults = () => {
           </button>
         </div>
       </div>
-
-      {/* {isDateModalOpen && (
-        <div>
-          <p onClick={dateModalHandler}>X</p>
-          <DateCalendar />
-        </div>
-      )} */}
 
       <Modal
         isOpen={isFilterModalOpen}
@@ -237,9 +249,9 @@ const SearchResults = () => {
 
       {/* Search results */}
       {filteredListings !== undefined && (
-        <div className="sm:flex sm:flex-wrap sm:items-start sm:px-5">
+        <div className="sm:flex sm:flex-wrap sm:items-start sm:px-5 sm:gap-10">
           {filteredListings.map((listing) => (
-            <CastleCardBig castle={listing} />
+            <CastleCardBig key={listing._id} castle={listing} />
           ))}
         </div>
       )}

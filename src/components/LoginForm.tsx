@@ -68,7 +68,7 @@ const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
             {...register("email", { required: true })}
           />
           {errors.email && errors.email.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Enter an email address
             </p>
           )}
@@ -82,13 +82,13 @@ const LoginForm = ({ setIsLoginModalOpen }: LoginFormProps) => {
             {...register("password", { required: true })}
           />
           {errors.password && errors.password.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">Enter a password</p>
+            <p className="text-(--error) text-xs mt-1">Enter a password</p>
           )}
           <p className="caption text-(--gray) underline">Forgot password?</p>
         </div>
 
         <div>
-          <p className="text-red-500 text-sm italic mb-3">{formError}</p>
+          <p className="text-(--error) text-xs mb-3">{formError}</p>
         </div>
 
         <button

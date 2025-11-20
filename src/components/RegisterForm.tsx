@@ -55,7 +55,6 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
     setIsSubmitted(true);
     setLoading(false);
     return;
-    return;
   };
 
   return (
@@ -74,7 +73,7 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
             {...register("email", { required: true })}
           />
           {errors.email && errors.email.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Enter an email address
             </p>
           )}
@@ -88,7 +87,7 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
             {...register("phone", { required: true })}
           />
           {errors.phone && errors.phone.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">
+            <p className="text-(--error) text-xs mt-1">
               Enter a valid phone number
             </p>
           )}
@@ -102,7 +101,7 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
             {...register("password", { required: true })}
           />
           {errors.password && errors.password.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">Enter a password</p>
+            <p className="text-(--error) text-xs mt-1">Enter a password</p>
           )}
         </div>
         <div className="mb-3 sm:mb-1">
@@ -114,12 +113,12 @@ const RegisterForm = ({ setIsRegisterModalOpen }: RegisterFormProps) => {
             {...register("confirmPassword", { required: true })}
           />
           {errors.email && errors.email.type === "required" && (
-            <p className="text-red-500 text-xs italic mt-1">Repeat password</p>
+            <p className="text-(--error) text-xs mt-1">Repeat password</p>
           )}
         </div>
 
         <div>
-          <p className="text-red-500 text-sm italic mb-3">{formError}</p>
+          <p className="text-(--error) text-xs mb-3">{formError}</p>
         </div>
 
         <button

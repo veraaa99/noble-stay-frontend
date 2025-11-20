@@ -1,114 +1,107 @@
-type amnityCategory = 
-    { id: "pets_allowed", label: "Pets allowed" } |
-    { id: "breakfast_included", label: "Breakfast included" } |
-    { id: "lunch_included", label: "Lunch included" } |
-    { id: "gym_nearby", label: "Gym nearby" } 
-type guestCategory = 'adult' | 'child' | 'pet'
-type eventCategory = 
-    { id: "ghost_hunting", label: "Ghost hunting" } |
-    { id: "dance_party", label: "Dance party" } |
-    { id: "photoshoot", label: "Photoshoot" } |
-    { id: "guided_tour", label: "Guided tour" }
-type rulesCategory =
-    { id: "no_smoking", label: "No smoking" }
+type amnityCategory =
+  | { id: "pets_allowed"; label: "Pets allowed" }
+  | { id: "breakfast_included"; label: "Breakfast included" }
+  | { id: "lunch_included"; label: "Lunch included" }
+  | { id: "gym_nearby"; label: "Gym nearby" };
+type guestCategory = "adult" | "child" | "pet";
+type eventCategory =
+  | { id: "ghost_hunting"; label: "Ghost hunting" }
+  | { id: "dance_party"; label: "Dance party" }
+  | { id: "photoshoot"; label: "Photoshoot" }
+  | { id: "guided_tour"; label: "Guided tour" };
 
 type RegisterInputs = {
-  email: string, 
-  phone: string,
-  password: string,
-  confirmPassword: string
-}
+  email: string;
+  phone: string;
+  password: string;
+  confirmPassword: string;
+};
 
 type LoginInputs = {
-  email: string, 
-  password: string
-}
+  email: string;
+  password: string;
+};
 
 type BookingInputs = {
-    castle: string,
-    bookedDates: Date[],
-    bookedRooms: Room[],
-    bookedGuests: Guest[],
-    // bookedEvents?: eventCategory[]
-}
+  castle: string;
+  bookedDates: Date[];
+  bookedRooms: Room[];
+  bookedGuests: Guest[];
+};
 
 type ListingInputs = {
-    title: string,
-    images: string[],
-    location: string,
-    description: string,
+  title: string;
+  images: string[];
+  location: string;
+  description: string;
 
-    amneties?: amnityCategory[],
-    rules: rulesCategory[],
-    dates: {
+  amneties?: amnityCategory[];
+  rules: rulesCategory[];
+  dates: {
     from: Date | undefined;
     to?: Date | undefined;
-    },
-    guests: Guest[],
-    rooms: Room[],
-    
-    events?: eventCategory[],
-}
+  };
+  guests: Guest[];
+  rooms: Room[];
+
+  events?: eventCategory[];
+};
 
 type CastleListing = {
-    _id: string,
-    title: string,
-    images: string[],
-    location: string,
-    description: string,
-    amneties?: amnityCategory[],
-    rules: rulesCategory[],
-    dates: string[],
-    guests: Guest[],
-    rooms: Room[],
+  _id: string;
+  title: string;
+  images: string[];
+  location: string;
+  description: string;
+  amneties?: amnityCategory[];
+  rules: rulesCategory[];
+  dates: string[];
+  guests: Guest[];
+  rooms: Room[];
 
-    castleOwner: User,
+  castleOwner: User;
 
-    events?: eventCategory[]
-}
+  events?: eventCategory[];
+};
 
 type Booking = {
-    _id: string,
-    castle: CastleListing,
+  _id: string;
+  castle: CastleListing;
 
-    bookedUser: User,
-    bookedDates: Date[],
-    bookedRooms: Room[],
-    bookedGuests: Guest[],
-    // bookedEvents?: eventCategory[],
-    
-    totalPrice: number
-}
+  bookedUser: User;
+  bookedDates: Date[];
+  bookedRooms: Room[];
+  bookedGuests: Guest[];
+
+  totalPrice: number;
+};
 
 type Room = {
-    // _id: number,
-    title: string,
-    caption: string,
-    description: string[],
-    price: number
-}
+  title: string;
+  caption: string;
+  description: string[];
+  price: number;
+};
 
 type User = {
-    _id: string,
-    email: string,
-    phone: string,
-    password: string,
-}
+  _id: string;
+  email: string;
+  phone: string;
+  password: string;
+};
 
 type Guest = {
-    // _id: number,
-    category: guestCategory,
-    number: number,
-}
+  category: guestCategory;
+  number: number;
+};
 
 type Filter = {
-    name: string,
-    options: FilterOption[],
-    selectedOptions: string[]
-    // ändra selectedoptions så den har key-value par
-}
+  name: string;
+  options: FilterOption[];
+  selectedOptions: string[];
+};
 
 type FilterOption = {
-    id: string,
-    label: string
-}
+  id: string;
+  label: string;
+};
